@@ -38,32 +38,26 @@
     list-style-type: none;
     margin: 0;
     padding: 0;
-    overflow: hidden;
   }
   li {
-    float: left;
-    height: 3rem;
+    color: rgba(51, 51, 51, 0.6);
+    display: inline-block;
   }
 
   li span {
     cursor: pointer;
     display: inline-block;
-    color: black;
-    text-align: center;
     padding: 0.8rem 1rem;
-    text-decoration: none;
   }
 
   /* Change the link color to #111 (black) on hover */
   li:hover {
+    color: inherit;
     border-bottom: 3px solid rgb(255, 175, 160);
   }
   .active {
+    color: inherit;
     border-bottom: 3px solid tomato !important;
-  }
-  input {
-    margin: 0;
-    padding: 0.8rem 0.8rem;
   }
 </style>
 

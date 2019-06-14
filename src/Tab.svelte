@@ -11,7 +11,7 @@
   function update() {
     console.log("blur");
     toggleEdit();
-    createEventDispatcher("notify", title);
+    dispatch("notify", title);
   }
 </script>
 
@@ -19,14 +19,11 @@
   span {
     cursor: pointer;
     display: inline-block;
-    color: black;
-    text-align: center;
-    padding: 0.8rem 1rem;
-    text-decoration: none;
+    padding: 0.8em 1em;
   }
   input {
     margin: 0;
-    padding: 0.8rem;
+    padding: 0.8em;
   }
 </style>
 
