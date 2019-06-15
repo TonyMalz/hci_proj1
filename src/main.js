@@ -1,10 +1,7 @@
-import App from './App.svelte';
+import SenseQVis from './SenseQVis.svelte';
 
-const app = new App({
+const app = new SenseQVis({
 	target: document.body,
-	props: {
-		name: 'Leo'
-	}
 });
 
 export default app;

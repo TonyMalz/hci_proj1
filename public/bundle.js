@@ -669,7 +669,7 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (72:4) {:else}
+    // (74:4) {:else}
     function create_else_block_1(ctx) {
     	var li, current;
 
@@ -683,8 +683,8 @@ var app = (function () {
     		c: function create() {
     			li = element("li");
     			tabitem.$$.fragment.c();
-    			li.className = "active svelte-eplv6k";
-    			add_location(li, file$1, 72, 6, 1533);
+    			li.className = "active svelte-tibrtl";
+    			add_location(li, file$1, 74, 6, 1577);
     		},
 
     		m: function mount(target, anchor) {
@@ -721,7 +721,7 @@ var app = (function () {
     	};
     }
 
-    // (68:4) {#if i !== activeTab}
+    // (70:4) {#if i !== activeTab}
     function create_if_block_1(ctx) {
     	var li, current, dispose;
 
@@ -738,8 +738,8 @@ var app = (function () {
     		c: function create() {
     			li = element("li");
     			tabitem.$$.fragment.c();
-    			li.className = "svelte-eplv6k";
-    			add_location(li, file$1, 68, 6, 1437);
+    			li.className = "svelte-tibrtl";
+    			add_location(li, file$1, 70, 6, 1481);
     			dispose = listen(li, "click", click_handler);
     		},
 
@@ -780,7 +780,7 @@ var app = (function () {
     	};
     }
 
-    // (67:2) {#each currentTabs as title, i}
+    // (69:2) {#each currentTabs as title, i}
     function create_each_block(ctx) {
     	var current_block_type_index, if_block, if_block_anchor, current;
 
@@ -856,7 +856,7 @@ var app = (function () {
     	};
     }
 
-    // (87:4) {:else}
+    // (89:4) {:else}
     function create_else_block$1(ctx) {
     	var div, dispose;
 
@@ -864,8 +864,8 @@ var app = (function () {
     		c: function create() {
     			div = element("div");
     			div.textContent = "+";
-    			div.className = "svelte-eplv6k";
-    			add_location(div, file$1, 87, 6, 1898);
+    			div.className = "svelte-tibrtl";
+    			add_location(div, file$1, 89, 6, 1942);
     			dispose = listen(div, "click", ctx.toggle);
     		},
 
@@ -887,7 +887,7 @@ var app = (function () {
     	};
     }
 
-    // (79:4) {#if toggleTab}
+    // (81:4) {#if toggleTab}
     function create_if_block$1(ctx) {
     	var input, input_intro, dispose;
 
@@ -897,7 +897,7 @@ var app = (function () {
     			input.id = "newTab";
     			attr(input, "type", "text");
     			input.autofocus = true;
-    			add_location(input, file$1, 79, 6, 1678);
+    			add_location(input, file$1, 81, 6, 1722);
 
     			dispose = [
     				listen(input, "blur", ctx.addTab),
@@ -976,10 +976,10 @@ var app = (function () {
     			t = space();
     			li = element("li");
     			if_block.c();
-    			li.className = "svelte-eplv6k";
-    			add_location(li, file$1, 77, 2, 1645);
-    			ul.className = "svelte-eplv6k";
-    			add_location(ul, file$1, 65, 0, 1363);
+    			li.className = "svelte-tibrtl";
+    			add_location(li, file$1, 79, 2, 1689);
+    			ul.className = "svelte-tibrtl";
+    			add_location(ul, file$1, 67, 0, 1407);
     		},
 
     		l: function claim(nodes) {
@@ -1166,7 +1166,7 @@ var app = (function () {
     			add_location(div2, file$2, 20, 2, 380);
     			add_location(div3, file$2, 21, 2, 440);
     			div4.id = "info";
-    			div4.className = "svelte-127acle";
+    			div4.className = "svelte-1m3j3d9";
     			add_location(div4, file$2, 17, 0, 281);
     		},
 
@@ -1243,30 +1243,30 @@ var app = (function () {
     			label1.textContent = "redo";
     			attr(path0, "fill", "#333");
     			attr(path0, "d", "M12.5,8C9.85,8 7.45,9 5.6,10.6L2,7V16H11L7.38,12.38C8.77,11.22\r\n      10.54,10.5 12.5,10.5C16.04,10.5 19.05,12.81\r\n      20.1,16L22.47,15.22C21.08,11.03 17.15,8 12.5,8Z");
-    			add_location(path0, file$3, 34, 4, 602);
+    			add_location(path0, file$3, 34, 4, 603);
     			attr(svg0, "id", "undo");
     			set_style(svg0, "width", "16px");
     			set_style(svg0, "height", "16px");
     			attr(svg0, "viewBox", "0 0 24 24");
-    			attr(svg0, "class", "svelte-1t8axfs");
-    			add_location(svg0, file$3, 33, 2, 530);
+    			attr(svg0, "class", "svelte-4zoca2");
+    			add_location(svg0, file$3, 33, 2, 531);
     			label0.id = "undoLabel";
-    			label0.className = "svelte-1t8axfs";
-    			add_location(label0, file$3, 40, 2, 823);
+    			label0.className = "svelte-4zoca2";
+    			add_location(label0, file$3, 40, 2, 824);
     			attr(path1, "fill", "#bbb");
     			attr(path1, "d", "M18.4,10.6C16.55,9 14.15,8 11.5,8C6.85,8 2.92,11.03\r\n      1.54,15.22L3.9,16C4.95,12.81 7.95,10.5 11.5,10.5C13.45,10.5 15.23,11.22\r\n      16.62,12.38L13,16H22V7L18.4,10.6Z");
-    			add_location(path1, file$3, 42, 4, 933);
+    			add_location(path1, file$3, 42, 4, 934);
     			attr(svg1, "id", "redo");
     			set_style(svg1, "width", "16px");
     			set_style(svg1, "height", "16px");
     			attr(svg1, "viewBox", "0 0 24 24");
-    			attr(svg1, "class", "svelte-1t8axfs");
-    			add_location(svg1, file$3, 41, 2, 861);
+    			attr(svg1, "class", "svelte-4zoca2");
+    			add_location(svg1, file$3, 41, 2, 862);
     			label1.id = "redoLabel";
-    			label1.className = "svelte-1t8axfs";
-    			add_location(label1, file$3, 48, 2, 1157);
-    			div.className = "svelte-1t8axfs";
-    			add_location(div, file$3, 32, 0, 521);
+    			label1.className = "svelte-4zoca2";
+    			add_location(label1, file$3, 48, 2, 1158);
+    			div.className = "svelte-4zoca2";
+    			add_location(div, file$3, 32, 0, 522);
     		},
 
     		l: function claim(nodes) {
@@ -1318,7 +1318,7 @@ var app = (function () {
     			div.id = "mainChart";
     			set_style(div, "width", "100%");
     			set_style(div, "height", "100%");
-    			add_location(div, file$4, 310, 0, 9191);
+    			add_location(div, file$4, 311, 0, 9199);
     		},
 
     		l: function claim(nodes) {
@@ -1466,20 +1466,20 @@ var app = (function () {
 
         const option = {
           backgroundColor: "#fff",
-          color: ["#dd4444", "#fec42c", "#80F1BE"],
+          color: ["#be5e5e", "#fec42c", "#7ad6ad"],
           legend: {
             y: "top",
             data: ["Angry", "Calm", "Happy"],
             textStyle: {
               color: "#333",
-              fontSize: 16
+              fontSize: 14
             }
           },
           grid: {
-            x: "4%",
-            x2: 150,
-            y: "18%",
-            y2: "10%"
+            x: 36,
+            x2: "17%",
+            y: 40,
+            y2: 40
           },
           tooltip: {
             padding: 10,
@@ -1560,17 +1560,17 @@ var app = (function () {
           },
           visualMap: [
             {
-              left: "right",
-              top: "2%",
+              left: "87%",
+              top: 10,
               dimension: 2,
               min: 0,
               max: 250,
-              itemWidth: 30,
-              itemHeight: 120,
+              itemWidth: 20,
+              itemHeight: 50,
               calculable: true,
               precision: 0.1,
               text: [schema[2].text],
-              textGap: 20,
+              textGap: 18,
               textStyle: {
                 color: "#333"
               },
@@ -1591,16 +1591,17 @@ var app = (function () {
               }
             },
             {
-              left: "right",
-              bottom: "5%",
+              left: "87%",
+              top: 140,
               dimension: 6,
               min: 0,
               max: 50,
-              itemHeight: 120,
+              itemWidth: 20,
+              itemHeight: 50,
               calculable: true,
               precision: 0.1,
               text: [schema[6].text],
-              textGap: 30,
+              textGap: 18,
               textStyle: {
                 color: "#333"
               },
@@ -1659,11 +1660,188 @@ var app = (function () {
     	}
     }
 
-    /* src\App.svelte generated by Svelte v3.5.1 */
+    /* src\Anova.svelte generated by Svelte v3.5.1 */
 
-    const file$5 = "src\\App.svelte";
+    const file$5 = "src\\Anova.svelte";
 
     function create_fragment$5(ctx) {
+    	var div;
+
+    	return {
+    		c: function create() {
+    			div = element("div");
+    			div.id = "anovaChart";
+    			div.className = "svelte-15kplwv";
+    			add_location(div, file$5, 143, 0, 3260);
+    		},
+
+    		l: function claim(nodes) {
+    			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+    		},
+
+    		m: function mount(target, anchor) {
+    			insert(target, div, anchor);
+    		},
+
+    		p: noop,
+    		i: noop,
+    		o: noop,
+
+    		d: function destroy(detaching) {
+    			if (detaching) {
+    				detach(div);
+    			}
+    		}
+    	};
+    }
+
+    function instance$3($$self) {
+    	onMount(() => {
+        const anovaChart = echarts.init(document.getElementById("anovaChart"));
+        const categoryData = [];
+        const errorData = [];
+        const barData = [];
+        const dataCount = 7;
+        for (var i = 0; i < dataCount; i++) {
+          var val = Math.random() * 7;
+          categoryData.push("Day" + (i + 1));
+          errorData.push([
+            i,
+            echarts.number.round(Math.max(0, val - Math.random() * 3)),
+            echarts.number.round(val + Math.random() * 3)
+          ]);
+          barData.push(echarts.number.round(val, 2));
+        }
+
+        function renderItem(params, api) {
+          var xValue = api.value(0);
+          var highPoint = api.coord([xValue, api.value(1)]);
+          var lowPoint = api.coord([xValue, api.value(2)]);
+          var halfWidth = api.size([1, 0])[0] * 0.05;
+          var style = api.style({
+            stroke: "#888",
+            fill: null
+          });
+
+          return {
+            type: "group",
+            children: [
+              {
+                type: "line",
+                shape: {
+                  x1: highPoint[0] - halfWidth,
+                  y1: highPoint[1],
+                  x2: highPoint[0] + halfWidth,
+                  y2: highPoint[1]
+                },
+                style: style
+              },
+              {
+                type: "line",
+                shape: {
+                  x1: highPoint[0],
+                  y1: highPoint[1],
+                  x2: lowPoint[0],
+                  y2: lowPoint[1]
+                },
+                style: style
+              },
+              {
+                type: "line",
+                shape: {
+                  x1: lowPoint[0] - halfWidth,
+                  y1: lowPoint[1],
+                  x2: lowPoint[0] + halfWidth,
+                  y2: lowPoint[1]
+                },
+                style: style
+              }
+            ]
+          };
+        } // renderItem
+
+        const option = {
+          tooltip: {
+            trigger: "axis",
+            axisPointer: {
+              type: "shadow"
+            }
+          },
+          grid: {
+            left: 36,
+            top: 5,
+            right: 0,
+            bottom: 25
+          },
+          // dataZoom: [
+          //   {
+          //     type: "slider",
+          //     start: 1,
+          //     end: 40
+          //   },
+          //   {
+          //     type: "inside",
+          //     start: 1,
+          //     end: 30
+          //   }
+          // ],
+          xAxis: {
+            data: categoryData
+          },
+          yAxis: {},
+          series: [
+            {
+              type: "bar",
+              name: "Availability",
+              data: barData,
+              itemStyle: {
+                normal: {
+                  color: "#96bcdb"
+                }
+              }
+            },
+            {
+              type: "custom",
+              name: "CI",
+              itemStyle: {
+                normal: {
+                  borderWidth: 1.5
+                }
+              },
+              renderItem: renderItem,
+              encode: {
+                x: 0,
+                y: [1, 2]
+              },
+              data: errorData,
+              z: 10
+            }
+          ]
+        };
+        anovaChart.setOption(option);
+
+        window.addEventListener("resize", () => {
+          if (anovaChart !== null) {
+            anovaChart.resize();
+          }
+        });
+      });
+
+    	return {};
+    }
+
+    class Anova extends SvelteComponentDev {
+    	constructor(options) {
+    		super(options);
+    		init(this, options, instance$3, create_fragment$5, safe_not_equal, []);
+    	}
+    }
+
+    /* src\SenseQVis.svelte generated by Svelte v3.5.1 */
+
+    const file$6 = "src\\SenseQVis.svelte";
+
+    function create_fragment$6(ctx) {
     	var main, header, t0, nav, div0, t1, div1, t2, section, div2, button, t4, t5, aside, t7, div3, current, dispose;
 
     	var studyinfo = new StudyInfo({ $$inline: true });
@@ -1676,6 +1854,8 @@ var app = (function () {
     	var undoredo = new UndoRedo({ $$inline: true });
 
     	var mainchart = new MainChart({ $$inline: true });
+
+    	var anova = new Anova({ $$inline: true });
 
     	return {
     		c: function create() {
@@ -1701,29 +1881,29 @@ var app = (function () {
     			aside.textContent = "AI Charts";
     			t7 = space();
     			div3 = element("div");
-    			div3.textContent = "Anova";
-    			header.className = "svelte-onwiwd";
-    			add_location(header, file$5, 86, 2, 1755);
-    			div0.className = "tabs svelte-onwiwd";
-    			add_location(div0, file$5, 90, 4, 1810);
-    			div1.className = "undoRedo svelte-onwiwd";
-    			add_location(div1, file$5, 93, 4, 1874);
-    			nav.className = "svelte-onwiwd";
-    			add_location(nav, file$5, 89, 2, 1799);
-    			button.className = "svelte-onwiwd";
-    			add_location(button, file$5, 99, 6, 1985);
+    			anova.$$.fragment.c();
+    			header.className = "svelte-1cf3a4o";
+    			add_location(header, file$6, 87, 2, 1816);
+    			div0.className = "tabs svelte-1cf3a4o";
+    			add_location(div0, file$6, 91, 4, 1871);
+    			div1.className = "undoRedo svelte-1cf3a4o";
+    			add_location(div1, file$6, 94, 4, 1935);
+    			nav.className = "svelte-1cf3a4o";
+    			add_location(nav, file$6, 90, 2, 1860);
+    			button.className = "svelte-1cf3a4o";
+    			add_location(button, file$6, 100, 6, 2046);
     			div2.id = "mainChart";
-    			div2.className = "svelte-onwiwd";
-    			add_location(div2, file$5, 98, 4, 1957);
-    			aside.className = "svelte-onwiwd";
-    			add_location(aside, file$5, 102, 4, 2070);
+    			div2.className = "svelte-1cf3a4o";
+    			add_location(div2, file$6, 99, 4, 2018);
+    			aside.className = "svelte-1cf3a4o";
+    			add_location(aside, file$6, 103, 4, 2131);
     			div3.id = "anova";
-    			div3.className = "svelte-onwiwd";
-    			add_location(div3, file$5, 103, 4, 2100);
-    			section.className = "svelte-onwiwd";
-    			add_location(section, file$5, 97, 2, 1942);
-    			main.className = "svelte-onwiwd";
-    			add_location(main, file$5, 85, 0, 1745);
+    			div3.className = "svelte-1cf3a4o";
+    			add_location(div3, file$6, 104, 4, 2161);
+    			section.className = "svelte-1cf3a4o";
+    			add_location(section, file$6, 98, 2, 2003);
+    			main.className = "svelte-1cf3a4o";
+    			add_location(main, file$6, 86, 0, 1806);
     			dispose = listen(button, "click", ctx.toggle);
     		},
 
@@ -1752,6 +1932,7 @@ var app = (function () {
     			append(section, aside);
     			append(section, t7);
     			append(section, div3);
+    			mount_component(anova, div3, null);
     			current = true;
     		},
 
@@ -1771,6 +1952,8 @@ var app = (function () {
 
     			mainchart.$$.fragment.i(local);
 
+    			anova.$$.fragment.i(local);
+
     			current = true;
     		},
 
@@ -1779,6 +1962,7 @@ var app = (function () {
     			tabs.$$.fragment.o(local);
     			undoredo.$$.fragment.o(local);
     			mainchart.$$.fragment.o(local);
+    			anova.$$.fragment.o(local);
     			current = false;
     		},
 
@@ -1795,12 +1979,14 @@ var app = (function () {
 
     			mainchart.$destroy();
 
+    			anova.$destroy();
+
     			dispose();
     		}
     	};
     }
 
-    function instance$3($$self, $$props, $$invalidate) {
+    function instance$4($$self, $$props, $$invalidate) {
     	
 
       let activeTab = 0;
@@ -1811,18 +1997,15 @@ var app = (function () {
     	return { activeTab, toggle };
     }
 
-    class App extends SvelteComponentDev {
+    class SenseQVis extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
-    		init(this, options, instance$3, create_fragment$5, safe_not_equal, []);
+    		init(this, options, instance$4, create_fragment$6, safe_not_equal, []);
     	}
     }
 
-    const app = new App({
+    const app = new SenseQVis({
     	target: document.body,
-    	props: {
-    		name: 'Leo'
-    	}
     });
 
     return app;

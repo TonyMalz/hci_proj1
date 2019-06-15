@@ -6,7 +6,7 @@
     justify-items: center;
     display: grid;
     grid-gap: 2px;
-    padding-right: 1em;
+    padding-right: 1rem;
     grid-template-areas:
       "undo redo"
       "undoLabel redoLabel";

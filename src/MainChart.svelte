@@ -124,20 +124,20 @@
 
     const option = {
       backgroundColor: "#fff",
-      color: ["#dd4444", "#fec42c", "#80F1BE"],
+      color: ["#be5e5e", "#fec42c", "#7ad6ad"],
       legend: {
         y: "top",
         data: ["Angry", "Calm", "Happy"],
         textStyle: {
           color: "#333",
-          fontSize: 16
+          fontSize: 14
         }
       },
       grid: {
-        x: "4%",
-        x2: 150,
-        y: "18%",
-        y2: "10%"
+        x: 36,
+        x2: "17%",
+        y: 40,
+        y2: 40
       },
       tooltip: {
         padding: 10,
@@ -218,17 +218,17 @@
       },
       visualMap: [
         {
-          left: "right",
-          top: "2%",
+          left: "87%",
+          top: 10,
           dimension: 2,
           min: 0,
           max: 250,
-          itemWidth: 30,
-          itemHeight: 120,
+          itemWidth: 20,
+          itemHeight: 50,
           calculable: true,
           precision: 0.1,
           text: [schema[2].text],
-          textGap: 20,
+          textGap: 18,
           textStyle: {
             color: "#333"
           },
@@ -249,16 +249,17 @@
           }
         },
         {
-          left: "right",
-          bottom: "5%",
+          left: "87%",
+          top: 140,
           dimension: 6,
           min: 0,
           max: 50,
-          itemHeight: 120,
+          itemWidth: 20,
+          itemHeight: 50,
           calculable: true,
           precision: 0.1,
           text: [schema[6].text],
-          textGap: 30,
+          textGap: 18,
           textStyle: {
             color: "#333"
           },

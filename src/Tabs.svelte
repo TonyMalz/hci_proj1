@@ -41,6 +41,7 @@
   }
   li {
     color: rgba(51, 51, 51, 0.6);
+    background: #fafafa;
     font-size: 0.9rem;
     display: inline-block;
   }
@@ -54,12 +55,13 @@
   /* Change the link color to #111 (black) on hover */
   li:hover {
     color: inherit;
-    border-bottom: 1px solid rgb(255, 175, 160);
+    border-top: 1px solid rgb(255, 175, 160);
   }
   .active {
     color: inherit;
+    background: white;
     font-weight: 400;
-    border-bottom: 1px solid tomato !important;
+    border-top: 1px solid tomato !important;
   }
 </style>
 

@@ -3,6 +3,7 @@
   import StudyInfo from "./StudyInfo.svelte";
   import UndoRedo from "./UndoRedo.svelte";
   import MainChart from "./MainChart.svelte";
+  import Anova from "./Anova.svelte";
   import { fly } from "svelte/transition";
 
   let activeTab = 0;
@@ -16,6 +17,7 @@
     --color-header: rgb(255, 255, 255);
     --color-nav: rgb(255, 255, 255);
     --color-content: rgb(255, 255, 255);
+    --color-bar: #96bcdb;
   }
   main {
     display: grid;
@@ -39,7 +41,7 @@
   }
 
   nav {
-    border: 1px solid rgba(255, 62, 0, 0.1);
+    border-top: 1px solid rgba(255, 62, 0, 0.1);
     font-weight: 300;
     grid-area: nav;
     background: var(--color-nav);
@@ -54,7 +56,7 @@
     display: grid;
     grid-template:
       "main-chart ai-charts"
-      "anova anova";
+      "anova ai-charts";
     grid-template-columns: 3fr 1fr;
     grid-template-rows: 2fr 1fr;
     grid-gap: 1em;
@@ -66,9 +68,8 @@
   }
   #anova {
     grid-area: anova;
-    border: 1px dashed gray;
+    /* border: 1px dashed gray; */
     width: 100%;
-    padding: 1em;
   }
   aside {
     border: 1px dashed gray;
@@ -101,6 +102,8 @@
       <MainChart />
     </div>
     <aside>AI Charts</aside>
-    <div id="anova">Anova</div>
+    <div id="anova">
+      <Anova />
+    </div>
   </section>
 </main>
