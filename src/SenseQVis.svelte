@@ -3,6 +3,7 @@
   import StudyInfo from "./StudyInfo.svelte";
   import UndoRedo from "./UndoRedo.svelte";
   import MainChart from "./MainChart.svelte";
+  import Sherlock from "./Sherlock.svelte";
   import Anova from "./Anova.svelte";
   import { fly } from "svelte/transition";
 
@@ -72,7 +73,9 @@
     width: 100%;
   }
   aside {
-    border: 1px dashed gray;
+    width: 97%;
+    height: 97%;
+    box-shadow: 0px 0px 14px 1px #e8e8e8;
     grid-area: ai-charts;
     padding: 1em;
   }
@@ -101,7 +104,9 @@
       <button on:click={toggle}>change tabs</button>
       <MainChart />
     </div>
-    <aside>AI Charts</aside>
+    <aside>
+      <Sherlock />
+    </aside>
     <div id="anova">
       <Anova />
     </div>
