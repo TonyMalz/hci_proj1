@@ -123,7 +123,7 @@
     };
 
     const option = {
-      backgroundColor: "#eee",
+      backgroundColor: "#fff",
       color: ["#dd4444", "#fec42c", "#80F1BE"],
       legend: {
         y: "top",

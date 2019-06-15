@@ -41,23 +41,25 @@
   }
   li {
     color: rgba(51, 51, 51, 0.6);
+    font-size: 0.9rem;
     display: inline-block;
   }
 
-  li span {
+  li div {
     cursor: pointer;
     display: inline-block;
-    padding: 0.8rem 1rem;
+    padding: 0.8em 1em;
   }
 
   /* Change the link color to #111 (black) on hover */
   li:hover {
     color: inherit;
-    border-bottom: 3px solid rgb(255, 175, 160);
+    border-bottom: 1px solid rgb(255, 175, 160);
   }
   .active {
     color: inherit;
-    border-bottom: 3px solid tomato !important;
+    font-weight: 400;
+    border-bottom: 1px solid tomato !important;
   }
 </style>
 
@@ -83,7 +85,7 @@
         on:keydown={e => (e.code === 'Enter' ? addTab() : null)}
         autofocus />
     {:else}
-      <span on:click={toggle}>+</span>
+      <div on:click={toggle}>+</div>
     {/if}
   </li>
 </ul>

@@ -12,9 +12,9 @@
 
 <style>
   :root {
-    --color-header: rgb(233, 232, 232);
-    --color-nav: rgb(212, 205, 219);
-    --color-content: rgb(240, 240, 240);
+    --color-header: rgb(255, 255, 255);
+    --color-nav: rgb(255, 255, 255);
+    --color-content: rgb(255, 255, 255);
   }
   main {
     display: grid;
@@ -25,19 +25,21 @@
       "nav"
       "content";
     grid-template-rows: auto auto 6fr;
-    grid-gap: 3px;
   }
 
   header {
     padding: 1em;
     padding-left: 1rem;
     font-size: 0.7em;
+    font-weight: 300;
     color: rgba(51, 51, 51, 0.6);
     grid-area: head;
     background: var(--color-header);
   }
 
   nav {
+    border: 1px solid rgba(255, 62, 0, 0.1);
+    font-weight: 300;
     grid-area: nav;
     background: var(--color-nav);
     display: flex;

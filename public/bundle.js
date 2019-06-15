@@ -469,22 +469,22 @@ var app = (function () {
 
     const file = "src\\Tab.svelte";
 
-    // (32:0) {:else}
+    // (28:0) {:else}
     function create_else_block(ctx) {
-    	var span, t, dispose;
+    	var div, t, dispose;
 
     	return {
     		c: function create() {
-    			span = element("span");
+    			div = element("div");
     			t = text(ctx.title);
-    			span.className = "svelte-15vxhgh";
-    			add_location(span, file, 32, 2, 592);
-    			dispose = listen(span, "click", ctx.toggleEdit);
+    			div.className = "svelte-1av4as1";
+    			add_location(div, file, 28, 2, 538);
+    			dispose = listen(div, "click", ctx.toggleEdit);
     		},
 
     		m: function mount(target, anchor) {
-    			insert(target, span, anchor);
-    			append(span, t);
+    			insert(target, div, anchor);
+    			append(div, t);
     		},
 
     		p: function update_1(changed, ctx) {
@@ -495,7 +495,7 @@ var app = (function () {
 
     		d: function destroy(detaching) {
     			if (detaching) {
-    				detach(span);
+    				detach(div);
     			}
 
     			dispose();
@@ -503,7 +503,7 @@ var app = (function () {
     	};
     }
 
-    // (30:0) {#if toggle}
+    // (26:0) {#if toggle}
     function create_if_block(ctx) {
     	var input, dispose;
 
@@ -512,8 +512,7 @@ var app = (function () {
     			input = element("input");
     			attr(input, "type", "text");
     			input.autofocus = true;
-    			input.className = "svelte-15vxhgh";
-    			add_location(input, file, 30, 2, 512);
+    			add_location(input, file, 26, 2, 458);
 
     			dispose = [
     				listen(input, "input", ctx.input_input_handler),
@@ -667,7 +666,7 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (70:4) {:else}
+    // (72:4) {:else}
     function create_else_block_1(ctx) {
     	var li, current;
 
@@ -681,8 +680,8 @@ var app = (function () {
     		c: function create() {
     			li = element("li");
     			tabitem.$$.fragment.c();
-    			li.className = "active svelte-sitdwx";
-    			add_location(li, file$1, 70, 6, 1489);
+    			li.className = "active svelte-eplv6k";
+    			add_location(li, file$1, 72, 6, 1533);
     		},
 
     		m: function mount(target, anchor) {
@@ -719,7 +718,7 @@ var app = (function () {
     	};
     }
 
-    // (66:4) {#if i !== activeTab}
+    // (68:4) {#if i !== activeTab}
     function create_if_block_1(ctx) {
     	var li, current, dispose;
 
@@ -736,8 +735,8 @@ var app = (function () {
     		c: function create() {
     			li = element("li");
     			tabitem.$$.fragment.c();
-    			li.className = "svelte-sitdwx";
-    			add_location(li, file$1, 66, 6, 1393);
+    			li.className = "svelte-eplv6k";
+    			add_location(li, file$1, 68, 6, 1437);
     			dispose = listen(li, "click", click_handler);
     		},
 
@@ -778,7 +777,7 @@ var app = (function () {
     	};
     }
 
-    // (65:2) {#each currentTabs as title, i}
+    // (67:2) {#each currentTabs as title, i}
     function create_each_block(ctx) {
     	var current_block_type_index, if_block, if_block_anchor, current;
 
@@ -854,21 +853,21 @@ var app = (function () {
     	};
     }
 
-    // (85:4) {:else}
+    // (87:4) {:else}
     function create_else_block$1(ctx) {
-    	var span, dispose;
+    	var div, dispose;
 
     	return {
     		c: function create() {
-    			span = element("span");
-    			span.textContent = "+";
-    			span.className = "svelte-sitdwx";
-    			add_location(span, file$1, 85, 6, 1854);
-    			dispose = listen(span, "click", ctx.toggle);
+    			div = element("div");
+    			div.textContent = "+";
+    			div.className = "svelte-eplv6k";
+    			add_location(div, file$1, 87, 6, 1898);
+    			dispose = listen(div, "click", ctx.toggle);
     		},
 
     		m: function mount(target, anchor) {
-    			insert(target, span, anchor);
+    			insert(target, div, anchor);
     		},
 
     		p: noop,
@@ -877,7 +876,7 @@ var app = (function () {
 
     		d: function destroy(detaching) {
     			if (detaching) {
-    				detach(span);
+    				detach(div);
     			}
 
     			dispose();
@@ -885,7 +884,7 @@ var app = (function () {
     	};
     }
 
-    // (77:4) {#if toggleTab}
+    // (79:4) {#if toggleTab}
     function create_if_block$1(ctx) {
     	var input, input_intro, dispose;
 
@@ -895,7 +894,7 @@ var app = (function () {
     			input.id = "newTab";
     			attr(input, "type", "text");
     			input.autofocus = true;
-    			add_location(input, file$1, 77, 6, 1634);
+    			add_location(input, file$1, 79, 6, 1678);
 
     			dispose = [
     				listen(input, "blur", ctx.addTab),
@@ -974,10 +973,10 @@ var app = (function () {
     			t = space();
     			li = element("li");
     			if_block.c();
-    			li.className = "svelte-sitdwx";
-    			add_location(li, file$1, 75, 2, 1601);
-    			ul.className = "svelte-sitdwx";
-    			add_location(ul, file$1, 63, 0, 1319);
+    			li.className = "svelte-eplv6k";
+    			add_location(li, file$1, 77, 2, 1645);
+    			ul.className = "svelte-eplv6k";
+    			add_location(ul, file$1, 65, 0, 1363);
     		},
 
     		l: function claim(nodes) {
@@ -1378,7 +1377,7 @@ var app = (function () {
         };
 
         const option = {
-          backgroundColor: "#eee",
+          backgroundColor: "#fff",
           color: ["#dd4444", "#fec42c", "#80F1BE"],
           legend: {
             y: "top",
@@ -1606,21 +1605,21 @@ var app = (function () {
     			t4 = space();
     			aside = element("aside");
     			aside.textContent = "AI Charts";
-    			header.className = "svelte-7zu4my";
-    			add_location(header, file$4, 66, 2, 1302);
-    			nav.className = "svelte-7zu4my";
-    			add_location(nav, file$4, 69, 2, 1346);
-    			button.className = "svelte-7zu4my";
-    			add_location(button, file$4, 74, 6, 1434);
+    			header.className = "svelte-fm2b8o";
+    			add_location(header, file$4, 68, 2, 1374);
+    			nav.className = "svelte-fm2b8o";
+    			add_location(nav, file$4, 71, 2, 1418);
+    			button.className = "svelte-fm2b8o";
+    			add_location(button, file$4, 76, 6, 1506);
     			div.id = "mainChart";
-    			div.className = "svelte-7zu4my";
-    			add_location(div, file$4, 73, 4, 1406);
-    			aside.className = "svelte-7zu4my";
-    			add_location(aside, file$4, 77, 4, 1519);
-    			section.className = "svelte-7zu4my";
-    			add_location(section, file$4, 72, 2, 1391);
-    			main.className = "svelte-7zu4my";
-    			add_location(main, file$4, 65, 0, 1292);
+    			div.className = "svelte-fm2b8o";
+    			add_location(div, file$4, 75, 4, 1478);
+    			aside.className = "svelte-fm2b8o";
+    			add_location(aside, file$4, 79, 4, 1591);
+    			section.className = "svelte-fm2b8o";
+    			add_location(section, file$4, 74, 2, 1463);
+    			main.className = "svelte-fm2b8o";
+    			add_location(main, file$4, 67, 0, 1364);
     			dispose = listen(button, "click", ctx.toggle);
     		},
 
