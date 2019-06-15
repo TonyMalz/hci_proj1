@@ -1,6 +1,7 @@
 <script>
   import Tabs from "./Tabs.svelte";
   import StudyInfo from "./StudyInfo.svelte";
+  import UndoRedo from "./UndoRedo.svelte";
   import MainChart from "./MainChart.svelte";
   import { fly } from "svelte/transition";
 
@@ -42,15 +43,20 @@
     font-weight: 300;
     grid-area: nav;
     background: var(--color-nav);
-    display: flex;
+    display: grid;
+    grid-template-areas: "tabs undoRedo";
+    grid-template-columns: auto 100px;
   }
 
   section {
     padding: 1em;
     grid-area: content;
     display: grid;
-    grid-template: "main-chart ai-charts";
-    grid-template-columns: 4fr 1fr;
+    grid-template:
+      "main-chart ai-charts"
+      "anova anova";
+    grid-template-columns: 3fr 1fr;
+    grid-template-rows: 2fr 1fr;
     grid-gap: 1em;
     background: var(--color-content);
   }
@@ -58,10 +64,22 @@
   #mainChart {
     grid-area: main-chart;
   }
+  #anova {
+    grid-area: anova;
+    border: 1px dashed gray;
+    width: 100%;
+    padding: 1em;
+  }
   aside {
     border: 1px dashed gray;
     grid-area: ai-charts;
     padding: 1em;
+  }
+  .tabs {
+    grid-area: tabs;
+  }
+  .undoRedo {
+    grid-area: undoRedo;
   }
 </style>
 
@@ -70,7 +88,12 @@
     <StudyInfo />
   </header>
   <nav>
-    <Tabs {activeTab} />
+    <div class="tabs">
+      <Tabs {activeTab} />
+    </div>
+    <div class="undoRedo">
+      <UndoRedo />
+    </div>
   </nav>
   <section>
     <div id="mainChart">
@@ -78,5 +101,6 @@
       <MainChart />
     </div>
     <aside>AI Charts</aside>
+    <div id="anova">Anova</div>
   </section>
 </main>
