@@ -18,5 +18,17 @@
     "dev": "run-p start:dev autobuild",
     "start": "sirv public",
     "start:dev": "sirv public --dev"
-  }
+  },
+  "description": "HCI Project 1 - SensQ Vis",
+  "main": "rollup.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TonyMalz/hci_proj1.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TonyMalz/hci_proj1/issues"
+  },
+  "homepage": "https://github.com/TonyMalz/hci_proj1#readme"
 }
