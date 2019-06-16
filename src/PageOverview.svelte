@@ -1,5 +1,6 @@
 <script>
   import MainChart from "./MainChart.svelte";
+  import MainChartSummary from "./MainChartSummary.svelte";
   import Sherlock from "./Sherlock.svelte";
   import Anova from "./Anova.svelte";
   import { fade } from "svelte/transition";
@@ -10,13 +11,25 @@
     height: 100%;
     display: grid;
     grid-template:
-      "main-chart ai-charts"
-      "anova ai-charts";
-    grid-template-columns: 3fr 1fr;
-    grid-template-rows: 2fr 1fr;
+      "main-chart main-chart-summary filters ai-charts"
+      "anova anova filters ai-charts";
+    grid-template-columns: 2.5fr 0.5fr 0.75fr 1fr;
+    grid-template-rows: 2.5fr 1fr;
     grid-gap: 1em;
   }
-
+  mainChartSummary {
+    width: 97%;
+    height: 97%;
+    grid-area: main-chart-summary;
+    padding: 1em;
+  }
+  leftOAside {
+    width: 97%;
+    height: 97%;
+    box-shadow: 0px 0px 14px 1px #e8e8e8;
+    grid-area: filters;
+    padding: 1em;
+  }
   .mainChart {
     grid-area: main-chart;
   }
@@ -39,6 +52,10 @@
   <div class="mainChart">
     <MainChart />
   </div>
+  <leftOAside>
+    <!-- TODO implement filters -->
+    Filters go here
+  </leftOAside>
   <aside>
     <Sherlock />
   </aside>
