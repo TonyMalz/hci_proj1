@@ -13,15 +13,14 @@
     grid-template:
       "main-chart main-chart-summary filters ai-charts"
       "anova anova filters ai-charts";
-    grid-template-columns: 2.5fr 0.5fr 0.75fr 1fr;
+    grid-template-columns: 2.5fr minmax(140px, 0.5fr) auto 1fr;
     grid-template-rows: 2.5fr 1fr;
     grid-gap: 1em;
   }
   .mainChartSummary {
-    width: 97%;
-    height: 97%;
+    /* width: 150px; */
+    height: 100%;
     grid-area: main-chart-summary;
-    padding: 1em;
   }
   leftOAside {
     width: 97%;
@@ -41,7 +40,7 @@
   aside {
     grid-area: ai-charts;
     width: 97%;
-    height: 97%;
+    /* height: 97%; */
     box-shadow: 0px 0px 14px 1px #e8e8e8;
     padding: 1em;
     border-radius: 4px;
@@ -55,10 +54,9 @@
   <div class="mainChartSummary">
     <MainChartSummary />
   </div>
-  <leftOAside>
-    <!-- TODO implement filters -->
+  <!-- <leftOAside>
     Filters go here
-  </leftOAside>
+  </leftOAside> -->
   <aside>
     <Sherlock />
   </aside>

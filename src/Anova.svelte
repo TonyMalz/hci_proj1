@@ -2,7 +2,15 @@
   import { onMount } from "svelte";
   onMount(() => {
     const anovaChart = echarts.init(document.getElementById("anovaChart"));
-    const categoryData = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    const categoryData = [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday"
+    ];
     const errorData = [];
     const barData = [];
     const dataCount = 7;
@@ -23,7 +31,7 @@
       var lowPoint = api.coord([xValue, api.value(2)]);
       var halfWidth = api.size([1, 0])[0] * 0.05;
       var style = api.style({
-        stroke: "#888",
+        stroke: "#777",
         fill: null
       });
 
@@ -104,7 +112,7 @@
           data: barData,
           itemStyle: {
             normal: {
-              color: "#96bcdb"
+              color: "#61a0a7"
             }
           }
         },

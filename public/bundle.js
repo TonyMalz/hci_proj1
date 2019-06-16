@@ -1348,7 +1348,7 @@ var app = (function () {
     			div.id = "mainChart";
     			set_style(div, "width", "100%");
     			set_style(div, "height", "100%");
-    			add_location(div, file$4, 86, 0, 3336);
+    			add_location(div, file$4, 236, 0, 4661);
     		},
 
     		l: function claim(nodes) {
@@ -1376,73 +1376,223 @@ var app = (function () {
         const mainChart = echarts.init(document.getElementById("mainChart"));
 
         // TODO find alternative for this workaround
-        var hours = ['08:00', '', '09:00', '', '10:00', '', '11:00', '', '12:00', '', '13:00', '', '14:00', '', '15:00',
-            '', '16:00', '', '17:00', '', '18:00', '', '19:00', '', '20:00', '', '21:00', '', '22:00', '', '23:00', '', '24:00'];
-        var days = ['', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-        var data = 
-        [[1,1,5],[1,3,3],[1,5,2],[1,7,1],[1,9,0],[1,11,0.5],[1,13,0.5],[1,15,3],[1,17,5],[1,19,5.5],[1,21,5.2],[1,23,6.1],[1,25,3],[1,27,6],[1,29,1],[1,31,2],
-        [2,1,5],[2,3,2],[2,5,2],[2,7,0.5],[2,9,1],[2,11,1.5],[2,13,1.5],[2,15,3.5],[2,17,6],[2,19,4.5],[2,21,4.5],[2,23,5.5],[2,25,4],[2,27,5],[2,29,1.2],[2,31,5],
-        [3,1,3],[3,3,1.5],[3,5,2],[3,7,1],[3,9,2],[3,11,2],[3,13,0.75],[3,15,2],[3,17,4],[3,19,3.5],[3,21,4],[3,23,5.75],[3,25,5],[3,27,3],[3,29,3],[3,31,2.5],
-        [4,1,3.5],[4,3,2],[4,5,2],[4,7,2],[4,9,0.5],[4,11,1.5],[4,13,0.85],[4,15,1.5],[4,17,3],[4,19,5],[4,21,3.9],[4,23,4],[4,25,3.5],[4,27,4],[4,29,2],[4,31,3],
-        [5,1,4],[5,3,1.4],[5,5,2],[5,7,1.5],[5,9,2],[5,11,0.5],[5,13,1.75],[5,15,2.85],[5,17,4.5],[5,19,5.1],[5,21,4.2],[5,23,3.5],[5,25,4],[5,27,4.5],[5,29,5],[5,31,4],
-        [6,1,5],[6,3,1.5],[6,5,2],[6,7,1],[6,9,0],[6,11,0.75],[6,13,1.0],[6,15,2],[6,17,5.75],[6,19,4],[6,21,4.75],[6,23,6],[6,25,4.5],[6,27,3.23],[6,29,7],[6,31,0.5],
-        [7,1,4.5],[7,3,1],[7,5,2],[7,7,0],[7,9,1],[7,11,1],[7,13,0.5],[7,15,3],[7,17,3],[7,19,4.75],[7,21,2],[7,23,5.5],[7,25,3.99],[7,27,6.5],[7,29,2],[7,31,1]];
-
+        var hours = [
+          "08:00",
+          "",
+          "09:00",
+          "",
+          "10:00",
+          "",
+          "11:00",
+          "",
+          "12:00",
+          "",
+          "13:00",
+          "",
+          "14:00",
+          "",
+          "15:00",
+          "",
+          "16:00",
+          "",
+          "17:00",
+          "",
+          "18:00",
+          "",
+          "19:00",
+          "",
+          "20:00",
+          "",
+          "21:00",
+          "",
+          "22:00",
+          "",
+          "23:00",
+          "",
+          "24:00"
+        ];
+        var days = [
+          "",
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday"
+        ];
+        var data = [
+          [1, 1, 5],
+          [1, 3, 3],
+          [1, 5, 2],
+          [1, 7, 1],
+          [1, 9, 0],
+          [1, 11, 0.5],
+          [1, 13, 0.5],
+          [1, 15, 3],
+          [1, 17, 5],
+          [1, 19, 5.5],
+          [1, 21, 5.2],
+          [1, 23, 6.1],
+          [1, 25, 3],
+          [1, 27, 6],
+          [1, 29, 1],
+          [1, 31, 2],
+          [2, 1, 5],
+          [2, 3, 2],
+          [2, 5, 2],
+          [2, 7, 0.5],
+          [2, 9, 1],
+          [2, 11, 1.5],
+          [2, 13, 1.5],
+          [2, 15, 3.5],
+          [2, 17, 6],
+          [2, 19, 4.5],
+          [2, 21, 4.5],
+          [2, 23, 5.5],
+          [2, 25, 4],
+          [2, 27, 5],
+          [2, 29, 1.2],
+          [2, 31, 5],
+          [3, 1, 3],
+          [3, 3, 1.5],
+          [3, 5, 2],
+          [3, 7, 1],
+          [3, 9, 2],
+          [3, 11, 2],
+          [3, 13, 0.75],
+          [3, 15, 2],
+          [3, 17, 4],
+          [3, 19, 3.5],
+          [3, 21, 4],
+          [3, 23, 5.75],
+          [3, 25, 5],
+          [3, 27, 3],
+          [3, 29, 3],
+          [3, 31, 2.5],
+          [4, 1, 3.5],
+          [4, 3, 2],
+          [4, 5, 2],
+          [4, 7, 2],
+          [4, 9, 0.5],
+          [4, 11, 1.5],
+          [4, 13, 0.85],
+          [4, 15, 1.5],
+          [4, 17, 3],
+          [4, 19, 5],
+          [4, 21, 3.9],
+          [4, 23, 4],
+          [4, 25, 3.5],
+          [4, 27, 4],
+          [4, 29, 2],
+          [4, 31, 3],
+          [5, 1, 4],
+          [5, 3, 1.4],
+          [5, 5, 2],
+          [5, 7, 1.5],
+          [5, 9, 2],
+          [5, 11, 0.5],
+          [5, 13, 1.75],
+          [5, 15, 2.85],
+          [5, 17, 4.5],
+          [5, 19, 5.1],
+          [5, 21, 4.2],
+          [5, 23, 3.5],
+          [5, 25, 4],
+          [5, 27, 4.5],
+          [5, 29, 5],
+          [5, 31, 4],
+          [6, 1, 5],
+          [6, 3, 1.5],
+          [6, 5, 2],
+          [6, 7, 1],
+          [6, 9, 0],
+          [6, 11, 0.75],
+          [6, 13, 1.0],
+          [6, 15, 2],
+          [6, 17, 5.75],
+          [6, 19, 4],
+          [6, 21, 4.75],
+          [6, 23, 6],
+          [6, 25, 4.5],
+          [6, 27, 3.23],
+          [6, 29, 7],
+          [6, 31, 0.5],
+          [7, 1, 4.5],
+          [7, 3, 1],
+          [7, 5, 2],
+          [7, 7, 0],
+          [7, 9, 1],
+          [7, 11, 1],
+          [7, 13, 0.5],
+          [7, 15, 3],
+          [7, 17, 3],
+          [7, 19, 4.75],
+          [7, 21, 2],
+          [7, 23, 5.5],
+          [7, 25, 3.99],
+          [7, 27, 6.5],
+          [7, 29, 2],
+          [7, 31, 1]
+        ];
 
         const option = {
           legend: {
-            data: ['Average availability'],
-            left: 'center'
+            data: ["Average availability"],
+            left: "center"
           },
           tooltip: {
-              position: 'top',
-              formatter: function (params) {
-                  // TODO implement function capable of translating params.value[1] into 'XX:00-XX:00'
-                  return 'Average availability is ' + params.value[2];
-              }
+            position: "top",
+            formatter: function(params) {
+              // TODO implement function capable of translating params.value[1] into 'XX:00-XX:00'
+              return "Average availability is " + params.value[2];
+            }
           },
           grid: {
-              left: 2,
-              bottom: 10,
-              right: 90,
-              containLabel: true
+            top:40,
+            left: 2,
+            bottom: 10,
+            right: 30,
+            containLabel: true
           },
           xAxis: {
-              type: 'category',
-              boundaryGap: false,
-              name: 'Day of week',
-              data: days,
-              splitLine: {
-                  show: true,
-                  lineStyle: {
-                      color: '#999',
-                      type: 'dashed'
-                  }
-              },
-              axisLine: {
-                  show: true
+            type: "category",
+            boundaryGap: false,
+            // name: "Day of week",
+            data: days,
+            splitLine: {
+              show: true,
+              lineStyle: {
+                color: "#999",
+                type: "dashed"
               }
+            },
+            axisLine: {
+              show: true
+            }
           },
           yAxis: {
-              type: 'category',
-              boundaryGap: false,
-              name: 'Time of day',
-              data: hours,
-              axisLine: {
-                  show: true
-              }
+            type: "category",
+            boundaryGap: false,
+            name: "Time of day",
+            data: hours,
+            axisLine: {
+              show: true
+            }
           },
-          series: [{
-              name: 'Average availability',
-              type: 'scatter',
-              symbolSize: function (val) {
-                  return val[2] * 6;
+          series: [
+            {
+              name: "Average availability",
+              type: "scatter",
+              symbolSize: function(val) {
+                return val[2] * 6;
               },
               data: data,
-              animationDelay: function (idx) {
-                  return idx * 5;
+              animationDelay: function(idx) {
+                return idx * 5;
               }
-          }]
+            }
+          ]
         };
 
         // use configuration item and data specified to show chart
@@ -1477,7 +1627,7 @@ var app = (function () {
     			div.id = "mainChartSummary";
     			set_style(div, "width", "100%");
     			set_style(div, "height", "100%");
-    			add_location(div, file$5, 56, 0, 1848);
+    			add_location(div, file$5, 126, 0, 2497);
     		},
 
     		l: function claim(nodes) {
@@ -1502,49 +1652,119 @@ var app = (function () {
 
     function instance$3($$self) {
     	onMount(() => {
-        const mainChartSummary = echarts.init(document.getElementById("mainChartSummary"));
+        const mainChartSummary = echarts.init(
+          document.getElementById("mainChartSummary")
+        );
 
         const option = {
-            tooltip: {
-                trigger: 'axis',
-                formatter: "Average availability : <br/>{b}h : {c}"
-            },
-            grid: {
-                left: '3%',
-                right: '40%',
-                bottom: '3%',
-                containLabel: true
-            },
-            xAxis: {
-                type: 'value',
-                name: 'Avg. Avail.'
-            },
-            yAxis: {
-                type: 'category',
-                axisLine: {onZero: true},
-                boundaryGap: false,
-                name: 'Time of day',
-                data: ['08:00', '', '09:00', '', '10:00', '', '11:00', '', '12:00', '', '13:00', '', '14:00', '', '15:00',
-                '', '16:00', '', '17:00', '', '18:00', '', '19:00', '', '20:00', '', '21:00', '', '22:00', '', '23:00', '', '24:00']
-            },
-            series: [
-                {
-                    name: 'Average availability',
-                    type: 'line',
-                    smooth: false, // disable interpolation
-                    lineStyle: {
-                        normal: {
-                            width: 3,
-                            shadowColor: 'rgba(0,0,0,0.4)',
-                            shadowBlur: 10,
-                            shadowOffsetY: 10
-                        }
-                    },
-                    data:[1, 2.5, 3.8, 7, 5, 4, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3.5, 3.5, 3.5, 4, 4, 4, 4.5, 3, 3, 3, 3, 2.5, 2, 5, 6, 4, 3.75, 2]
-                }
+          tooltip: {
+            trigger: "axis",
+            formatter: "Average availability : <br/>{b}h : {c}"
+          },
+          grid: {
+            top: 40,
+            left: 2,
+            bottom: 10,
+            right: 50,
+            containLabel: true
+          },
+          xAxis: {
+            type: "value",
+            name: "Avail."
+          },
+          yAxis: {
+            type: "category",
+            axisLine: { onZero: true },
+            boundaryGap: false,
+            name: "Time of day",
+            data: [
+              "08:00",
+              "",
+              "09:00",
+              "",
+              "10:00",
+              "",
+              "11:00",
+              "",
+              "12:00",
+              "",
+              "13:00",
+              "",
+              "14:00",
+              "",
+              "15:00",
+              "",
+              "16:00",
+              "",
+              "17:00",
+              "",
+              "18:00",
+              "",
+              "19:00",
+              "",
+              "20:00",
+              "",
+              "21:00",
+              "",
+              "22:00",
+              "",
+              "23:00",
+              "",
+              "24:00"
             ]
+          },
+          series: [
+            {
+              name: "Average availability",
+              type: "line",
+              smooth: false, // disable interpolation
+              lineStyle: {
+                normal: {
+                  width: 3,
+                  shadowColor: "rgba(0,0,0,0.4)",
+                  shadowBlur: 10,
+                  shadowOffsetY: 10
+                }
+              },
+              data: [
+                1,
+                2.5,
+                3.8,
+                7,
+                5,
+                4,
+                4,
+                4,
+                4,
+                5,
+                5,
+                5,
+                2,
+                2,
+                2,
+                3.5,
+                3.5,
+                3.5,
+                4,
+                4,
+                4,
+                4.5,
+                3,
+                3,
+                3,
+                3,
+                2.5,
+                2,
+                5,
+                6,
+                4,
+                3.75,
+                2
+              ]
+            }
+          ]
         };
-        
+
         // use configuration item and data specified to show chart
         mainChartSummary.setOption(option);
         window.addEventListener("resize", () => {
@@ -1893,7 +2113,7 @@ var app = (function () {
     			div = element("div");
     			div.id = "anovaChart";
     			div.className = "svelte-1a6ghsc";
-    			add_location(div, file$7, 147, 0, 3410);
+    			add_location(div, file$7, 155, 0, 3466);
     		},
 
     		l: function claim(nodes) {
@@ -1919,7 +2139,15 @@ var app = (function () {
     function instance$5($$self) {
     	onMount(() => {
         const anovaChart = echarts.init(document.getElementById("anovaChart"));
-        const categoryData = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+        const categoryData = [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday"
+        ];
         const errorData = [];
         const barData = [];
         const dataCount = 7;
@@ -1940,7 +2168,7 @@ var app = (function () {
           var lowPoint = api.coord([xValue, api.value(2)]);
           var halfWidth = api.size([1, 0])[0] * 0.05;
           var style = api.style({
-            stroke: "#888",
+            stroke: "#777",
             fill: null
           });
 
@@ -2021,7 +2249,7 @@ var app = (function () {
               data: barData,
               itemStyle: {
                 normal: {
-                  color: "#96bcdb"
+                  color: "#61a0a7"
                 }
               }
             },
@@ -2067,7 +2295,7 @@ var app = (function () {
     const file$8 = "src\\PageOverview.svelte";
 
     function create_fragment$8(ctx) {
-    	var div3, div0, t0, div1, t1, leftOAside, t3, aside, t4, div2, div3_intro, current;
+    	var div3, div0, t0, div1, t1, aside, t2, div2, div3_intro, current;
 
     	var mainchart = new MainChart({ $$inline: true });
 
@@ -2086,26 +2314,21 @@ var app = (function () {
     			div1 = element("div");
     			mainchartsummary.$$.fragment.c();
     			t1 = space();
-    			leftOAside = element("leftOAside");
-    			leftOAside.textContent = "Filters go here";
-    			t3 = space();
     			aside = element("aside");
     			sherlock.$$.fragment.c();
-    			t4 = space();
+    			t2 = space();
     			div2 = element("div");
     			anova.$$.fragment.c();
-    			div0.className = "mainChart svelte-y99zse";
-    			add_location(div0, file$8, 51, 2, 1188);
-    			div1.className = "mainChartSummary svelte-y99zse";
-    			add_location(div1, file$8, 54, 2, 1244);
-    			leftOAside.className = "svelte-y99zse";
-    			add_location(leftOAside, file$8, 57, 2, 1314);
-    			aside.className = "svelte-y99zse";
-    			add_location(aside, file$8, 61, 2, 1405);
-    			div2.className = "anova svelte-y99zse";
-    			add_location(div2, file$8, 64, 2, 1446);
-    			div3.className = "overview svelte-y99zse";
-    			add_location(div3, file$8, 50, 0, 1134);
+    			div0.className = "mainChart svelte-126cpnx";
+    			add_location(div0, file$8, 50, 2, 1197);
+    			div1.className = "mainChartSummary svelte-126cpnx";
+    			add_location(div1, file$8, 53, 2, 1253);
+    			aside.className = "svelte-126cpnx";
+    			add_location(aside, file$8, 59, 2, 1386);
+    			div2.className = "anova svelte-126cpnx";
+    			add_location(div2, file$8, 62, 2, 1427);
+    			div3.className = "overview svelte-126cpnx";
+    			add_location(div3, file$8, 49, 0, 1143);
     		},
 
     		l: function claim(nodes) {
@@ -2120,11 +2343,9 @@ var app = (function () {
     			append(div3, div1);
     			mount_component(mainchartsummary, div1, null);
     			append(div3, t1);
-    			append(div3, leftOAside);
-    			append(div3, t3);
     			append(div3, aside);
     			mount_component(sherlock, aside, null);
-    			append(div3, t4);
+    			append(div3, t2);
     			append(div3, div2);
     			mount_component(anova, div2, null);
     			current = true;
