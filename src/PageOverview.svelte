@@ -17,7 +17,7 @@
     grid-template-rows: 2.5fr 1fr;
     grid-gap: 1em;
   }
-  mainChartSummary {
+  .mainChartSummary {
     width: 97%;
     height: 97%;
     grid-area: main-chart-summary;
@@ -51,6 +51,9 @@
 <div class="overview" in:fade={{ duration: 300 }}>
   <div class="mainChart">
     <MainChart />
+  </div>
+  <div class="mainChartSummary">
+    <MainChartSummary />
   </div>
   <leftOAside>
     <!-- TODO implement filters -->

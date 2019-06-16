@@ -1348,7 +1348,7 @@ var app = (function () {
     			div.id = "mainChart";
     			set_style(div, "width", "100%");
     			set_style(div, "height", "100%");
-    			add_location(div, file$4, 312, 0, 8621);
+    			add_location(div, file$4, 86, 0, 3336);
     		},
 
     		l: function claim(nodes) {
@@ -1372,304 +1372,78 @@ var app = (function () {
     }
 
     function instance$2($$self) {
-    	const dataBJ = [
-        [1, 55, 9, 56, 0.46, 18, 6, "良"],
-        [2, 25, 11, 21, 0.65, 34, 9, "优"],
-        [3, 56, 7, 63, 0.3, 14, 5, "良"],
-        [4, 33, 7, 29, 0.33, 16, 6, "优"],
-        [5, 42, 24, 44, 0.76, 40, 16, "优"],
-        [6, 82, 58, 90, 1.77, 68, 33, "良"],
-        [7, 74, 49, 77, 1.46, 48, 27, "良"],
-        [8, 78, 55, 80, 1.29, 59, 29, "良"],
-        [9, 267, 216, 280, 4.8, 108, 64, "重度污染"],
-        [10, 185, 127, 216, 2.52, 61, 27, "中度污染"],
-        [11, 39, 19, 38, 0.57, 31, 15, "优"],
-        [12, 41, 11, 40, 0.43, 21, 7, "优"],
-        [13, 64, 38, 74, 1.04, 46, 22, "良"],
-        [14, 108, 79, 120, 1.7, 75, 41, "轻度污染"],
-        [15, 108, 63, 116, 1.48, 44, 26, "轻度污染"],
-        [16, 33, 6, 29, 0.34, 13, 5, "优"],
-        [17, 94, 66, 110, 1.54, 62, 31, "良"],
-        [18, 186, 142, 192, 3.88, 93, 79, "中度污染"],
-        [19, 57, 31, 54, 0.96, 32, 14, "良"],
-        [20, 22, 8, 17, 0.48, 23, 10, "优"],
-        [21, 39, 15, 36, 0.61, 29, 13, "优"],
-        [22, 94, 69, 114, 2.08, 73, 39, "良"],
-        [23, 99, 73, 110, 2.43, 76, 48, "良"],
-        [24, 31, 12, 30, 0.5, 32, 16, "优"],
-        [25, 42, 27, 43, 1, 53, 22, "优"],
-        [26, 154, 117, 157, 3.05, 92, 58, "中度污染"],
-        [27, 234, 185, 230, 4.09, 123, 69, "重度污染"],
-        [28, 160, 120, 186, 2.77, 91, 50, "中度污染"],
-        [29, 134, 96, 165, 2.76, 83, 41, "轻度污染"],
-        [30, 52, 24, 60, 1.03, 50, 21, "良"]
-      ];
-
-      const dataGZ = [
-        [1, 26, 37, 27, 1.163, 27, 13, "优"],
-        [2, 85, 62, 71, 1.195, 60, 8, "良"],
-        [3, 78, 38, 74, 1.363, 37, 7, "良"],
-        [4, 21, 21, 36, 0.634, 40, 9, "优"],
-        [5, 41, 42, 46, 0.915, 81, 13, "优"],
-        [6, 56, 52, 69, 1.067, 92, 16, "良"],
-        [7, 64, 30, 28, 0.924, 51, 2, "良"],
-        [8, 55, 48, 74, 1.236, 75, 26, "良"],
-        [9, 76, 85, 113, 1.237, 114, 27, "良"],
-        [10, 91, 81, 104, 1.041, 56, 40, "良"],
-        [11, 84, 39, 60, 0.964, 25, 11, "良"],
-        [12, 64, 51, 101, 0.862, 58, 23, "良"],
-        [13, 70, 69, 120, 1.198, 65, 36, "良"],
-        [14, 77, 105, 178, 2.549, 64, 16, "良"],
-        [15, 109, 68, 87, 0.996, 74, 29, "轻度污染"],
-        [16, 73, 68, 97, 0.905, 51, 34, "良"],
-        [17, 54, 27, 47, 0.592, 53, 12, "良"],
-        [18, 51, 61, 97, 0.811, 65, 19, "良"],
-        [19, 91, 71, 121, 1.374, 43, 18, "良"],
-        [20, 73, 102, 182, 2.787, 44, 19, "良"],
-        [21, 73, 50, 76, 0.717, 31, 20, "良"],
-        [22, 84, 94, 140, 2.238, 68, 18, "良"],
-        [23, 93, 77, 104, 1.165, 53, 7, "良"],
-        [24, 99, 130, 227, 3.97, 55, 15, "良"],
-        [25, 146, 84, 139, 1.094, 40, 17, "轻度污染"],
-        [26, 113, 108, 137, 1.481, 48, 15, "轻度污染"],
-        [27, 81, 48, 62, 1.619, 26, 3, "良"],
-        [28, 56, 48, 68, 1.336, 37, 9, "良"],
-        [29, 82, 92, 174, 3.29, 0, 13, "良"],
-        [30, 106, 116, 188, 3.628, 101, 16, "轻度污染"]
-      ];
-
-      const dataSH = [
-        [1, 91, 45, 125, 0.82, 34, 23, "良"],
-        [2, 65, 27, 78, 0.86, 45, 29, "良"],
-        [3, 83, 60, 84, 1.09, 73, 27, "良"],
-        [4, 109, 81, 121, 1.28, 68, 51, "轻度污染"],
-        [5, 106, 77, 114, 1.07, 55, 51, "轻度污染"],
-        [6, 109, 81, 121, 1.28, 68, 51, "轻度污染"],
-        [7, 106, 77, 114, 1.07, 55, 51, "轻度污染"],
-        [8, 89, 65, 78, 0.86, 51, 26, "良"],
-        [9, 53, 33, 47, 0.64, 50, 17, "良"],
-        [10, 80, 55, 80, 1.01, 75, 24, "良"],
-        [11, 117, 81, 124, 1.03, 45, 24, "轻度污染"],
-        [12, 99, 71, 142, 1.1, 62, 42, "良"],
-        [13, 95, 69, 130, 1.28, 74, 50, "良"],
-        [14, 116, 87, 131, 1.47, 84, 40, "轻度污染"],
-        [15, 108, 80, 121, 1.3, 85, 37, "轻度污染"],
-        [16, 134, 83, 167, 1.16, 57, 43, "轻度污染"],
-        [17, 79, 43, 107, 1.05, 59, 37, "良"],
-        [18, 71, 46, 89, 0.86, 64, 25, "良"],
-        [19, 97, 71, 113, 1.17, 88, 31, "良"],
-        [20, 84, 57, 91, 0.85, 55, 31, "良"],
-        [21, 87, 63, 101, 0.9, 56, 41, "良"],
-        [22, 104, 77, 119, 1.09, 73, 48, "轻度污染"],
-        [23, 87, 62, 100, 1, 72, 28, "良"],
-        [24, 168, 128, 172, 1.49, 97, 56, "中度污染"],
-        [25, 65, 45, 51, 0.74, 39, 17, "良"],
-        [26, 39, 24, 38, 0.61, 47, 17, "优"],
-        [27, 39, 24, 39, 0.59, 50, 19, "优"],
-        [28, 93, 68, 96, 1.05, 79, 29, "良"],
-        [29, 188, 143, 197, 1.66, 99, 51, "中度污染"],
-        [30, 174, 131, 174, 1.55, 108, 50, "中度污染"]
-      ];
-
-      const schema = [
-        { name: "date", index: 0, text: "Day" },
-        { name: "AQIindex", index: 1, text: "AQI" },
-        { name: "PM25", index: 2, text: "Workload" },
-        { name: "PM10", index: 3, text: "PM10" },
-        { name: "CO", index: 4, text: "(CO)" },
-        { name: "NO2", index: 5, text: "(NO2)" },
-        { name: "SO2", index: 6, text: "(SO2)" }
-      ];
-
-      const itemStyle = {
-        normal: {
-          opacity: 0.8,
-          shadowBlur: 10,
-          shadowOffsetX: 0,
-          shadowOffsetY: 0,
-          shadowColor: "rgba(0, 0, 0, 0.5)"
-        }
-      };
-
-      const option = {
-        backgroundColor: "#fff",
-        color: ["#be5e5e", "#fec42c", "#7ad6ad"],
-        legend: {
-          y: "top",
-          data: ["Angry", "Calm", "Happy"],
-          textStyle: {
-            color: "#333",
-            fontSize: 14
-          }
-        },
-        grid: {
-          x: 36,
-          x2: "17%",
-          y: 40,
-          y2: 40
-        },
-        tooltip: {
-          padding: 10,
-          backgroundColor: "#333",
-          borderColor: "#777",
-          borderWidth: 1,
-          formatter: function(obj) {
-            const value = obj.value;
-            return (
-              '<div style="border-bottom: 1px solid rgba(255,255,255,.3); font-size: 14px;padding-bottom: 7px;margin-bottom: 7px">' +
-              obj.seriesName +
-              " " +
-              `Day：${value[0]} ` +
-              // + value[7]
-              "</div>" +
-              schema[1].text +
-              "：" +
-              value[1] +
-              "<br>" +
-              schema[2].text +
-              "：" +
-              value[2] +
-              "<br>" +
-              schema[3].text +
-              "：" +
-              value[3] +
-              "<br>" +
-              schema[4].text +
-              "：" +
-              value[4] +
-              "<br>" +
-              schema[5].text +
-              "：" +
-              value[5] +
-              "<br>" +
-              schema[6].text +
-              "：" +
-              value[6] +
-              "<br>"
-            );
-          }
-        },
-        xAxis: {
-          type: "value",
-          name: "Day",
-          nameGap: 16,
-          nameTextStyle: {
-            color: "#333",
-            fontSize: 14
-          },
-          max: 30,
-          splitLine: {
-            show: true
-          },
-          axisLine: {
-            lineStyle: {
-              color: "#333"
-            }
-          }
-        },
-        yAxis: {
-          type: "value",
-          name: "Availability",
-          nameLocation: "end",
-          nameGap: 16,
-          nameTextStyle: {
-            color: "#333",
-            fontSize: 14
-          },
-          axisLine: {
-            lineStyle: {
-              color: "#333"
-            }
-          },
-          splitLine: {
-            show: false
-          }
-        },
-        visualMap: [
-          {
-            left: "87%",
-            top: 10,
-            dimension: 2,
-            min: 0,
-            max: 250,
-            itemWidth: 20,
-            itemHeight: 50,
-            calculable: true,
-            precision: 0.1,
-            text: [schema[2].text],
-            textGap: 18,
-            textStyle: {
-              color: "#333"
-            },
-            inRange: {
-              symbolSize: [10, 70]
-            },
-            outOfRange: {
-              symbolSize: [10, 70],
-              color: ["rgba(255,255,255,.2)"]
-            },
-            controller: {
-              inRange: {
-                color: ["#777"]
-              },
-              outOfRange: {
-                color: ["#444"]
-              }
-            }
-          },
-          {
-            left: "87%",
-            top: 140,
-            dimension: 6,
-            min: 0,
-            max: 50,
-            itemWidth: 20,
-            itemHeight: 50,
-            calculable: true,
-            precision: 0.1,
-            text: [schema[6].text],
-            textGap: 18,
-            textStyle: {
-              color: "#333"
-            },
-            inRange: {},
-            outOfRange: {
-              color: ["rgba(255,255,255,.2)"]
-            },
-            controller: {
-              inRange: {
-                color: ["teal"]
-              },
-              outOfRange: {
-                color: ["#444"]
-              }
-            }
-          }
-        ],
-        series: [
-          {
-            name: "Angry",
-            type: "scatter",
-            itemStyle: itemStyle,
-            data: dataBJ
-          },
-          {
-            name: "Calm",
-            type: "scatter",
-            itemStyle: itemStyle,
-            data: dataSH
-          },
-          {
-            name: "Happy",
-            type: "scatter",
-            itemStyle: itemStyle,
-            data: dataGZ
-          }
-        ]
-      };
-
-      onMount(() => {
+    	onMount(() => {
         const mainChart = echarts.init(document.getElementById("mainChart"));
+
+        // TODO find alternative for this workaround
+        var hours = ['08:00', '', '09:00', '', '10:00', '', '11:00', '', '12:00', '', '13:00', '', '14:00', '', '15:00',
+            '', '16:00', '', '17:00', '', '18:00', '', '19:00', '', '20:00', '', '21:00', '', '22:00', '', '23:00', '', '24:00'];
+        var days = ['', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+        var data = 
+        [[1,1,5],[1,3,3],[1,5,2],[1,7,1],[1,9,0],[1,11,0.5],[1,13,0.5],[1,15,3],[1,17,5],[1,19,5.5],[1,21,5.2],[1,23,6.1],[1,25,3],[1,27,6],[1,29,1],[1,31,2],
+        [2,1,5],[2,3,2],[2,5,2],[2,7,0.5],[2,9,1],[2,11,1.5],[2,13,1.5],[2,15,3.5],[2,17,6],[2,19,4.5],[2,21,4.5],[2,23,5.5],[2,25,4],[2,27,5],[2,29,1.2],[2,31,5],
+        [3,1,3],[3,3,1.5],[3,5,2],[3,7,1],[3,9,2],[3,11,2],[3,13,0.75],[3,15,2],[3,17,4],[3,19,3.5],[3,21,4],[3,23,5.75],[3,25,5],[3,27,3],[3,29,3],[3,31,2.5],
+        [4,1,3.5],[4,3,2],[4,5,2],[4,7,2],[4,9,0.5],[4,11,1.5],[4,13,0.85],[4,15,1.5],[4,17,3],[4,19,5],[4,21,3.9],[4,23,4],[4,25,3.5],[4,27,4],[4,29,2],[4,31,3],
+        [5,1,4],[5,3,1.4],[5,5,2],[5,7,1.5],[5,9,2],[5,11,0.5],[5,13,1.75],[5,15,2.85],[5,17,4.5],[5,19,5.1],[5,21,4.2],[5,23,3.5],[5,25,4],[5,27,4.5],[5,29,5],[5,31,4],
+        [6,1,5],[6,3,1.5],[6,5,2],[6,7,1],[6,9,0],[6,11,0.75],[6,13,1.0],[6,15,2],[6,17,5.75],[6,19,4],[6,21,4.75],[6,23,6],[6,25,4.5],[6,27,3.23],[6,29,7],[6,31,0.5],
+        [7,1,4.5],[7,3,1],[7,5,2],[7,7,0],[7,9,1],[7,11,1],[7,13,0.5],[7,15,3],[7,17,3],[7,19,4.75],[7,21,2],[7,23,5.5],[7,25,3.99],[7,27,6.5],[7,29,2],[7,31,1]];
+
+
+        const option = {
+          legend: {
+            data: ['Average availability'],
+            left: 'center'
+          },
+          tooltip: {
+              position: 'top',
+              formatter: function (params) {
+                  // TODO implement function capable of translating params.value[1] into 'XX:00-XX:00'
+                  return 'Average availability is ' + params.value[2];
+              }
+          },
+          grid: {
+              left: 2,
+              bottom: 10,
+              right: 90,
+              containLabel: true
+          },
+          xAxis: {
+              type: 'category',
+              boundaryGap: false,
+              name: 'Day of week',
+              data: days,
+              splitLine: {
+                  show: true,
+                  lineStyle: {
+                      color: '#999',
+                      type: 'dashed'
+                  }
+              },
+              axisLine: {
+                  show: true
+              }
+          },
+          yAxis: {
+              type: 'category',
+              boundaryGap: false,
+              name: 'Time of day',
+              data: hours,
+              axisLine: {
+                  show: true
+              }
+          },
+          series: [{
+              name: 'Average availability',
+              type: 'scatter',
+              symbolSize: function (val) {
+                  return val[2] * 6;
+              },
+              data: data,
+              animationDelay: function (idx) {
+                  return idx * 5;
+              }
+          }]
+        };
 
         // use configuration item and data specified to show chart
         mainChart.setOption(option);
@@ -1690,11 +1464,111 @@ var app = (function () {
     	}
     }
 
-    /* src\Sherlock.svelte generated by Svelte v3.5.1 */
+    /* src\MainChartSummary.svelte generated by Svelte v3.5.1 */
 
-    const file$5 = "src\\Sherlock.svelte";
+    const file$5 = "src\\MainChartSummary.svelte";
 
     function create_fragment$5(ctx) {
+    	var div;
+
+    	return {
+    		c: function create() {
+    			div = element("div");
+    			div.id = "mainChartSummary";
+    			set_style(div, "width", "100%");
+    			set_style(div, "height", "100%");
+    			add_location(div, file$5, 56, 0, 1848);
+    		},
+
+    		l: function claim(nodes) {
+    			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+    		},
+
+    		m: function mount(target, anchor) {
+    			insert(target, div, anchor);
+    		},
+
+    		p: noop,
+    		i: noop,
+    		o: noop,
+
+    		d: function destroy(detaching) {
+    			if (detaching) {
+    				detach(div);
+    			}
+    		}
+    	};
+    }
+
+    function instance$3($$self) {
+    	onMount(() => {
+        const mainChartSummary = echarts.init(document.getElementById("mainChartSummary"));
+
+        const option = {
+            tooltip: {
+                trigger: 'axis',
+                formatter: "Average availability : <br/>{b}h : {c}"
+            },
+            grid: {
+                left: '3%',
+                right: '40%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'value',
+                name: 'Avg. Avail.'
+            },
+            yAxis: {
+                type: 'category',
+                axisLine: {onZero: true},
+                boundaryGap: false,
+                name: 'Time of day',
+                data: ['08:00', '', '09:00', '', '10:00', '', '11:00', '', '12:00', '', '13:00', '', '14:00', '', '15:00',
+                '', '16:00', '', '17:00', '', '18:00', '', '19:00', '', '20:00', '', '21:00', '', '22:00', '', '23:00', '', '24:00']
+            },
+            series: [
+                {
+                    name: 'Average availability',
+                    type: 'line',
+                    smooth: false, // disable interpolation
+                    lineStyle: {
+                        normal: {
+                            width: 3,
+                            shadowColor: 'rgba(0,0,0,0.4)',
+                            shadowBlur: 10,
+                            shadowOffsetY: 10
+                        }
+                    },
+                    data:[1, 2.5, 3.8, 7, 5, 4, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3.5, 3.5, 3.5, 4, 4, 4, 4.5, 3, 3, 3, 3, 2.5, 2, 5, 6, 4, 3.75, 2]
+                }
+            ]
+        };
+        
+        // use configuration item and data specified to show chart
+        mainChartSummary.setOption(option);
+        window.addEventListener("resize", () => {
+          if (mainChartSummary !== null) {
+            mainChartSummary.resize();
+          }
+        });
+      });
+
+    	return {};
+    }
+
+    class MainChartSummary extends SvelteComponentDev {
+    	constructor(options) {
+    		super(options);
+    		init(this, options, instance$3, create_fragment$5, safe_not_equal, []);
+    	}
+    }
+
+    /* src\Sherlock.svelte generated by Svelte v3.5.1 */
+
+    const file$6 = "src\\Sherlock.svelte";
+
+    function create_fragment$6(ctx) {
     	var div0, svg1, g1, g0, svg0, path, t0, span, t2, div1;
 
     	return {
@@ -1711,7 +1585,7 @@ var app = (function () {
     			t2 = space();
     			div1 = element("div");
     			attr(path, "d", "M-823.5,558.3c-4.8-0.3-4.4,1.6-4.4,1.6l0.2,4.6c0,0,0,2.4-1.4,2.3s-1.8-2.8-1.8-2.8s-1.1-4.6-1.1-4.6\r\n            c0-0.1,0.1-0.3,0.1-0.4c0.1-0.3,0.1-0.7,0-1c-0.1-0.7-0.2-1.5-0.7-2.1c0,0-0.8-0.5-0.8-0.4c-0.5-3.4-2.2-6.8-5.7-7.8\r\n            c-0.2-0.1-2.5-0.5-3.6-0.7c0.1-0.3,0.3-0.6,0.4-0.9c0.3-1.2-0.4-2.3-0.8-3.3c-0.3-1-0.2-1.9,1-2c1.1-0.1,3.1,1,3.7,0.8\r\n            c0.7-0.1,1.5-0.7,1.5-1.5s-1.2-2.5-1.2-2.5s-1.6-3.2-2.1-4.6c-0.5-1.4-2.3-2.7-2.3-2.7s-1.8-1.3-1.6-2.2c0.2-0.9,0.9-1.2,1.2-2.1\r\n            c1,0.1,2.1,0.4,2.9,0.5c2.9,0.4,6.7,1.2,9,0.7c0,0,1.2-0.1,0-1c-1.2-0.9-4.1-3.7-5-4.7s-4.1-3.1-4.7-4.4c-1.9-3.9-2.4-8.6-5.6-11.9\r\n            c-2.3-2.4-5.2-4.3-8.2-5.6c1.1,0.2,2.2,0.3,3.3,0.3c0.1,0,0.3,0,0.4,0l0-0.9c-2.8,0.1-6-0.6-8.3-1.2c0.5,0,1-0.1,1.6-0.3\r\n            c1-0.3,2.9-1.1,2.5-2.5c-0.5-1.9-3.8-1.3-5.1-1.1c-2.5,0.4-4.8,1.6-7,2.8c-0.3-0.4-0.8-0.5-1.4-0.4c-0.4,0.1-0.7,0.3-0.9,0.5\r\n            c-0.4-0.2-1.7-0.7-4.9-0.7c-2,0-8.9,2.1-5.3,4.4c-1.5,0.4-3.2,0.8-4.4,0.9l0.1,0.9c0.7-0.1,1.5-0.2,2.4-0.4\r\n            c-2.5,1.5-4.7,3.4-6.6,5.6c-2,2.3-3.1,5.4-3.5,8.3c-0.5,3.6,0.5,7.2,0.3,10.8c-0.2,1.9-1.2,2.8-2.2,4.3c-1,1.5-1.4,3.2-2.4,4.7\r\n            c-0.8,1.4-2.1,2.4-3.2,3.6c-0.4,0.4-0.3,0.7,0,0.8c0.1,0,0.2,0,0.4,0c0.8-0.1,1.5-0.5,2.2-0.7c1.1-0.3,2.2-0.6,3.2-1\r\n            c0.7-0.3,3-1,5.4-1.9c0.1,0.9,0.2,1.9,0.4,2.5c0.4,1.2,2.3,3.4,2.3,3.4s1.8,1.6,1.9,3.7c0,1.1-0.3,2-0.7,2.6c-0.6-0.4-2.2-1-3.6,0.8\r\n            c-1.8,2.3-2.5,4.4-3.4,5.6c-0.9,1.2-3,3.6-3.2,4.7c-0.2,1.1,0.8,2.3,0.8,2.3l-5.7,10.3c0,0,2.5,2.9,8.6,3.3\r\n            c6.1,0.4,6.5-1.3,14.3,0.8c7.8,2.1,12.2,13.9,27.5,12c0,0-2-6.2-4.5-9.9c-2.5-3.7-5.4-7.8-5.4-7.8c0.2-1.1,1.4-4.6,0.6-5.4\r\n            c-0.5-0.5-1-0.9-1.5-1.4c0.4-0.9,0.9-1.8,0.9-2.8c0-0.9-0.4-2-0.1-2.9c0.2-0.6,0.8-1,1.4-1c0.8,0,1.3,0.7,2.1,0.9\r\n            c0.8,0.2,2.1,0.1,2.9,0.1c0.9,0,1.7,0.7,2.5,0.9c2.1,0.7,4.4,0.4,5.9-1.3c1.6-1.8,0.3-3.6,0.3-3.6s-1.2-1.5-1.2-2.4\r\n            c0-0.9,0.7-1.6,0.7-1.6l0-0.1c0.1,0,0.2,0,0.3,0c0.7,0,1.3-0.5,1.3-1c0-0.2,0-0.3-0.1-0.4c0.5,0.1,1.2,0.2,1.3,0.2\r\n            c0.8,0.2,1.5,0.4,2.2,0.8c1.4,0.8,2.3,2.2,2.7,3.7c0.1,0.5,0.7,2.2,0.3,2.6c-0.3,0.3-0.4,1.1-0.4,1.5c0,0.8,0.3,1.7,0.8,2.3\r\n            c0.1,0.2,0.6,0.5,0.7,0.7c1.2,5.1,1.6,11.1,8.3,11.6c2.8,0.2,4.4-1.3,4.4-1.3s1.8-1.1,2.4-4.1c0.6-3,0.7-6.5,0.7-6.5\r\n            S-818.7,558.5-823.5,558.3z\r\n            M-865.4,497.4c-0.4,0-0.7,0-1.1,0c0,0,0-0.1,0-0.1C-866.3,497.4-865.9,497.4-865.4,497.4z\r\n            M-872.9,497.9\r\n            c0.3-0.1,2.5-0.4,3.4-0.4c0,0.1,0,0.1,0,0.2c-0.3,0-0.7,0.1-1,0.1c-1.6,0.2-3.3,0.6-4.9,1.2C-874.6,498.5-873.8,498-872.9,497.9z\r\n            M-878.4,498.2c1.6-0.8,2.9-0.9,4.7-1.1c-1.4,0.1-3.1,2.5-4.6,2C-878.7,498.9-878.9,498.5-878.4,498.2z\r\n            M-862,497.6\r\n            c0.1,0,0.3,0,0.4,0l0,0C-861.7,497.6-861.9,497.6-862,497.6z\r\n            M-860.9,496.5c-0.8-0.1-2.2-0.5-3-0.2c1.3-0.4,2.5-0.9,3.8-1.2\r\n            c0.7-0.1,1.4-0.2,2.1-0.1c1,0.2,1.1,0.9,0.2,1.4c0,0-0.1,0-0.1,0C-858.8,496.9-859.9,496.6-860.9,496.5z");
-    			add_location(path, file$5, 263, 10, 5660);
+    			add_location(path, file$6, 263, 10, 5660);
     			attr(svg0, "fill", "#333");
     			attr(svg0, "xmlns", "http://www.w3.org/2000/svg");
     			attr(svg0, "xmlns:xlink", "http://www.w3.org/1999/xlink");
@@ -1721,23 +1595,23 @@ var app = (function () {
     			attr(svg0, "viewBox", "-909 491 100 100");
     			set_style(svg0, "enable-background", "new -909 491 100 100");
     			attr(svg0, "xml:space", "preserve");
-    			add_location(svg0, file$5, 253, 8, 5328);
+    			add_location(svg0, file$6, 253, 8, 5328);
     			attr(g0, "transform", "translate(600 600) scale(-0.69 0.69) translate(-600 -600)");
-    			add_location(g0, file$5, 252, 6, 5245);
-    			add_location(g1, file$5, 251, 4, 5234);
+    			add_location(g0, file$6, 252, 6, 5245);
+    			add_location(g1, file$6, 251, 4, 5234);
     			attr(svg1, "xmlns", "http://www.w3.org/2000/svg");
     			attr(svg1, "xmlns:xlink", "http://www.w3.org/1999/xlink");
     			attr(svg1, "width", "36");
     			attr(svg1, "height", "36");
     			attr(svg1, "viewBox", "0 0 1200 1200");
-    			add_location(svg1, file$5, 245, 2, 5073);
-    			add_location(span, file$5, 295, 2, 8734);
+    			add_location(svg1, file$6, 245, 2, 5073);
+    			add_location(span, file$6, 295, 2, 8734);
     			div0.id = "sherlockHeader";
     			div0.className = "svelte-nary1h";
-    			add_location(div0, file$5, 244, 0, 5044);
+    			add_location(div0, file$6, 244, 0, 5044);
     			div1.id = "sherlockChart";
     			div1.className = "svelte-nary1h";
-    			add_location(div1, file$5, 297, 0, 8765);
+    			add_location(div1, file$6, 297, 0, 8765);
     		},
 
     		l: function claim(nodes) {
@@ -1771,7 +1645,7 @@ var app = (function () {
     	};
     }
 
-    function instance$3($$self) {
+    function instance$4($$self) {
     	onMount(() => {
         const sherlockChart = echarts.init(
           document.getElementById("sherlockChart")
@@ -2003,15 +1877,15 @@ var app = (function () {
     class Sherlock extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
-    		init(this, options, instance$3, create_fragment$5, safe_not_equal, []);
+    		init(this, options, instance$4, create_fragment$6, safe_not_equal, []);
     	}
     }
 
     /* src\Anova.svelte generated by Svelte v3.5.1 */
 
-    const file$6 = "src\\Anova.svelte";
+    const file$7 = "src\\Anova.svelte";
 
-    function create_fragment$6(ctx) {
+    function create_fragment$7(ctx) {
     	var div;
 
     	return {
@@ -2019,7 +1893,7 @@ var app = (function () {
     			div = element("div");
     			div.id = "anovaChart";
     			div.className = "svelte-1a6ghsc";
-    			add_location(div, file$6, 147, 0, 3332);
+    			add_location(div, file$7, 147, 0, 3410);
     		},
 
     		l: function claim(nodes) {
@@ -2042,16 +1916,16 @@ var app = (function () {
     	};
     }
 
-    function instance$4($$self) {
+    function instance$5($$self) {
     	onMount(() => {
         const anovaChart = echarts.init(document.getElementById("anovaChart"));
-        const categoryData = [];
+        const categoryData = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
         const errorData = [];
         const barData = [];
         const dataCount = 7;
         for (var i = 0; i < dataCount; i++) {
           var val = Math.random() * 7;
-          categoryData.push("Day" + (i + 1));
+          //categoryData.push("Day" + (i + 1));
           errorData.push([
             i,
             echarts.number.round(Math.max(0, val - Math.random() * 3)),
@@ -2184,18 +2058,20 @@ var app = (function () {
     class Anova extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
-    		init(this, options, instance$4, create_fragment$6, safe_not_equal, []);
+    		init(this, options, instance$5, create_fragment$7, safe_not_equal, []);
     	}
     }
 
     /* src\PageOverview.svelte generated by Svelte v3.5.1 */
 
-    const file$7 = "src\\PageOverview.svelte";
+    const file$8 = "src\\PageOverview.svelte";
 
-    function create_fragment$7(ctx) {
-    	var div2, div0, t0, aside, t1, div1, div2_intro, current;
+    function create_fragment$8(ctx) {
+    	var div3, div0, t0, div1, t1, leftOAside, t3, aside, t4, div2, div3_intro, current;
 
     	var mainchart = new MainChart({ $$inline: true });
+
+    	var mainchartsummary = new MainChartSummary({ $$inline: true });
 
     	var sherlock = new Sherlock({ $$inline: true });
 
@@ -2203,23 +2079,33 @@ var app = (function () {
 
     	return {
     		c: function create() {
-    			div2 = element("div");
+    			div3 = element("div");
     			div0 = element("div");
     			mainchart.$$.fragment.c();
     			t0 = space();
+    			div1 = element("div");
+    			mainchartsummary.$$.fragment.c();
+    			t1 = space();
+    			leftOAside = element("leftOAside");
+    			leftOAside.textContent = "Filters go here";
+    			t3 = space();
     			aside = element("aside");
     			sherlock.$$.fragment.c();
-    			t1 = space();
-    			div1 = element("div");
+    			t4 = space();
+    			div2 = element("div");
     			anova.$$.fragment.c();
-    			div0.className = "mainChart svelte-livwh2";
-    			add_location(div0, file$7, 38, 2, 810);
-    			aside.className = "svelte-livwh2";
-    			add_location(aside, file$7, 41, 2, 866);
-    			div1.className = "anova svelte-livwh2";
-    			add_location(div1, file$7, 44, 2, 907);
-    			div2.className = "overview svelte-livwh2";
-    			add_location(div2, file$7, 37, 0, 756);
+    			div0.className = "mainChart svelte-y99zse";
+    			add_location(div0, file$8, 51, 2, 1188);
+    			div1.className = "mainChartSummary svelte-y99zse";
+    			add_location(div1, file$8, 54, 2, 1244);
+    			leftOAside.className = "svelte-y99zse";
+    			add_location(leftOAside, file$8, 57, 2, 1314);
+    			aside.className = "svelte-y99zse";
+    			add_location(aside, file$8, 61, 2, 1405);
+    			div2.className = "anova svelte-y99zse";
+    			add_location(div2, file$8, 64, 2, 1446);
+    			div3.className = "overview svelte-y99zse";
+    			add_location(div3, file$8, 50, 0, 1134);
     		},
 
     		l: function claim(nodes) {
@@ -2227,15 +2113,20 @@ var app = (function () {
     		},
 
     		m: function mount(target, anchor) {
-    			insert(target, div2, anchor);
-    			append(div2, div0);
+    			insert(target, div3, anchor);
+    			append(div3, div0);
     			mount_component(mainchart, div0, null);
-    			append(div2, t0);
-    			append(div2, aside);
+    			append(div3, t0);
+    			append(div3, div1);
+    			mount_component(mainchartsummary, div1, null);
+    			append(div3, t1);
+    			append(div3, leftOAside);
+    			append(div3, t3);
+    			append(div3, aside);
     			mount_component(sherlock, aside, null);
-    			append(div2, t1);
-    			append(div2, div1);
-    			mount_component(anova, div1, null);
+    			append(div3, t4);
+    			append(div3, div2);
+    			mount_component(anova, div2, null);
     			current = true;
     		},
 
@@ -2245,14 +2136,16 @@ var app = (function () {
     			if (current) return;
     			mainchart.$$.fragment.i(local);
 
+    			mainchartsummary.$$.fragment.i(local);
+
     			sherlock.$$.fragment.i(local);
 
     			anova.$$.fragment.i(local);
 
-    			if (!div2_intro) {
+    			if (!div3_intro) {
     				add_render_callback(() => {
-    					div2_intro = create_in_transition(div2, fade, { duration: 300 });
-    					div2_intro.start();
+    					div3_intro = create_in_transition(div3, fade, { duration: 300 });
+    					div3_intro.start();
     				});
     			}
 
@@ -2261,6 +2154,7 @@ var app = (function () {
 
     		o: function outro(local) {
     			mainchart.$$.fragment.o(local);
+    			mainchartsummary.$$.fragment.o(local);
     			sherlock.$$.fragment.o(local);
     			anova.$$.fragment.o(local);
     			current = false;
@@ -2268,10 +2162,12 @@ var app = (function () {
 
     		d: function destroy(detaching) {
     			if (detaching) {
-    				detach(div2);
+    				detach(div3);
     			}
 
     			mainchart.$destroy();
+
+    			mainchartsummary.$destroy();
 
     			sherlock.$destroy();
 
@@ -2283,15 +2179,15 @@ var app = (function () {
     class PageOverview extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
-    		init(this, options, null, create_fragment$7, safe_not_equal, []);
+    		init(this, options, null, create_fragment$8, safe_not_equal, []);
     	}
     }
 
     /* src\WeekChart.svelte generated by Svelte v3.5.1 */
 
-    const file$8 = "src\\WeekChart.svelte";
+    const file$9 = "src\\WeekChart.svelte";
 
-    function create_fragment$8(ctx) {
+    function create_fragment$9(ctx) {
     	var div;
 
     	return {
@@ -2299,7 +2195,7 @@ var app = (function () {
     			div = element("div");
     			div.id = "weekChart";
     			div.className = "svelte-uu58md";
-    			add_location(div, file$8, 281, 0, 5286);
+    			add_location(div, file$9, 281, 0, 5286);
     		},
 
     		l: function claim(nodes) {
@@ -2322,7 +2218,7 @@ var app = (function () {
     	};
     }
 
-    function instance$5($$self) {
+    function instance$6($$self) {
     	onMount(() => {
         const weekChart = echarts.init(document.getElementById("weekChart"));
 
@@ -2597,15 +2493,15 @@ var app = (function () {
     class WeekChart extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
-    		init(this, options, instance$5, create_fragment$8, safe_not_equal, []);
+    		init(this, options, instance$6, create_fragment$9, safe_not_equal, []);
     	}
     }
 
     /* src\BDAChart.svelte generated by Svelte v3.5.1 */
 
-    const file$9 = "src\\BDAChart.svelte";
+    const file$a = "src\\BDAChart.svelte";
 
-    function create_fragment$9(ctx) {
+    function create_fragment$a(ctx) {
     	var div;
 
     	return {
@@ -2613,7 +2509,7 @@ var app = (function () {
     			div = element("div");
     			div.id = "BDAChart";
     			div.className = "svelte-1j0o2bd";
-    			add_location(div, file$9, 62, 0, 1189);
+    			add_location(div, file$a, 62, 0, 1189);
     		},
 
     		l: function claim(nodes) {
@@ -2636,7 +2532,7 @@ var app = (function () {
     	};
     }
 
-    function instance$6($$self) {
+    function instance$7($$self) {
     	onMount(() => {
         const BDAChart = echarts.init(document.getElementById("BDAChart"));
         const option = {
@@ -2692,15 +2588,15 @@ var app = (function () {
     class BDAChart extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
-    		init(this, options, instance$6, create_fragment$9, safe_not_equal, []);
+    		init(this, options, instance$7, create_fragment$a, safe_not_equal, []);
     	}
     }
 
     /* src\ContextPie.svelte generated by Svelte v3.5.1 */
 
-    const file$a = "src\\ContextPie.svelte";
+    const file$b = "src\\ContextPie.svelte";
 
-    function create_fragment$a(ctx) {
+    function create_fragment$b(ctx) {
     	var div;
 
     	return {
@@ -2708,7 +2604,7 @@ var app = (function () {
     			div = element("div");
     			div.id = "ContextPieChart";
     			div.className = "svelte-8xdxio";
-    			add_location(div, file$a, 92, 0, 2089);
+    			add_location(div, file$b, 92, 0, 2089);
     		},
 
     		l: function claim(nodes) {
@@ -2731,7 +2627,7 @@ var app = (function () {
     	};
     }
 
-    function instance$7($$self) {
+    function instance$8($$self) {
     	onMount(() => {
         const ContextPieChart = echarts.init(
           document.getElementById("ContextPieChart")
@@ -2817,15 +2713,15 @@ var app = (function () {
     class ContextPie extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
-    		init(this, options, instance$7, create_fragment$a, safe_not_equal, []);
+    		init(this, options, instance$8, create_fragment$b, safe_not_equal, []);
     	}
     }
 
     /* src\PageUserview.svelte generated by Svelte v3.5.1 */
 
-    const file$b = "src\\PageUserview.svelte";
+    const file$c = "src\\PageUserview.svelte";
 
-    function create_fragment$b(ctx) {
+    function create_fragment$c(ctx) {
     	var div7, select, option0, option1, option2, option3, option4, t5, div6, div0, t6, div1, t7, div2, t8, div3, t9, div5, div4, svg, path, t10, div7_intro, current;
 
     	var anova = new Anova({ $$inline: true });
@@ -2871,45 +2767,45 @@ var app = (function () {
     			t10 = text("\r\n        Add new widget");
     			option0.__value = "1";
     			option0.value = option0.__value;
-    			add_location(option0, file$b, 42, 4, 923);
+    			add_location(option0, file$c, 42, 4, 923);
     			option1.__value = "2";
     			option1.value = option1.__value;
-    			add_location(option1, file$b, 43, 4, 1004);
+    			add_location(option1, file$c, 43, 4, 1004);
     			option2.__value = "3";
     			option2.value = option2.__value;
-    			add_location(option2, file$b, 44, 4, 1085);
+    			add_location(option2, file$c, 44, 4, 1085);
     			option3.__value = "4";
     			option3.value = option3.__value;
-    			add_location(option3, file$b, 45, 4, 1165);
+    			add_location(option3, file$c, 45, 4, 1165);
     			option4.__value = "5";
     			option4.value = option4.__value;
-    			add_location(option4, file$b, 46, 4, 1246);
+    			add_location(option4, file$c, 46, 4, 1246);
     			select.name = "user";
     			select.id = "userSelect";
-    			add_location(select, file$b, 41, 2, 881);
+    			add_location(select, file$c, 41, 2, 881);
     			div0.className = "widget svelte-isych5";
-    			add_location(div0, file$b, 49, 4, 1373);
+    			add_location(div0, file$c, 49, 4, 1373);
     			div1.className = "widget svelte-isych5";
-    			add_location(div1, file$b, 52, 4, 1428);
+    			add_location(div1, file$c, 52, 4, 1428);
     			div2.className = "widget svelte-isych5";
-    			add_location(div2, file$b, 55, 4, 1487);
+    			add_location(div2, file$c, 55, 4, 1487);
     			div3.className = "widget svelte-isych5";
-    			add_location(div3, file$b, 58, 4, 1545);
+    			add_location(div3, file$c, 58, 4, 1545);
     			attr(path, "fill", "#333");
     			attr(path, "d", "M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59\r\n            20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0\r\n            12,22A10,10 0 0,0 22,12A10,10 0 0,0\r\n            12,2M13,7H11V11H7V13H11V17H13V13H17V11H13V7Z");
-    			add_location(path, file$b, 64, 10, 1734);
+    			add_location(path, file$c, 64, 10, 1734);
     			set_style(svg, "width", "50px");
     			set_style(svg, "height", "50px");
     			attr(svg, "viewBox", "0 0 24 24");
-    			add_location(svg, file$b, 63, 8, 1666);
+    			add_location(svg, file$c, 63, 8, 1666);
     			div4.className = "addWidget svelte-isych5";
-    			add_location(div4, file$b, 62, 6, 1633);
+    			add_location(div4, file$c, 62, 6, 1633);
     			div5.className = "widget svelte-isych5";
-    			add_location(div5, file$b, 61, 4, 1605);
+    			add_location(div5, file$c, 61, 4, 1605);
     			div6.className = "widgetContainer svelte-isych5";
-    			add_location(div6, file$b, 48, 2, 1338);
+    			add_location(div6, file$c, 48, 2, 1338);
     			div7.className = "userview svelte-isych5";
-    			add_location(div7, file$b, 40, 0, 827);
+    			add_location(div7, file$c, 40, 0, 827);
     		},
 
     		l: function claim(nodes) {
@@ -2995,15 +2891,15 @@ var app = (function () {
     class PageUserview extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
-    		init(this, options, null, create_fragment$b, safe_not_equal, []);
+    		init(this, options, null, create_fragment$c, safe_not_equal, []);
     	}
     }
 
     /* src\SenseQVis.svelte generated by Svelte v3.5.1 */
 
-    const file$c = "src\\SenseQVis.svelte";
+    const file$d = "src\\SenseQVis.svelte";
 
-    // (87:4) {:else}
+    // (88:4) {:else}
     function create_else_block$2(ctx) {
     	var current;
 
@@ -3037,7 +2933,7 @@ var app = (function () {
     	};
     }
 
-    // (85:4) {#if activeTab === 0}
+    // (86:4) {#if activeTab === 0}
     function create_if_block$2(ctx) {
     	var current;
 
@@ -3071,7 +2967,7 @@ var app = (function () {
     	};
     }
 
-    function create_fragment$c(ctx) {
+    function create_fragment$d(ctx) {
     	var main, header, t0, nav, div0, t1, div1, t2, section, current_block_type_index, if_block, current;
 
     	var studyinfo = new StudyInfo({ $$inline: true });
@@ -3111,17 +3007,17 @@ var app = (function () {
     			section = element("section");
     			if_block.c();
     			header.className = "svelte-7e2twn";
-    			add_location(header, file$c, 72, 2, 1542);
+    			add_location(header, file$d, 73, 2, 1544);
     			div0.className = "tabs svelte-7e2twn";
-    			add_location(div0, file$c, 76, 4, 1597);
+    			add_location(div0, file$d, 77, 4, 1599);
     			div1.className = "undoRedo svelte-7e2twn";
-    			add_location(div1, file$c, 79, 4, 1649);
+    			add_location(div1, file$d, 80, 4, 1651);
     			nav.className = "svelte-7e2twn";
-    			add_location(nav, file$c, 75, 2, 1586);
+    			add_location(nav, file$d, 76, 2, 1588);
     			section.className = "svelte-7e2twn";
-    			add_location(section, file$c, 83, 2, 1717);
+    			add_location(section, file$d, 84, 2, 1719);
     			main.className = "svelte-7e2twn";
-    			add_location(main, file$c, 71, 0, 1532);
+    			add_location(main, file$d, 72, 0, 1534);
     		},
 
     		l: function claim(nodes) {
@@ -3203,7 +3099,7 @@ var app = (function () {
     	};
     }
 
-    function instance$8($$self, $$props, $$invalidate) {
+    function instance$9($$self, $$props, $$invalidate) {
     	
 
       let activeTab = 0;
@@ -3218,7 +3114,7 @@ var app = (function () {
     class SenseQVis extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
-    		init(this, options, instance$8, create_fragment$c, safe_not_equal, []);
+    		init(this, options, instance$9, create_fragment$d, safe_not_equal, []);
     	}
     }
 
