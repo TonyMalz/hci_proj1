@@ -2,13 +2,13 @@
   import { onMount } from "svelte";
   onMount(() => {
     const anovaChart = echarts.init(document.getElementById("anovaChart"));
-    const categoryData = [];
+    const categoryData = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
     const errorData = [];
     const barData = [];
     const dataCount = 7;
     for (var i = 0; i < dataCount; i++) {
       var val = Math.random() * 7;
-      categoryData.push("Day" + (i + 1));
+      //categoryData.push("Day" + (i + 1));
       errorData.push([
         i,
         echarts.number.round(Math.max(0, val - Math.random() * 3)),
@@ -134,7 +134,7 @@
 
 <style>
   #anovaChart {
-    width: 83%;
+    width: 95%;
     height: 99%;
     padding: 0;
     margin: 0;
