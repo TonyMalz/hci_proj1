@@ -1,13 +1,18 @@
-:root{--color-header:rgb(255, 255, 255);--color-nav:rgb(255, 255, 255);--color-content:rgb(255, 255, 255);--color-bar:#96bcdb}main.svelte-1gg47ow{display:grid;width:100%;height:100%;grid-template-areas:"head"
+:root{--color-header:rgb(255, 255, 255);--color-nav:rgb(255, 255, 255);--color-content:rgb(255, 255, 255);--color-bar:#96bcdb}main.svelte-7e2twn{overflow-y:auto;overflow-x:hidden;display:grid;width:100%;height:100%;grid-template-areas:"head"
       "nav"
-      "content";grid-template-rows:auto auto 6fr}header.svelte-1gg47ow{padding:1em;padding-left:1rem;font-size:0.7em;font-weight:300;color:rgba(51, 51, 51, 0.6);grid-area:head;background:var(--color-header)}nav.svelte-1gg47ow{border-top:1px solid rgba(255, 62, 0, 0.1);font-weight:300;grid-area:nav;background:var(--color-nav);display:grid;grid-template-areas:"tabs undoRedo";grid-template-columns:auto 100px}section.svelte-1gg47ow{padding:1em;grid-area:content;display:grid;grid-template:"main-chart ai-charts"
-      "anova ai-charts";grid-template-columns:3fr 1fr;grid-template-rows:2fr 1fr;grid-gap:1em;background:var(--color-content)}#mainChart.svelte-1gg47ow{grid-area:main-chart}#anova.svelte-1gg47ow{grid-area:anova;width:100%}aside.svelte-1gg47ow{width:97%;height:97%;box-shadow:0px 0px 14px 1px #e8e8e8;grid-area:ai-charts;padding:1em}.tabs.svelte-1gg47ow{grid-area:tabs}.undoRedo.svelte-1gg47ow{grid-area:undoRedo}
+      "content";grid-template-rows:auto auto 6fr}header.svelte-7e2twn{padding:1em;padding-left:1rem;font-size:0.7em;font-weight:300;color:rgba(51, 51, 51, 0.6);grid-area:head;background:var(--color-header)}nav.svelte-7e2twn{border-top:1px solid rgba(255, 62, 0, 0.1);font-weight:300;grid-area:nav;background:var(--color-nav);display:grid;grid-template-areas:"tabs undoRedo";grid-template-columns:auto 100px}section.svelte-7e2twn{padding:1em;grid-area:content;background:var(--color-content)}.tabs.svelte-7e2twn{grid-area:tabs}.undoRedo.svelte-7e2twn{grid-area:undoRedo}
 ul.svelte-tibrtl{list-style-type:none;margin:0;padding:0}li.svelte-tibrtl{color:rgba(51, 51, 51, 0.6);background:#fafafa;font-size:0.9rem;display:inline-block}li.svelte-tibrtl div.svelte-tibrtl{cursor:pointer;display:inline-block;padding:0.8em 1em}li.svelte-tibrtl:hover{color:inherit;border-top:1px solid rgb(255, 175, 160)}.active.svelte-tibrtl{color:inherit;background:white;font-weight:400;border-top:1px solid tomato !important}
 #info.svelte-1m3j3d9{width:100%;height:100%;display:grid;grid-template-columns:3fr 1fr 1fr 1fr;grid-gap:1em}
 div.svelte-4zoca2{cursor:pointer;font-size:0.7em;height:100%;justify-items:center;display:grid;grid-gap:2px;padding-right:1rem;grid-template-areas:"undo redo"
       "undoLabel redoLabel"}label.svelte-4zoca2{cursor:pointer}#undo.svelte-4zoca2{align-self:end;grid-area:undo}#redo.svelte-4zoca2{align-self:end;grid-area:redo}#undoLabel.svelte-4zoca2{grid-area:undoLabel}#redoLabel.svelte-4zoca2{grid-area:redoLabel}
-div.svelte-1av4as1{cursor:pointer;display:inline-block;padding:0.8em 1em}
-#anovaChart.svelte-15kplwv{width:83%;height:99%;padding:0;margin:0}
 #sherlockChart.svelte-nary1h{width:100%;height:80%;padding:0;margin:0}#sherlockHeader.svelte-nary1h{display:grid;grid-template-columns:auto 1fr;align-items:center;margin-bottom:0.5em}
+#anovaChart.svelte-1a6ghsc{width:95%;height:99%;padding:0;margin:0}
+div.svelte-1av4as1{cursor:pointer;display:inline-block;padding:0.8em 1em}
+.overview.svelte-livwh2{height:100%;display:grid;grid-template:"main-chart ai-charts"
+      "anova ai-charts";grid-template-columns:3fr 1fr;grid-template-rows:2fr 1fr;grid-gap:1em}.mainChart.svelte-livwh2{grid-area:main-chart}.anova.svelte-livwh2{grid-area:anova;width:100%}aside.svelte-livwh2{grid-area:ai-charts;width:97%;height:97%;box-shadow:0px 0px 14px 1px #e8e8e8;padding:1em;border-radius:4px}
+.userview.svelte-isych5{display:grid;height:100%;grid-template-rows:50px auto;grid-gap:1rem}.widgetContainer.svelte-isych5{display:flex;flex-wrap:wrap;overflow:auto}.widgetContainer.svelte-isych5>.svelte-isych5{flex-grow:1;flex-shrink:1;flex-basis:50ch}.widget.svelte-isych5{border:1px solid #ccc;height:250px;padding:1em;border-radius:4px}.addWidget.svelte-isych5{display:grid;grid-template-columns:auto 1fr;align-items:center;cursor:pointer;grid-gap:1em}
+#weekChart.svelte-uu58md{width:100%;height:100%;padding:0;margin:0}
+#BDAChart.svelte-1j0o2bd{width:95%;height:100%;padding:0;margin:0}
+#ContextPieChart.svelte-8xdxio{width:100%;height:100%;padding:0;margin:0}
 
 /*# sourceMappingURL=bundle.css.map */

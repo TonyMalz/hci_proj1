@@ -1,17 +1,22 @@
 <script>
   import Tabitem from "./Tab.svelte";
-  import { fly, fade } from "svelte/transition";
+  import { fade } from "svelte/transition";
+  import { activeUITab } from "./store.js";
 
-  let currentTabs = ["Overview", "User Details"];
-  export let activeTab = 0;
+  let currentTabs = ["Overview", "User View"];
+  let activeTab = 0;
+
   function activate(tab) {
-    console.log("activate");
+    console.log("activate tab", tab);
     activeTab = tab;
+    activeUITab.set(tab);
   }
+
   let toggleTab = false;
   function toggle() {
     toggleTab = !toggleTab;
   }
+
   function addTab() {
     const el = document.getElementById("newTab");
     const text = el.value.trim();
@@ -21,10 +26,6 @@
       activeTab = currentTabs.length - 1;
     }
     toggle();
-  }
-
-  function showEditMenu(tab) {
-    console.log(tab);
   }
 
   function titleChanged(event) {

@@ -92,7 +92,11 @@
       xAxis: {
         data: categoryData
       },
-      yAxis: {},
+      yAxis: {
+        axisLabel: {
+          showMaxLabel: false
+        }
+      },
       series: [
         {
           type: "bar",
@@ -134,7 +138,7 @@
 
 <style>
   #anovaChart {
-    width: 83%;
+    width: 95%;
     height: 99%;
     padding: 0;
     margin: 0;

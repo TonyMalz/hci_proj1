@@ -2,15 +2,16 @@
   import Tabs from "./Tabs.svelte";
   import StudyInfo from "./StudyInfo.svelte";
   import UndoRedo from "./UndoRedo.svelte";
-  import MainChart from "./MainChart.svelte";
-  import Sherlock from "./Sherlock.svelte";
-  import Anova from "./Anova.svelte";
+  import PageOverview from "./PageOverview.svelte";
+  import PageUserview from "./PageUserview.svelte";
   import { fly } from "svelte/transition";
+  import { activeUITab } from "./store.js";
 
   let activeTab = 0;
-  function toggle() {
-    activeTab = activeTab == 0 ? 1 : 0;
-  }
+  activeUITab.subscribe(async v => {
+    console.log("subscription", v);
+    activeTab = v;
+  });
 </script>
 
 <style>
@@ -20,7 +21,10 @@
     --color-content: rgb(255, 255, 255);
     --color-bar: #96bcdb;
   }
+
   main {
+    overflow-y: auto;
+    overflow-x: hidden;
     display: grid;
     width: 100%;
     height: 100%;
@@ -54,31 +58,9 @@
   section {
     padding: 1em;
     grid-area: content;
-    display: grid;
-    grid-template:
-      "main-chart ai-charts"
-      "anova ai-charts";
-    grid-template-columns: 3fr 1fr;
-    grid-template-rows: 2fr 1fr;
-    grid-gap: 1em;
     background: var(--color-content);
   }
 
-  #mainChart {
-    grid-area: main-chart;
-  }
-  #anova {
-    grid-area: anova;
-    /* border: 1px dashed gray; */
-    width: 100%;
-  }
-  aside {
-    width: 97%;
-    height: 97%;
-    box-shadow: 0px 0px 14px 1px #e8e8e8;
-    grid-area: ai-charts;
-    padding: 1em;
-  }
   .tabs {
     grid-area: tabs;
   }
@@ -93,22 +75,17 @@
   </header>
   <nav>
     <div class="tabs">
-      <Tabs {activeTab} />
+      <Tabs />
     </div>
     <div class="undoRedo">
       <UndoRedo />
     </div>
   </nav>
   <section>
-    <div id="mainChart">
-      <button on:click={toggle}>change tabs</button>
-      <MainChart />
-    </div>
-    <aside>
-      <Sherlock />
-    </aside>
-    <div id="anova">
-      <Anova />
-    </div>
+    {#if activeTab === 0}
+      <PageOverview />
+    {:else}
+      <PageUserview />
+    {/if}
   </section>
 </main>
