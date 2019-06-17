@@ -30,12 +30,13 @@
   .widgetContainer > * {
     flex-grow: 1;
     flex-shrink: 1;
-    flex-basis: 50ch;
+    flex-basis: 45%;
   }
   .widget {
     border: 1px solid #ccc;
-    height: 250px;
+    height: 45%;
     padding: 1em;
+    margin: 1em;
     border-radius: 4px;
   }
   /*.addWidget {
