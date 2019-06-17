@@ -4,13 +4,14 @@
   import UndoRedo from "./UndoRedo.svelte";
   import PageOverview from "./PageOverview.svelte";
   import PageUserview from "./PageUserview.svelte";
+  import PageNew from "./PageNew.svelte";
 
   import { fly } from "svelte/transition";
   import { activeUITab } from "./store.js";
 
   let activeTab = 0;
   activeUITab.subscribe(async v => {
-    console.log("subscription", v);
+    console.log(new Date().toLocaleTimeString() + " subscription", v);
     activeTab = v;
   });
 </script>
@@ -85,8 +86,10 @@
   <section>
     {#if activeTab === 0}
       <PageOverview />
-    {:else}
+    {:else if activeTab === 1}
       <PageUserview />
+    {:else}
+      <PageNew />
     {/if}
   </section>
 </main>
