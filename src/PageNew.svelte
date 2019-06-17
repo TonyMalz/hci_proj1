@@ -18,11 +18,6 @@
     flex-wrap: wrap;
     overflow: auto;
   }
-  /*.widgetContainer > * {
-    flex-grow: 1;
-    flex-shrink: 1;
-    flex-basis: 50ch;
-  }*/
   .newView {
       border: 1px solid #ccc;
       height: 150px;
