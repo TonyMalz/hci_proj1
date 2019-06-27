@@ -43,7 +43,7 @@
     white-space: nowrap;
     cursor: pointer;
     overflow: hidden;
-    padding: 0.625em 1.25em;
+    padding: 1rem 1.25rem;
     border-radius: 4px;
     color: white;
   }
@@ -57,8 +57,8 @@
   <figure>
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="30"
-      height="27"
+      width="2em"
+      height="1.8em"
       viewBox="0 0 20 17">
       <path
         fill="white"

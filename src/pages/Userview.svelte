@@ -14,13 +14,11 @@
     grid-gap: 1rem;
   }
   .optionsContainer {
-    display: flex;
-    flex-wrap: wrap;
-    overflow: auto;
+    overflow: hidden;
   }
   .widgetContainer {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(35rem, 1fr));
     grid-gap: 1rem;
   }
 
@@ -28,8 +26,8 @@
     border: 1px solid #ccc;
     padding: 1em;
     border-radius: 4px;
-    min-height: 205px;
-    max-height: 350px;
+    min-height: 12rem;
+    max-height: 20rem;
   }
 </style>
 

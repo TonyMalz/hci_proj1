@@ -1,7 +1,7 @@
 <style>
   div {
     cursor: pointer;
-    font-size: 0.7em;
+    font-size: 0.7rem;
     height: 100%;
     justify-items: center;
     display: grid;
@@ -31,7 +31,7 @@
 </style>
 
 <div>
-  <svg id="undo" style="width:16px;height:16px" viewBox="0 0 24 24">
+  <svg id="undo" style="width:1rem;height:1rem" viewBox="0 0 24 24">
     <path
       fill="#333"
       d="M12.5,8C9.85,8 7.45,9 5.6,10.6L2,7V16H11L7.38,12.38C8.77,11.22
@@ -39,7 +39,7 @@
       20.1,16L22.47,15.22C21.08,11.03 17.15,8 12.5,8Z" />
   </svg>
   <label id="undoLabel">undo</label>
-  <svg id="redo" style="width:16px;height:16px" viewBox="0 0 24 24">
+  <svg id="redo" style="width:1rem;height:1rem" viewBox="0 0 24 24">
     <path
       fill="#bbb"
       d="M18.4,10.6C16.55,9 14.15,8 11.5,8C6.85,8 2.92,11.03

@@ -246,8 +246,8 @@
   <svg
     xmlns="http://www.w3.org/2000/svg"
     xmlns:xlink="http://www.w3.org/1999/xlink"
-    width="36"
-    height="36"
+    width="2.5em"
+    height="2.5em"
     viewBox="0 0 1200 1200">
     <g>
       <g transform="translate(600 600) scale(-0.69 0.69) translate(-600 -600)">

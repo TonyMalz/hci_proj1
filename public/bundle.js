@@ -1363,30 +1363,30 @@ function create_fragment$3(ctx) {
 			label1.textContent = "redo";
 			attr(path0, "fill", "#333");
 			attr(path0, "d", "M12.5,8C9.85,8 7.45,9 5.6,10.6L2,7V16H11L7.38,12.38C8.77,11.22\r\n      10.54,10.5 12.5,10.5C16.04,10.5 19.05,12.81\r\n      20.1,16L22.47,15.22C21.08,11.03 17.15,8 12.5,8Z");
-			add_location(path0, file$3, 34, 4, 603);
+			add_location(path0, file$3, 34, 4, 604);
 			attr(svg0, "id", "undo");
-			set_style(svg0, "width", "16px");
-			set_style(svg0, "height", "16px");
+			set_style(svg0, "width", "1rem");
+			set_style(svg0, "height", "1rem");
 			attr(svg0, "viewBox", "0 0 24 24");
-			attr(svg0, "class", "svelte-4zoca2");
-			add_location(svg0, file$3, 33, 2, 531);
+			attr(svg0, "class", "svelte-16ia47i");
+			add_location(svg0, file$3, 33, 2, 532);
 			label0.id = "undoLabel";
-			label0.className = "svelte-4zoca2";
-			add_location(label0, file$3, 40, 2, 824);
+			label0.className = "svelte-16ia47i";
+			add_location(label0, file$3, 40, 2, 825);
 			attr(path1, "fill", "#bbb");
 			attr(path1, "d", "M18.4,10.6C16.55,9 14.15,8 11.5,8C6.85,8 2.92,11.03\r\n      1.54,15.22L3.9,16C4.95,12.81 7.95,10.5 11.5,10.5C13.45,10.5 15.23,11.22\r\n      16.62,12.38L13,16H22V7L18.4,10.6Z");
-			add_location(path1, file$3, 42, 4, 934);
+			add_location(path1, file$3, 42, 4, 935);
 			attr(svg1, "id", "redo");
-			set_style(svg1, "width", "16px");
-			set_style(svg1, "height", "16px");
+			set_style(svg1, "width", "1rem");
+			set_style(svg1, "height", "1rem");
 			attr(svg1, "viewBox", "0 0 24 24");
-			attr(svg1, "class", "svelte-4zoca2");
-			add_location(svg1, file$3, 41, 2, 862);
+			attr(svg1, "class", "svelte-16ia47i");
+			add_location(svg1, file$3, 41, 2, 863);
 			label1.id = "redoLabel";
-			label1.className = "svelte-4zoca2";
-			add_location(label1, file$3, 48, 2, 1158);
-			div.className = "svelte-4zoca2";
-			add_location(div, file$3, 32, 0, 522);
+			label1.className = "svelte-16ia47i";
+			add_location(label1, file$3, 48, 2, 1159);
+			div.className = "svelte-16ia47i";
+			add_location(div, file$3, 32, 0, 523);
 		},
 
 		l: function claim(nodes) {
@@ -2193,36 +2193,36 @@ function create_fragment$8(ctx) {
 			contextpie.$$.fragment.c();
 			option0.__value = "1";
 			option0.value = option0.__value;
-			add_location(option0, file$8, 38, 6, 917);
+			add_location(option0, file$8, 36, 6, 877);
 			option1.__value = "2";
 			option1.value = option1.__value;
-			add_location(option1, file$8, 41, 6, 1018);
+			add_location(option1, file$8, 39, 6, 978);
 			option2.__value = "3";
 			option2.value = option2.__value;
-			add_location(option2, file$8, 44, 6, 1119);
+			add_location(option2, file$8, 42, 6, 1079);
 			option3.__value = "4";
 			option3.value = option3.__value;
-			add_location(option3, file$8, 45, 6, 1201);
+			add_location(option3, file$8, 43, 6, 1161);
 			option4.__value = "5";
 			option4.value = option4.__value;
-			add_location(option4, file$8, 48, 6, 1302);
+			add_location(option4, file$8, 46, 6, 1262);
 			select.name = "user";
 			select.id = "userSelect";
-			add_location(select, file$8, 37, 4, 873);
-			div0.className = "optionsContainer svelte-7zhlt7";
-			add_location(div0, file$8, 36, 2, 837);
-			div1.className = "widget svelte-7zhlt7";
-			add_location(div1, file$8, 66, 4, 1893);
-			div2.className = "widget svelte-7zhlt7";
-			add_location(div2, file$8, 69, 4, 1948);
-			div3.className = "widget svelte-7zhlt7";
-			add_location(div3, file$8, 72, 4, 2007);
-			div4.className = "widget svelte-7zhlt7";
-			add_location(div4, file$8, 75, 4, 2065);
-			div5.className = "widgetContainer svelte-7zhlt7";
-			add_location(div5, file$8, 65, 2, 1858);
-			div6.className = "userview svelte-7zhlt7";
-			add_location(div6, file$8, 35, 0, 783);
+			add_location(select, file$8, 35, 4, 833);
+			div0.className = "optionsContainer svelte-22tdrg";
+			add_location(div0, file$8, 34, 2, 797);
+			div1.className = "widget svelte-22tdrg";
+			add_location(div1, file$8, 64, 4, 1853);
+			div2.className = "widget svelte-22tdrg";
+			add_location(div2, file$8, 67, 4, 1908);
+			div3.className = "widget svelte-22tdrg";
+			add_location(div3, file$8, 70, 4, 1967);
+			div4.className = "widget svelte-22tdrg";
+			add_location(div4, file$8, 73, 4, 2025);
+			div5.className = "widgetContainer svelte-22tdrg";
+			add_location(div5, file$8, 63, 2, 1818);
+			div6.className = "userview svelte-22tdrg";
+			add_location(div6, file$8, 33, 0, 743);
 		},
 
 		l: function claim(nodes) {
@@ -2777,7 +2777,7 @@ function create_fragment$b(ctx) {
 			t2 = space();
 			div1 = element("div");
 			attr(path, "d", "M-823.5,558.3c-4.8-0.3-4.4,1.6-4.4,1.6l0.2,4.6c0,0,0,2.4-1.4,2.3s-1.8-2.8-1.8-2.8s-1.1-4.6-1.1-4.6\r\n            c0-0.1,0.1-0.3,0.1-0.4c0.1-0.3,0.1-0.7,0-1c-0.1-0.7-0.2-1.5-0.7-2.1c0,0-0.8-0.5-0.8-0.4c-0.5-3.4-2.2-6.8-5.7-7.8\r\n            c-0.2-0.1-2.5-0.5-3.6-0.7c0.1-0.3,0.3-0.6,0.4-0.9c0.3-1.2-0.4-2.3-0.8-3.3c-0.3-1-0.2-1.9,1-2c1.1-0.1,3.1,1,3.7,0.8\r\n            c0.7-0.1,1.5-0.7,1.5-1.5s-1.2-2.5-1.2-2.5s-1.6-3.2-2.1-4.6c-0.5-1.4-2.3-2.7-2.3-2.7s-1.8-1.3-1.6-2.2c0.2-0.9,0.9-1.2,1.2-2.1\r\n            c1,0.1,2.1,0.4,2.9,0.5c2.9,0.4,6.7,1.2,9,0.7c0,0,1.2-0.1,0-1c-1.2-0.9-4.1-3.7-5-4.7s-4.1-3.1-4.7-4.4c-1.9-3.9-2.4-8.6-5.6-11.9\r\n            c-2.3-2.4-5.2-4.3-8.2-5.6c1.1,0.2,2.2,0.3,3.3,0.3c0.1,0,0.3,0,0.4,0l0-0.9c-2.8,0.1-6-0.6-8.3-1.2c0.5,0,1-0.1,1.6-0.3\r\n            c1-0.3,2.9-1.1,2.5-2.5c-0.5-1.9-3.8-1.3-5.1-1.1c-2.5,0.4-4.8,1.6-7,2.8c-0.3-0.4-0.8-0.5-1.4-0.4c-0.4,0.1-0.7,0.3-0.9,0.5\r\n            c-0.4-0.2-1.7-0.7-4.9-0.7c-2,0-8.9,2.1-5.3,4.4c-1.5,0.4-3.2,0.8-4.4,0.9l0.1,0.9c0.7-0.1,1.5-0.2,2.4-0.4\r\n            c-2.5,1.5-4.7,3.4-6.6,5.6c-2,2.3-3.1,5.4-3.5,8.3c-0.5,3.6,0.5,7.2,0.3,10.8c-0.2,1.9-1.2,2.8-2.2,4.3c-1,1.5-1.4,3.2-2.4,4.7\r\n            c-0.8,1.4-2.1,2.4-3.2,3.6c-0.4,0.4-0.3,0.7,0,0.8c0.1,0,0.2,0,0.4,0c0.8-0.1,1.5-0.5,2.2-0.7c1.1-0.3,2.2-0.6,3.2-1\r\n            c0.7-0.3,3-1,5.4-1.9c0.1,0.9,0.2,1.9,0.4,2.5c0.4,1.2,2.3,3.4,2.3,3.4s1.8,1.6,1.9,3.7c0,1.1-0.3,2-0.7,2.6c-0.6-0.4-2.2-1-3.6,0.8\r\n            c-1.8,2.3-2.5,4.4-3.4,5.6c-0.9,1.2-3,3.6-3.2,4.7c-0.2,1.1,0.8,2.3,0.8,2.3l-5.7,10.3c0,0,2.5,2.9,8.6,3.3\r\n            c6.1,0.4,6.5-1.3,14.3,0.8c7.8,2.1,12.2,13.9,27.5,12c0,0-2-6.2-4.5-9.9c-2.5-3.7-5.4-7.8-5.4-7.8c0.2-1.1,1.4-4.6,0.6-5.4\r\n            c-0.5-0.5-1-0.9-1.5-1.4c0.4-0.9,0.9-1.8,0.9-2.8c0-0.9-0.4-2-0.1-2.9c0.2-0.6,0.8-1,1.4-1c0.8,0,1.3,0.7,2.1,0.9\r\n            c0.8,0.2,2.1,0.1,2.9,0.1c0.9,0,1.7,0.7,2.5,0.9c2.1,0.7,4.4,0.4,5.9-1.3c1.6-1.8,0.3-3.6,0.3-3.6s-1.2-1.5-1.2-2.4\r\n            c0-0.9,0.7-1.6,0.7-1.6l0-0.1c0.1,0,0.2,0,0.3,0c0.7,0,1.3-0.5,1.3-1c0-0.2,0-0.3-0.1-0.4c0.5,0.1,1.2,0.2,1.3,0.2\r\n            c0.8,0.2,1.5,0.4,2.2,0.8c1.4,0.8,2.3,2.2,2.7,3.7c0.1,0.5,0.7,2.2,0.3,2.6c-0.3,0.3-0.4,1.1-0.4,1.5c0,0.8,0.3,1.7,0.8,2.3\r\n            c0.1,0.2,0.6,0.5,0.7,0.7c1.2,5.1,1.6,11.1,8.3,11.6c2.8,0.2,4.4-1.3,4.4-1.3s1.8-1.1,2.4-4.1c0.6-3,0.7-6.5,0.7-6.5\r\n            S-818.7,558.5-823.5,558.3z\r\n            M-865.4,497.4c-0.4,0-0.7,0-1.1,0c0,0,0-0.1,0-0.1C-866.3,497.4-865.9,497.4-865.4,497.4z\r\n            M-872.9,497.9\r\n            c0.3-0.1,2.5-0.4,3.4-0.4c0,0.1,0,0.1,0,0.2c-0.3,0-0.7,0.1-1,0.1c-1.6,0.2-3.3,0.6-4.9,1.2C-874.6,498.5-873.8,498-872.9,497.9z\r\n            M-878.4,498.2c1.6-0.8,2.9-0.9,4.7-1.1c-1.4,0.1-3.1,2.5-4.6,2C-878.7,498.9-878.9,498.5-878.4,498.2z\r\n            M-862,497.6\r\n            c0.1,0,0.3,0,0.4,0l0,0C-861.7,497.6-861.9,497.6-862,497.6z\r\n            M-860.9,496.5c-0.8-0.1-2.2-0.5-3-0.2c1.3-0.4,2.5-0.9,3.8-1.2\r\n            c0.7-0.1,1.4-0.2,2.1-0.1c1,0.2,1.1,0.9,0.2,1.4c0,0-0.1,0-0.1,0C-858.8,496.9-859.9,496.6-860.9,496.5z");
-			add_location(path, file$b, 263, 10, 5660);
+			add_location(path, file$b, 263, 10, 5666);
 			attr(svg0, "fill", "#333");
 			attr(svg0, "xmlns", "http://www.w3.org/2000/svg");
 			attr(svg0, "xmlns:xlink", "http://www.w3.org/1999/xlink");
@@ -2787,23 +2787,23 @@ function create_fragment$b(ctx) {
 			attr(svg0, "viewBox", "-909 491 100 100");
 			set_style(svg0, "enable-background", "new -909 491 100 100");
 			attr(svg0, "xml:space", "preserve");
-			add_location(svg0, file$b, 253, 8, 5328);
+			add_location(svg0, file$b, 253, 8, 5334);
 			attr(g0, "transform", "translate(600 600) scale(-0.69 0.69) translate(-600 -600)");
-			add_location(g0, file$b, 252, 6, 5245);
-			add_location(g1, file$b, 251, 4, 5234);
+			add_location(g0, file$b, 252, 6, 5251);
+			add_location(g1, file$b, 251, 4, 5240);
 			attr(svg1, "xmlns", "http://www.w3.org/2000/svg");
 			attr(svg1, "xmlns:xlink", "http://www.w3.org/1999/xlink");
-			attr(svg1, "width", "36");
-			attr(svg1, "height", "36");
+			attr(svg1, "width", "2.5em");
+			attr(svg1, "height", "2.5em");
 			attr(svg1, "viewBox", "0 0 1200 1200");
 			add_location(svg1, file$b, 245, 2, 5073);
-			add_location(span, file$b, 295, 2, 8734);
+			add_location(span, file$b, 295, 2, 8740);
 			div0.id = "sherlockHeader";
 			div0.className = "svelte-nary1h";
 			add_location(div0, file$b, 244, 0, 5044);
 			div1.id = "sherlockChart";
 			div1.className = "svelte-nary1h";
-			add_location(div1, file$b, 297, 0, 8765);
+			add_location(div1, file$b, 297, 0, 8771);
 		},
 
 		l: function claim(nodes) {
@@ -3207,20 +3207,20 @@ function create_fragment$d(ctx) {
 			attr(input, "type", "file");
 			input.multiple = true;
 			input.accept = "application/json";
-			input.className = "svelte-1fkh3gu";
-			add_location(input, file$d, 54, 0, 1208);
+			input.className = "svelte-bptog8";
+			add_location(input, file$d, 54, 0, 1206);
 			attr(path, "fill", "white");
 			attr(path, "d", "M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3\r\n        11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8\r\n        2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6\r\n        1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4\r\n        1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z");
-			add_location(path, file$d, 62, 6, 1445);
+			add_location(path, file$d, 62, 6, 1447);
 			attr(svg, "xmlns", "http://www.w3.org/2000/svg");
-			attr(svg, "width", "30");
-			attr(svg, "height", "27");
+			attr(svg, "width", "2em");
+			attr(svg, "height", "1.8em");
 			attr(svg, "viewBox", "0 0 20 17");
-			add_location(svg, file$d, 57, 4, 1326);
-			add_location(figure, file$d, 56, 2, 1312);
+			add_location(svg, file$d, 57, 4, 1324);
+			add_location(figure, file$d, 56, 2, 1310);
 			label.htmlFor = "studyImport";
-			label.className = "svelte-1fkh3gu";
-			add_location(label, file$d, 55, 0, 1283);
+			label.className = "svelte-bptog8";
+			add_location(label, file$d, 55, 0, 1281);
 		},
 
 		l: function claim(nodes) {
