@@ -2193,36 +2193,36 @@ function create_fragment$8(ctx) {
 			contextpie.$$.fragment.c();
 			option0.__value = "1";
 			option0.value = option0.__value;
-			add_location(option0, file$8, 38, 6, 914);
+			add_location(option0, file$8, 38, 6, 917);
 			option1.__value = "2";
 			option1.value = option1.__value;
-			add_location(option1, file$8, 41, 6, 1015);
+			add_location(option1, file$8, 41, 6, 1018);
 			option2.__value = "3";
 			option2.value = option2.__value;
-			add_location(option2, file$8, 44, 6, 1116);
+			add_location(option2, file$8, 44, 6, 1119);
 			option3.__value = "4";
 			option3.value = option3.__value;
-			add_location(option3, file$8, 45, 6, 1198);
+			add_location(option3, file$8, 45, 6, 1201);
 			option4.__value = "5";
 			option4.value = option4.__value;
-			add_location(option4, file$8, 48, 6, 1299);
+			add_location(option4, file$8, 48, 6, 1302);
 			select.name = "user";
 			select.id = "userSelect";
-			add_location(select, file$8, 37, 4, 870);
-			div0.className = "optionsContainer svelte-40dlaf";
-			add_location(div0, file$8, 36, 2, 834);
-			div1.className = "widget svelte-40dlaf";
-			add_location(div1, file$8, 66, 4, 1890);
-			div2.className = "widget svelte-40dlaf";
-			add_location(div2, file$8, 69, 4, 1945);
-			div3.className = "widget svelte-40dlaf";
-			add_location(div3, file$8, 72, 4, 2004);
-			div4.className = "widget svelte-40dlaf";
-			add_location(div4, file$8, 75, 4, 2062);
-			div5.className = "widgetContainer svelte-40dlaf";
-			add_location(div5, file$8, 65, 2, 1855);
-			div6.className = "userview svelte-40dlaf";
-			add_location(div6, file$8, 35, 0, 780);
+			add_location(select, file$8, 37, 4, 873);
+			div0.className = "optionsContainer svelte-7zhlt7";
+			add_location(div0, file$8, 36, 2, 837);
+			div1.className = "widget svelte-7zhlt7";
+			add_location(div1, file$8, 66, 4, 1893);
+			div2.className = "widget svelte-7zhlt7";
+			add_location(div2, file$8, 69, 4, 1948);
+			div3.className = "widget svelte-7zhlt7";
+			add_location(div3, file$8, 72, 4, 2007);
+			div4.className = "widget svelte-7zhlt7";
+			add_location(div4, file$8, 75, 4, 2065);
+			div5.className = "widgetContainer svelte-7zhlt7";
+			add_location(div5, file$8, 65, 2, 1858);
+			div6.className = "userview svelte-7zhlt7";
+			add_location(div6, file$8, 35, 0, 783);
 		},
 
 		l: function claim(nodes) {
@@ -3207,20 +3207,20 @@ function create_fragment$d(ctx) {
 			attr(input, "type", "file");
 			input.multiple = true;
 			input.accept = "application/json";
-			input.className = "svelte-50ai9g";
-			add_location(input, file$d, 57, 0, 1276);
+			input.className = "svelte-1fkh3gu";
+			add_location(input, file$d, 54, 0, 1208);
 			attr(path, "fill", "white");
 			attr(path, "d", "M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3\r\n        11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8\r\n        2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6\r\n        1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4\r\n        1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z");
-			add_location(path, file$d, 65, 6, 1513);
+			add_location(path, file$d, 62, 6, 1445);
 			attr(svg, "xmlns", "http://www.w3.org/2000/svg");
 			attr(svg, "width", "30");
 			attr(svg, "height", "27");
 			attr(svg, "viewBox", "0 0 20 17");
-			add_location(svg, file$d, 60, 4, 1394);
-			add_location(figure, file$d, 59, 2, 1380);
+			add_location(svg, file$d, 57, 4, 1326);
+			add_location(figure, file$d, 56, 2, 1312);
 			label.htmlFor = "studyImport";
-			label.className = "svelte-50ai9g";
-			add_location(label, file$d, 58, 0, 1351);
+			label.className = "svelte-1fkh3gu";
+			add_location(label, file$d, 55, 0, 1283);
 		},
 
 		l: function claim(nodes) {
@@ -3305,14 +3305,14 @@ function create_fragment$e(ctx) {
 			t3 = space();
 			div2 = element("div");
 			studyimporter.$$.fragment.c();
-			div0.className = "study svelte-bn3yhx";
-			add_location(div0, file$e, 21, 2, 466);
-			div1.className = "study svelte-bn3yhx";
-			add_location(div1, file$e, 22, 2, 502);
-			div2.className = "study svelte-bn3yhx";
-			add_location(div2, file$e, 23, 2, 538);
-			div3.className = "container svelte-bn3yhx";
-			add_location(div3, file$e, 20, 0, 411);
+			div0.className = "study svelte-18f404u";
+			add_location(div0, file$e, 22, 2, 485);
+			div1.className = "study svelte-18f404u";
+			add_location(div1, file$e, 23, 2, 521);
+			div2.className = "study svelte-18f404u";
+			add_location(div2, file$e, 24, 2, 557);
+			div3.className = "container svelte-18f404u";
+			add_location(div3, file$e, 21, 0, 430);
 		},
 
 		l: function claim(nodes) {

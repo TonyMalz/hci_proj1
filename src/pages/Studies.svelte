@@ -10,11 +10,12 @@
     grid-gap: 1rem;
   }
   .study {
-    min-height: 15ch;
+    height: 15ch;
     border: 1px solid #ccc;
     border-radius: 4px;
     cursor: pointer;
     text-align: center;
+    overflow: hidden;
   }
 </style>
 

@@ -35,20 +35,17 @@
     z-index: -1;
   }
   label {
-    height: 100%;
-    width: 100%;
+    background: tomato;
+    height: 15ch;
     text-align: center;
-    font-size: 1rem;
     font-weight: 600;
     text-overflow: ellipsis;
     white-space: nowrap;
     cursor: pointer;
-    display: inline-block;
     overflow: hidden;
     padding: 0.625em 1.25em;
     border-radius: 4px;
     color: white;
-    background: tomato;
   }
   label:hover {
     background-color: #722040;
