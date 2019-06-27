@@ -4,7 +4,6 @@
   import WeekChart from "../charts/WeekChart.svelte";
   import BDAChart from "../charts/BDAChart.svelte";
   import ContextPie from "../charts/ContextPie.svelte";
-  import StudyImporter from "../components/StudyImporter.svelte";
 </script>
 
 <style>
@@ -66,7 +65,7 @@
         User 5 | avg. availability: 3.3 | responses: 254
       </option>
     </select>
-    <StudyImporter />
+
     <!-- <button id="newWidgetButton">
       New Widget
       <svg style="width:25px;height:25px">
