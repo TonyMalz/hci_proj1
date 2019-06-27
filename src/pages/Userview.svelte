@@ -18,34 +18,19 @@
     flex-wrap: wrap;
     overflow: auto;
   }
-  #newWidgetButton {
-    margin-left: auto;
-    width: 10%;
-  }
   .widgetContainer {
-    display: flex;
-    flex-wrap: wrap;
-    overflow: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(55ch, 1fr));
+    grid-gap: 1rem;
   }
-  .widgetContainer > * {
-    flex-grow: 1;
-    flex-shrink: 1;
-    flex-basis: 45%;
-  }
+
   .widget {
     border: 1px solid #ccc;
-    height: 45%;
     padding: 1em;
-    margin: 1em;
     border-radius: 4px;
+    min-height: 30ch;
+    max-height: 55ch;
   }
-  /*.addWidget {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    align-items: center;
-    cursor: pointer;
-    grid-gap: 1em;
-  }*/
 </style>
 
 <div class="userview" in:fade={{ duration: 300 }}>

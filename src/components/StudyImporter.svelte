@@ -72,5 +72,5 @@
         1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z" />
     </svg>
   </figure>
-    Upload a new study
+    Upload new study
 </label>
