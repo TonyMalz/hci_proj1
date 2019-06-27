@@ -1626,7 +1626,7 @@ function create_fragment$5(ctx) {
 			div = element("div");
 			div.id = "weekChart";
 			div.className = "svelte-uu58md";
-			add_location(div, file$5, 281, 0, 5286);
+			add_location(div, file$5, 281, 0, 5333);
 		},
 
 		l: function claim(nodes) {
@@ -1654,30 +1654,30 @@ function instance$4($$self) {
     const weekChart = echarts.init(document.getElementById("weekChart"));
 
     const hours = [
-      "12a",
-      "1a",
-      "2a",
-      "3a",
-      "4a",
-      "5a",
-      "6a",
-      "7a",
-      "8a",
-      "9a",
-      "10a",
-      "11a",
-      "12p",
-      "1p",
-      "2p",
-      "3p",
-      "4p",
-      "5p",
-      "6p",
-      "7p",
-      "8p",
-      "9p",
-      "10p",
-      "11p"
+      "0:00",
+      "1:00",
+      "2:00",
+      "3:00",
+      "4:00",
+      "5:00",
+      "6:00",
+      "7:00",
+      "8:00",
+      "9:00",
+      "10:00",
+      "11:00",
+      "12:00",
+      "1:00",
+      "2:00",
+      "3:00",
+      "4:00",
+      "5:00",
+      "6:00",
+      "7:00",
+      "8:00",
+      "9:00",
+      "10:00",
+      "11:00"
     ];
     const days = [
       "Saturday",
