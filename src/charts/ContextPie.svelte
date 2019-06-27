@@ -1,6 +1,6 @@
 <script>
   import { onMount } from "svelte";
-
+  let labelFontSize = window.devicePixelRatio <= 1 ? 18 : 12;
   onMount(() => {
     const ContextPieChart = echarts.init(
       document.getElementById("ContextPieChart")
@@ -40,6 +40,7 @@
           label: {
             normal: {
               textStyle: {
+                fontSize: labelFontSize,
                 color: "#333"
               }
             }

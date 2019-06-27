@@ -2035,7 +2035,7 @@ function create_fragment$7(ctx) {
 			div = element("div");
 			div.id = "ContextPieChart";
 			div.className = "svelte-8xdxio";
-			add_location(div, file$7, 92, 0, 2089);
+			add_location(div, file$7, 93, 0, 2192);
 		},
 
 		l: function claim(nodes) {
@@ -2059,7 +2059,8 @@ function create_fragment$7(ctx) {
 }
 
 function instance$6($$self) {
-	onMount(() => {
+	let labelFontSize = window.devicePixelRatio <= 1 ? 18 : 12;
+  onMount(() => {
     const ContextPieChart = echarts.init(
       document.getElementById("ContextPieChart")
     );
@@ -2098,6 +2099,7 @@ function instance$6($$self) {
           label: {
             normal: {
               textStyle: {
+                fontSize: labelFontSize,
                 color: "#333"
               }
             }
@@ -2193,36 +2195,36 @@ function create_fragment$8(ctx) {
 			contextpie.$$.fragment.c();
 			option0.__value = "1";
 			option0.value = option0.__value;
-			add_location(option0, file$8, 36, 6, 877);
+			add_location(option0, file$8, 37, 6, 905);
 			option1.__value = "2";
 			option1.value = option1.__value;
-			add_location(option1, file$8, 39, 6, 978);
+			add_location(option1, file$8, 40, 6, 1006);
 			option2.__value = "3";
 			option2.value = option2.__value;
-			add_location(option2, file$8, 42, 6, 1079);
+			add_location(option2, file$8, 43, 6, 1107);
 			option3.__value = "4";
 			option3.value = option3.__value;
-			add_location(option3, file$8, 43, 6, 1161);
+			add_location(option3, file$8, 44, 6, 1189);
 			option4.__value = "5";
 			option4.value = option4.__value;
-			add_location(option4, file$8, 46, 6, 1262);
+			add_location(option4, file$8, 47, 6, 1290);
 			select.name = "user";
 			select.id = "userSelect";
-			add_location(select, file$8, 35, 4, 833);
-			div0.className = "optionsContainer svelte-22tdrg";
-			add_location(div0, file$8, 34, 2, 797);
-			div1.className = "widget svelte-22tdrg";
-			add_location(div1, file$8, 64, 4, 1853);
-			div2.className = "widget svelte-22tdrg";
-			add_location(div2, file$8, 67, 4, 1908);
-			div3.className = "widget svelte-22tdrg";
-			add_location(div3, file$8, 70, 4, 1967);
-			div4.className = "widget svelte-22tdrg";
-			add_location(div4, file$8, 73, 4, 2025);
-			div5.className = "widgetContainer svelte-22tdrg";
-			add_location(div5, file$8, 63, 2, 1818);
-			div6.className = "userview svelte-22tdrg";
-			add_location(div6, file$8, 33, 0, 743);
+			add_location(select, file$8, 36, 4, 861);
+			div0.className = "optionsContainer svelte-1ci0qxq";
+			add_location(div0, file$8, 35, 2, 825);
+			div1.className = "widget svelte-1ci0qxq";
+			add_location(div1, file$8, 65, 4, 1881);
+			div2.className = "widget svelte-1ci0qxq";
+			add_location(div2, file$8, 68, 4, 1936);
+			div3.className = "widget svelte-1ci0qxq";
+			add_location(div3, file$8, 71, 4, 1995);
+			div4.className = "widget svelte-1ci0qxq";
+			add_location(div4, file$8, 74, 4, 2053);
+			div5.className = "widgetContainer svelte-1ci0qxq";
+			add_location(div5, file$8, 64, 2, 1846);
+			div6.className = "userview svelte-1ci0qxq";
+			add_location(div6, file$8, 34, 0, 771);
 		},
 
 		l: function claim(nodes) {

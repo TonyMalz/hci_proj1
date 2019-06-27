@@ -25,6 +25,7 @@
   .widget {
     border: 1px solid #ccc;
     padding: 1em;
+    padding-bottom: 0.5em;
     border-radius: 4px;
     min-height: 12rem;
     max-height: 20rem;
