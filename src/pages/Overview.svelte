@@ -1,8 +1,8 @@
 <script>
-  import MainChart from "./MainChart.svelte";
-  import MainChartSummary from "./MainChartSummary.svelte";
-  import Sherlock from "./Sherlock.svelte";
-  import Anova from "./Anova.svelte";
+  import MainChart from "../charts/MainChart.svelte";
+  import MainChartSummary from "../charts/MainChartSummary.svelte";
+  import Sherlock from "../charts/Sherlock.svelte";
+  import Anova from "../charts/Anova.svelte";
   import { fade } from "svelte/transition";
 </script>
 

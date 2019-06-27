@@ -1,10 +1,10 @@
 <script>
   import { fade } from "svelte/transition";
-  import Anova from "./Anova.svelte";
-  import WeekChart from "./WeekChart.svelte";
-  import BDAChart from "./BDAChart.svelte";
-  import ContextPie from "./ContextPie.svelte";
-  import StudyImporter from "./StudyImporter.svelte";
+  import Anova from "../charts/Anova.svelte";
+  import WeekChart from "../charts/WeekChart.svelte";
+  import BDAChart from "../charts/BDAChart.svelte";
+  import ContextPie from "../charts/ContextPie.svelte";
+  import StudyImporter from "../components/StudyImporter.svelte";
 </script>
 
 <style>

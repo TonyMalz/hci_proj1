@@ -1,13 +1,13 @@
 <script>
-  import Tabs from "./Tabs.svelte";
-  import StudyInfo from "./StudyInfo.svelte";
-  import UndoRedo from "./UndoRedo.svelte";
-  import PageOverview from "./PageOverview.svelte";
-  import PageUserview from "./PageUserview.svelte";
-  import PageNew from "./PageNew.svelte";
+  import Tabs from "./components/Tabs.svelte";
+  import StudyInfo from "./components/StudyInfo.svelte";
+  import UndoRedo from "./components/UndoRedo.svelte";
+  import Userview from "./pages/Userview.svelte";
+  import Overview from "./pages/Overview.svelte";
+  import New from "./pages/New.svelte";
 
   import { fly } from "svelte/transition";
-  import { activeUITab } from "./store.js";
+  import { activeUITab } from "./modules/store.js";
 
   let activeTab = 0;
   activeUITab.subscribe(async v => {
@@ -85,11 +85,11 @@
   </nav>
   <section>
     {#if activeTab === 0}
-      <PageOverview />
+      <Overview />
     {:else if activeTab === 1}
-      <PageUserview />
+      <Userview />
     {:else}
-      <PageNew />
+      <New />
     {/if}
   </section>
 </main>
