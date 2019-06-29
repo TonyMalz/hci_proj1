@@ -1,24 +1,94 @@
 <script>
+  import { db } from "../modules/indexeddb.js";
   import { onMount } from "svelte";
   onMount(() => {
     const el = document.getElementById("studyImport");
 
     el.onchange = () => {
       for (const file of el.files) {
-        console.log(file);
+        //console.log(file);
         if (file.type !== "application/json") {
           console.error("invalid file type");
           continue;
         }
         // read file contents
         const reader = new FileReader();
+        console.log("importing file: ", file.name);
+        reader.readAsText(file);
         reader.onload = e => {
           const text = reader.result;
-          console.log("file reader finished");
-          const jsn = JSON.parse(text);
-          console.log(jsn);
+          console.log("file reader finished importing");
+          try {
+            console.log("parsing json file: ", file.name);
+            const jsn = JSON.parse(text);
+            console.log("finished parsing file");
+            console.log(jsn);
+            // import study into database
+
+            // sanity checks:
+            if (!jsn.hasOwnProperty("_id")) {
+              console.error("missing prop: _id");
+              return;
+            }
+            if (!jsn.hasOwnProperty("studyName")) {
+              console.error("missing prop: studyName");
+              return;
+            }
+            if (!jsn.hasOwnProperty("description")) {
+              console.error("missing prop: description");
+              return;
+            }
+
+            // insert study data into db
+            if (!db) {
+              console.error("missing database object");
+              return;
+            }
+
+            let tx = db.transaction(["Studies", "StudyVariables"], "readwrite");
+            let storeName = "Studies";
+            let store = tx.objectStore(storeName);
+
+            jsn.$created = new Date();
+            let result = store.add(jsn); // put replaces existing items in the db
+            result.onerror = event => {
+              // ConstraintError occurs when an object with the same id already exists
+              if (result.error.name == "ConstraintError") {
+                if (
+                  confirm(
+                    "This study already exists, do you want to replace it?"
+                  )
+                ) {
+                  console.log("replace study");
+                  event.preventDefault(); // don't abort the transaction
+                  event.stopPropagation();
+                  event.target.source.put(jsn); //source holds objectStore for this event
+                  result.onsuccess();
+                } else {
+                  console.log("don't replace study");
+                }
+              }
+            };
+            result.onsuccess = () => {
+              storeName = "StudyVariables";
+              store = tx.objectStore(storeName);
+
+              const stId = jsn._id;
+              for (const task of jsn.tasks) {
+                for (const step of task.steps) {
+                  for (const stepItem of step.stepItems) {
+                    stepItem.$created = new Date();
+                    stepItem.studyId = stId;
+                    store.put(stepItem);
+                  }
+                }
+              }
+              alert(`Study "${jsn.studyName}" was successfully imported`);
+            };
+          } catch (error) {
+            console.error(`Error parsing ${file.name}: `, error);
+          }
         };
-        reader.readAsText(file);
       }
     };
   });
