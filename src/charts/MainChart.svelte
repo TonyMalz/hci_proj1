@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
 
   onMount(() => {
-    const mainChart = echarts.init(document.getElementById("mainChart"));
+    let mainChart = echarts.init(document.getElementById("mainChart"));
 
     // TODO find alternative for this workaround
     var hours = [
@@ -178,7 +178,7 @@
         }
       },
       grid: {
-        top:40,
+        top: 40,
         left: 2,
         bottom: 10,
         right: 30,
@@ -226,11 +226,20 @@
 
     // use configuration item and data specified to show chart
     mainChart.setOption(option);
-    window.addEventListener("resize", () => {
-      if (mainChart !== null) {
+
+    function resizeChart() {
+      if (mainChart !== null && !mainChart.isDisposed()) {
         mainChart.resize();
       }
-    });
+    }
+    window.addEventListener("resize", resizeChart);
+
+    return () => {
+      // clean up after component unmounts
+      mainChart.dispose();
+      mainChart = null;
+      window.removeEventListener("resize", resizeChart);
+    };
   });
 </script>
 

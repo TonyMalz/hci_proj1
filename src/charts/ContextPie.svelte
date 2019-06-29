@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   let labelFontSize = window.devicePixelRatio <= 1 ? 18 : 12;
   onMount(() => {
-    const ContextPieChart = echarts.init(
+    let ContextPieChart = echarts.init(
       document.getElementById("ContextPieChart")
     );
     const option = {
@@ -74,11 +74,19 @@
 
     ContextPieChart.setOption(option);
 
-    window.addEventListener("resize", () => {
-      if (ContextPieChart !== null) {
+    function resizeChart() {
+      if (ContextPieChart !== null && !ContextPieChart.isDisposed()) {
         ContextPieChart.resize();
       }
-    });
+    }
+    window.addEventListener("resize", resizeChart);
+
+    return () => {
+      // clean up after component unmounts
+      ContextPieChart.dispose();
+      ContextPieChart = null;
+      window.removeEventListener("resize", resizeChart);
+    };
   });
 </script>
 

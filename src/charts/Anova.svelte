@@ -1,7 +1,7 @@
 <script>
   import { onMount } from "svelte";
   onMount(() => {
-    const anovaChart = echarts.init(document.getElementById("anovaChart"));
+    let anovaChart = echarts.init(document.getElementById("anovaChart"));
     const categoryData = [
       "Monday",
       "Tuesday",
@@ -136,11 +136,19 @@
     };
     anovaChart.setOption(option);
 
-    window.addEventListener("resize", () => {
-      if (anovaChart !== null) {
+    function resizeChart() {
+      if (anovaChart !== null && !anovaChart.isDisposed()) {
         anovaChart.resize();
       }
-    });
+    }
+    window.addEventListener("resize", resizeChart);
+
+    return () => {
+      // clean up after component unmounts
+      anovaChart.dispose();
+      anovaChart = null;
+      window.removeEventListener("resize", resizeChart);
+    };
   });
 </script>
 

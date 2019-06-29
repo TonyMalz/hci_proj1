@@ -1,9 +1,7 @@
 <script>
   import { onMount } from "svelte";
   onMount(() => {
-    const sherlockChart = echarts.init(
-      document.getElementById("sherlockChart")
-    );
+    let sherlockChart = echarts.init(document.getElementById("sherlockChart"));
     const dataAll = [
       [
         [10.0, 8.04],
@@ -218,11 +216,19 @@
     };
     sherlockChart.setOption(option);
 
-    window.addEventListener("resize", () => {
-      if (sherlockChart !== null) {
+    function resizeChart() {
+      if (sherlockChart !== null && !sherlockChart.isDisposed()) {
         sherlockChart.resize();
       }
-    });
+    }
+    window.addEventListener("resize", resizeChart);
+
+    return () => {
+      // clean up after component unmounts
+      sherlockChart.dispose();
+      sherlockChart = null;
+      window.removeEventListener("resize", resizeChart);
+    };
   });
 </script>
 

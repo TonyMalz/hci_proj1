@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
 
   onMount(() => {
-    const weekChart = echarts.init(document.getElementById("weekChart"));
+    let weekChart = echarts.init(document.getElementById("weekChart"));
 
     const hours = [
       "0:00",
@@ -262,11 +262,19 @@
 
     weekChart.setOption(option);
 
-    window.addEventListener("resize", () => {
-      if (weekChart !== null) {
+    function resizeChart() {
+      if (weekChart !== null && !weekChart.isDisposed()) {
         weekChart.resize();
       }
-    });
+    }
+    window.addEventListener("resize", resizeChart);
+
+    return () => {
+      // clean up after component unmounts
+      weekChart.dispose();
+      weekChart = null;
+      window.removeEventListener("resize", resizeChart);
+    };
   });
 </script>
 

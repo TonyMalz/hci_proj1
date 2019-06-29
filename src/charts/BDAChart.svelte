@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
 
   onMount(() => {
-    const BDAChart = echarts.init(document.getElementById("BDAChart"));
+    let BDAChart = echarts.init(document.getElementById("BDAChart"));
     const option = {
       grid: {
         left: 36,
@@ -43,11 +43,19 @@
 
     BDAChart.setOption(option);
 
-    window.addEventListener("resize", () => {
-      if (BDAChart !== null) {
+    function resizeChart() {
+      if (BDAChart !== null && !BDAChart.isDisposed()) {
         BDAChart.resize();
       }
-    });
+    }
+    window.addEventListener("resize", resizeChart);
+
+    return () => {
+      // clean up after component unmounts
+      BDAChart.dispose();
+      BDAChart = null;
+      window.removeEventListener("resize", resizeChart);
+    };
   });
 </script>
 

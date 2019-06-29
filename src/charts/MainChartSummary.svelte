@@ -1,7 +1,7 @@
 <script>
   import { onMount } from "svelte";
   onMount(() => {
-    const mainChartSummary = echarts.init(
+    let mainChartSummary = echarts.init(
       document.getElementById("mainChartSummary")
     );
 
@@ -116,11 +116,19 @@
 
     // use configuration item and data specified to show chart
     mainChartSummary.setOption(option);
-    window.addEventListener("resize", () => {
-      if (mainChartSummary !== null) {
+    function resizeChart() {
+      if (mainChartSummary !== null && !mainChartSummary.isDisposed()) {
         mainChartSummary.resize();
       }
-    });
+    }
+    window.addEventListener("resize", resizeChart);
+
+    return () => {
+      // clean up after component unmounts
+      mainChartSummary.dispose();
+      mainChartSummary = null;
+      window.removeEventListener("resize", resizeChart);
+    };
   });
 </script>
 

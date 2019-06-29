@@ -1437,7 +1437,7 @@ function create_fragment$4(ctx) {
 			div = element("div");
 			div.id = "anovaChart";
 			div.className = "svelte-1a6ghsc";
-			add_location(div, file$4, 155, 0, 3466);
+			add_location(div, file$4, 163, 0, 3713);
 		},
 
 		l: function claim(nodes) {
@@ -1462,7 +1462,7 @@ function create_fragment$4(ctx) {
 
 function instance$3($$self) {
 	onMount(() => {
-    const anovaChart = echarts.init(document.getElementById("anovaChart"));
+    let anovaChart = echarts.init(document.getElementById("anovaChart"));
     const categoryData = [
       "Monday",
       "Tuesday",
@@ -1597,11 +1597,19 @@ function instance$3($$self) {
     };
     anovaChart.setOption(option);
 
-    window.addEventListener("resize", () => {
-      if (anovaChart !== null) {
+    function resizeChart() {
+      if (anovaChart !== null && !anovaChart.isDisposed()) {
         anovaChart.resize();
       }
-    });
+    }
+    window.addEventListener("resize", resizeChart);
+
+    return () => {
+      // clean up after component unmounts
+      anovaChart.dispose();
+      anovaChart = null;
+      window.removeEventListener("resize", resizeChart);
+    };
   });
 
 	return {};
@@ -1626,7 +1634,7 @@ function create_fragment$5(ctx) {
 			div = element("div");
 			div.id = "weekChart";
 			div.className = "svelte-uu58md";
-			add_location(div, file$5, 281, 0, 5333);
+			add_location(div, file$5, 289, 0, 5577);
 		},
 
 		l: function claim(nodes) {
@@ -1651,7 +1659,7 @@ function create_fragment$5(ctx) {
 
 function instance$4($$self) {
 	onMount(() => {
-    const weekChart = echarts.init(document.getElementById("weekChart"));
+    let weekChart = echarts.init(document.getElementById("weekChart"));
 
     const hours = [
       "0:00",
@@ -1911,11 +1919,19 @@ function instance$4($$self) {
 
     weekChart.setOption(option);
 
-    window.addEventListener("resize", () => {
-      if (weekChart !== null) {
+    function resizeChart() {
+      if (weekChart !== null && !weekChart.isDisposed()) {
         weekChart.resize();
       }
-    });
+    }
+    window.addEventListener("resize", resizeChart);
+
+    return () => {
+      // clean up after component unmounts
+      weekChart.dispose();
+      weekChart = null;
+      window.removeEventListener("resize", resizeChart);
+    };
   });
 
 	return {};
@@ -1940,7 +1956,7 @@ function create_fragment$6(ctx) {
 			div = element("div");
 			div.id = "BDAChart";
 			div.className = "svelte-1j0o2bd";
-			add_location(div, file$6, 62, 0, 1189);
+			add_location(div, file$6, 70, 0, 1430);
 		},
 
 		l: function claim(nodes) {
@@ -1965,7 +1981,7 @@ function create_fragment$6(ctx) {
 
 function instance$5($$self) {
 	onMount(() => {
-    const BDAChart = echarts.init(document.getElementById("BDAChart"));
+    let BDAChart = echarts.init(document.getElementById("BDAChart"));
     const option = {
       grid: {
         left: 36,
@@ -2006,11 +2022,19 @@ function instance$5($$self) {
 
     BDAChart.setOption(option);
 
-    window.addEventListener("resize", () => {
-      if (BDAChart !== null) {
+    function resizeChart() {
+      if (BDAChart !== null && !BDAChart.isDisposed()) {
         BDAChart.resize();
       }
-    });
+    }
+    window.addEventListener("resize", resizeChart);
+
+    return () => {
+      // clean up after component unmounts
+      BDAChart.dispose();
+      BDAChart = null;
+      window.removeEventListener("resize", resizeChart);
+    };
   });
 
 	return {};
@@ -2035,7 +2059,7 @@ function create_fragment$7(ctx) {
 			div = element("div");
 			div.id = "ContextPieChart";
 			div.className = "svelte-8xdxio";
-			add_location(div, file$7, 93, 0, 2192);
+			add_location(div, file$7, 101, 0, 2454);
 		},
 
 		l: function claim(nodes) {
@@ -2061,7 +2085,7 @@ function create_fragment$7(ctx) {
 function instance$6($$self) {
 	let labelFontSize = window.devicePixelRatio <= 1 ? 18 : 12;
   onMount(() => {
-    const ContextPieChart = echarts.init(
+    let ContextPieChart = echarts.init(
       document.getElementById("ContextPieChart")
     );
     const option = {
@@ -2133,11 +2157,19 @@ function instance$6($$self) {
 
     ContextPieChart.setOption(option);
 
-    window.addEventListener("resize", () => {
-      if (ContextPieChart !== null) {
+    function resizeChart() {
+      if (ContextPieChart !== null && !ContextPieChart.isDisposed()) {
         ContextPieChart.resize();
       }
-    });
+    }
+    window.addEventListener("resize", resizeChart);
+
+    return () => {
+      // clean up after component unmounts
+      ContextPieChart.dispose();
+      ContextPieChart = null;
+      window.removeEventListener("resize", resizeChart);
+    };
   });
 
 	return {};
@@ -2322,7 +2354,7 @@ function create_fragment$9(ctx) {
 			div.id = "mainChart";
 			set_style(div, "width", "100%");
 			set_style(div, "height", "100%");
-			add_location(div, file$9, 236, 0, 4661);
+			add_location(div, file$9, 245, 0, 4908);
 		},
 
 		l: function claim(nodes) {
@@ -2347,7 +2379,7 @@ function create_fragment$9(ctx) {
 
 function instance$7($$self) {
 	onMount(() => {
-    const mainChart = echarts.init(document.getElementById("mainChart"));
+    let mainChart = echarts.init(document.getElementById("mainChart"));
 
     // TODO find alternative for this workaround
     var hours = [
@@ -2523,7 +2555,7 @@ function instance$7($$self) {
         }
       },
       grid: {
-        top:40,
+        top: 40,
         left: 2,
         bottom: 10,
         right: 30,
@@ -2571,11 +2603,20 @@ function instance$7($$self) {
 
     // use configuration item and data specified to show chart
     mainChart.setOption(option);
-    window.addEventListener("resize", () => {
-      if (mainChart !== null) {
+
+    function resizeChart() {
+      if (mainChart !== null && !mainChart.isDisposed()) {
         mainChart.resize();
       }
-    });
+    }
+    window.addEventListener("resize", resizeChart);
+
+    return () => {
+      // clean up after component unmounts
+      mainChart.dispose();
+      mainChart = null;
+      window.removeEventListener("resize", resizeChart);
+    };
   });
 
 	return {};
@@ -2601,7 +2642,7 @@ function create_fragment$a(ctx) {
 			div.id = "mainChartSummary";
 			set_style(div, "width", "100%");
 			set_style(div, "height", "100%");
-			add_location(div, file$a, 126, 0, 2497);
+			add_location(div, file$a, 134, 0, 2762);
 		},
 
 		l: function claim(nodes) {
@@ -2626,7 +2667,7 @@ function create_fragment$a(ctx) {
 
 function instance$8($$self) {
 	onMount(() => {
-    const mainChartSummary = echarts.init(
+    let mainChartSummary = echarts.init(
       document.getElementById("mainChartSummary")
     );
 
@@ -2741,11 +2782,19 @@ function instance$8($$self) {
 
     // use configuration item and data specified to show chart
     mainChartSummary.setOption(option);
-    window.addEventListener("resize", () => {
-      if (mainChartSummary !== null) {
+    function resizeChart() {
+      if (mainChartSummary !== null && !mainChartSummary.isDisposed()) {
         mainChartSummary.resize();
       }
-    });
+    }
+    window.addEventListener("resize", resizeChart);
+
+    return () => {
+      // clean up after component unmounts
+      mainChartSummary.dispose();
+      mainChartSummary = null;
+      window.removeEventListener("resize", resizeChart);
+    };
   });
 
 	return {};
@@ -2779,7 +2828,7 @@ function create_fragment$b(ctx) {
 			t2 = space();
 			div1 = element("div");
 			attr(path, "d", "M-823.5,558.3c-4.8-0.3-4.4,1.6-4.4,1.6l0.2,4.6c0,0,0,2.4-1.4,2.3s-1.8-2.8-1.8-2.8s-1.1-4.6-1.1-4.6\r\n            c0-0.1,0.1-0.3,0.1-0.4c0.1-0.3,0.1-0.7,0-1c-0.1-0.7-0.2-1.5-0.7-2.1c0,0-0.8-0.5-0.8-0.4c-0.5-3.4-2.2-6.8-5.7-7.8\r\n            c-0.2-0.1-2.5-0.5-3.6-0.7c0.1-0.3,0.3-0.6,0.4-0.9c0.3-1.2-0.4-2.3-0.8-3.3c-0.3-1-0.2-1.9,1-2c1.1-0.1,3.1,1,3.7,0.8\r\n            c0.7-0.1,1.5-0.7,1.5-1.5s-1.2-2.5-1.2-2.5s-1.6-3.2-2.1-4.6c-0.5-1.4-2.3-2.7-2.3-2.7s-1.8-1.3-1.6-2.2c0.2-0.9,0.9-1.2,1.2-2.1\r\n            c1,0.1,2.1,0.4,2.9,0.5c2.9,0.4,6.7,1.2,9,0.7c0,0,1.2-0.1,0-1c-1.2-0.9-4.1-3.7-5-4.7s-4.1-3.1-4.7-4.4c-1.9-3.9-2.4-8.6-5.6-11.9\r\n            c-2.3-2.4-5.2-4.3-8.2-5.6c1.1,0.2,2.2,0.3,3.3,0.3c0.1,0,0.3,0,0.4,0l0-0.9c-2.8,0.1-6-0.6-8.3-1.2c0.5,0,1-0.1,1.6-0.3\r\n            c1-0.3,2.9-1.1,2.5-2.5c-0.5-1.9-3.8-1.3-5.1-1.1c-2.5,0.4-4.8,1.6-7,2.8c-0.3-0.4-0.8-0.5-1.4-0.4c-0.4,0.1-0.7,0.3-0.9,0.5\r\n            c-0.4-0.2-1.7-0.7-4.9-0.7c-2,0-8.9,2.1-5.3,4.4c-1.5,0.4-3.2,0.8-4.4,0.9l0.1,0.9c0.7-0.1,1.5-0.2,2.4-0.4\r\n            c-2.5,1.5-4.7,3.4-6.6,5.6c-2,2.3-3.1,5.4-3.5,8.3c-0.5,3.6,0.5,7.2,0.3,10.8c-0.2,1.9-1.2,2.8-2.2,4.3c-1,1.5-1.4,3.2-2.4,4.7\r\n            c-0.8,1.4-2.1,2.4-3.2,3.6c-0.4,0.4-0.3,0.7,0,0.8c0.1,0,0.2,0,0.4,0c0.8-0.1,1.5-0.5,2.2-0.7c1.1-0.3,2.2-0.6,3.2-1\r\n            c0.7-0.3,3-1,5.4-1.9c0.1,0.9,0.2,1.9,0.4,2.5c0.4,1.2,2.3,3.4,2.3,3.4s1.8,1.6,1.9,3.7c0,1.1-0.3,2-0.7,2.6c-0.6-0.4-2.2-1-3.6,0.8\r\n            c-1.8,2.3-2.5,4.4-3.4,5.6c-0.9,1.2-3,3.6-3.2,4.7c-0.2,1.1,0.8,2.3,0.8,2.3l-5.7,10.3c0,0,2.5,2.9,8.6,3.3\r\n            c6.1,0.4,6.5-1.3,14.3,0.8c7.8,2.1,12.2,13.9,27.5,12c0,0-2-6.2-4.5-9.9c-2.5-3.7-5.4-7.8-5.4-7.8c0.2-1.1,1.4-4.6,0.6-5.4\r\n            c-0.5-0.5-1-0.9-1.5-1.4c0.4-0.9,0.9-1.8,0.9-2.8c0-0.9-0.4-2-0.1-2.9c0.2-0.6,0.8-1,1.4-1c0.8,0,1.3,0.7,2.1,0.9\r\n            c0.8,0.2,2.1,0.1,2.9,0.1c0.9,0,1.7,0.7,2.5,0.9c2.1,0.7,4.4,0.4,5.9-1.3c1.6-1.8,0.3-3.6,0.3-3.6s-1.2-1.5-1.2-2.4\r\n            c0-0.9,0.7-1.6,0.7-1.6l0-0.1c0.1,0,0.2,0,0.3,0c0.7,0,1.3-0.5,1.3-1c0-0.2,0-0.3-0.1-0.4c0.5,0.1,1.2,0.2,1.3,0.2\r\n            c0.8,0.2,1.5,0.4,2.2,0.8c1.4,0.8,2.3,2.2,2.7,3.7c0.1,0.5,0.7,2.2,0.3,2.6c-0.3,0.3-0.4,1.1-0.4,1.5c0,0.8,0.3,1.7,0.8,2.3\r\n            c0.1,0.2,0.6,0.5,0.7,0.7c1.2,5.1,1.6,11.1,8.3,11.6c2.8,0.2,4.4-1.3,4.4-1.3s1.8-1.1,2.4-4.1c0.6-3,0.7-6.5,0.7-6.5\r\n            S-818.7,558.5-823.5,558.3z\r\n            M-865.4,497.4c-0.4,0-0.7,0-1.1,0c0,0,0-0.1,0-0.1C-866.3,497.4-865.9,497.4-865.4,497.4z\r\n            M-872.9,497.9\r\n            c0.3-0.1,2.5-0.4,3.4-0.4c0,0.1,0,0.1,0,0.2c-0.3,0-0.7,0.1-1,0.1c-1.6,0.2-3.3,0.6-4.9,1.2C-874.6,498.5-873.8,498-872.9,497.9z\r\n            M-878.4,498.2c1.6-0.8,2.9-0.9,4.7-1.1c-1.4,0.1-3.1,2.5-4.6,2C-878.7,498.9-878.9,498.5-878.4,498.2z\r\n            M-862,497.6\r\n            c0.1,0,0.3,0,0.4,0l0,0C-861.7,497.6-861.9,497.6-862,497.6z\r\n            M-860.9,496.5c-0.8-0.1-2.2-0.5-3-0.2c1.3-0.4,2.5-0.9,3.8-1.2\r\n            c0.7-0.1,1.4-0.2,2.1-0.1c1,0.2,1.1,0.9,0.2,1.4c0,0-0.1,0-0.1,0C-858.8,496.9-859.9,496.6-860.9,496.5z");
-			add_location(path, file$b, 263, 10, 5666);
+			add_location(path, file$b, 269, 10, 5908);
 			attr(svg0, "fill", "#333");
 			attr(svg0, "xmlns", "http://www.w3.org/2000/svg");
 			attr(svg0, "xmlns:xlink", "http://www.w3.org/1999/xlink");
@@ -2789,23 +2838,23 @@ function create_fragment$b(ctx) {
 			attr(svg0, "viewBox", "-909 491 100 100");
 			set_style(svg0, "enable-background", "new -909 491 100 100");
 			attr(svg0, "xml:space", "preserve");
-			add_location(svg0, file$b, 253, 8, 5334);
+			add_location(svg0, file$b, 259, 8, 5576);
 			attr(g0, "transform", "translate(600 600) scale(-0.69 0.69) translate(-600 -600)");
-			add_location(g0, file$b, 252, 6, 5251);
-			add_location(g1, file$b, 251, 4, 5240);
+			add_location(g0, file$b, 258, 6, 5493);
+			add_location(g1, file$b, 257, 4, 5482);
 			attr(svg1, "xmlns", "http://www.w3.org/2000/svg");
 			attr(svg1, "xmlns:xlink", "http://www.w3.org/1999/xlink");
 			attr(svg1, "width", "2.5em");
 			attr(svg1, "height", "2.5em");
 			attr(svg1, "viewBox", "0 0 1200 1200");
-			add_location(svg1, file$b, 245, 2, 5073);
-			add_location(span, file$b, 295, 2, 8740);
+			add_location(svg1, file$b, 251, 2, 5315);
+			add_location(span, file$b, 301, 2, 8982);
 			div0.id = "sherlockHeader";
 			div0.className = "svelte-nary1h";
-			add_location(div0, file$b, 244, 0, 5044);
+			add_location(div0, file$b, 250, 0, 5286);
 			div1.id = "sherlockChart";
 			div1.className = "svelte-nary1h";
-			add_location(div1, file$b, 297, 0, 8771);
+			add_location(div1, file$b, 303, 0, 9013);
 		},
 
 		l: function claim(nodes) {
@@ -2841,9 +2890,7 @@ function create_fragment$b(ctx) {
 
 function instance$9($$self) {
 	onMount(() => {
-    const sherlockChart = echarts.init(
-      document.getElementById("sherlockChart")
-    );
+    let sherlockChart = echarts.init(document.getElementById("sherlockChart"));
     const dataAll = [
       [
         [10.0, 8.04],
@@ -3058,11 +3105,19 @@ function instance$9($$self) {
     };
     sherlockChart.setOption(option);
 
-    window.addEventListener("resize", () => {
-      if (sherlockChart !== null) {
+    function resizeChart() {
+      if (sherlockChart !== null && !sherlockChart.isDisposed()) {
         sherlockChart.resize();
       }
-    });
+    }
+    window.addEventListener("resize", resizeChart);
+
+    return () => {
+      // clean up after component unmounts
+      sherlockChart.dispose();
+      sherlockChart = null;
+      window.removeEventListener("resize", resizeChart);
+    };
   });
 
 	return {};
