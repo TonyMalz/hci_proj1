@@ -3262,7 +3262,7 @@ request.onupgradeneeded = (e) => {
     store = db.createObjectStore("Studies", { keyPath: "_id" });
     store.createIndex("studyName", "studyName", { unique: false });
 
-    // later used to quickly lookup taks to distinguish btw. demographics and regular questions
+    // later used to quickly lookup task properties to distinguish btw. demographics and regular questions
     store = db.createObjectStore("StudyTasks", { keyPath: "taskId" });
     store.createIndex("studyId", "studyId", { unique: false });
 
@@ -3275,11 +3275,14 @@ request.onupgradeneeded = (e) => {
     // store.createIndex("variableName", "variableName", { unique: false })
 
     // not sure if really needed
-    store = db.createObjectStore("Users", { keyPath: "userId" });
+    store = db.createObjectStore("Users", { keyPath: ["userId", "studyId"] });
+    store.createIndex("userId", "userId", { unique: false });
+    store.createIndex("studyId", "studyId", { unique: false });
 
     // store holding all demographics of each user (where task.personalData == true)
-    store = db.createObjectStore("Demographics", { keyPath: "userId" });
-    store.createIndex("taskId", "taskId", { unique: false });
+    store = db.createObjectStore("Demographics", { keyPath: ["userId", "variableName"] });
+    store.createIndex("userId", "userId", { unique: false });
+    store.createIndex("variableName", "variableName", { unique: false });
 
     // holds all results from all questionnaires
     store = db.createObjectStore("TaskResults", { autoIncrement: true });
@@ -3341,25 +3344,25 @@ function create_fragment$d(ctx) {
 			figure = element("figure");
 			svg = svg_element("svg");
 			path = svg_element("path");
-			t1 = text("\r\n    Upload new study");
+			t1 = text("\r\n    Upload study data");
 			input.id = "studyImport";
 			attr(input, "type", "file");
 			input.multiple = true;
 			input.accept = "application/json";
 			input.className = "svelte-bptog8";
-			add_location(input, file$d, 124, 0, 3947);
+			add_location(input, file$d, 198, 0, 7155);
 			attr(path, "fill", "white");
 			attr(path, "d", "M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3\r\n        11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8\r\n        2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6\r\n        1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4\r\n        1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z");
-			add_location(path, file$d, 132, 6, 4188);
+			add_location(path, file$d, 206, 6, 7396);
 			attr(svg, "xmlns", "http://www.w3.org/2000/svg");
 			attr(svg, "width", "2em");
 			attr(svg, "height", "1.8em");
 			attr(svg, "viewBox", "0 0 20 17");
-			add_location(svg, file$d, 127, 4, 4065);
-			add_location(figure, file$d, 126, 2, 4051);
+			add_location(svg, file$d, 201, 4, 7273);
+			add_location(figure, file$d, 200, 2, 7259);
 			label.htmlFor = "studyImport";
 			label.className = "svelte-bptog8";
-			add_location(label, file$d, 125, 0, 4022);
+			add_location(label, file$d, 199, 0, 7230);
 		},
 
 		l: function claim(nodes) {
@@ -3416,8 +3419,72 @@ function instance$a($$self) {
             console.log(jsn);
             // import study into database
 
-            // sanity checks:
+            // check if it is a results file
+            if (
+              jsn.hasOwnProperty("taskResults") &&
+              jsn.taskResults instanceof Array
+            ) {
+              let tx = db.transaction(
+                ["Users", "Demographics", "TaskResults", "StudyTasks"],
+                "readwrite"
+              );
+
+              // importing questionnaire results
+              for (const result of jsn.taskResults) {
+                const { studyId, taskId, userId, startDate } = result;
+                const res = tx.objectStore("StudyTasks").get(taskId);
+                res.onsuccess = e => {
+                  const taskInfo = e.target.result;
+                  if (taskInfo.personalData === true) {
+                    // import data for demographics
+                    const store = tx.objectStore("Demographics");
+                    for (const step of result.stepResults) {
+                      for (const stepItem of step.stepItemResults) {
+                        const data = {
+                          userId: userId,
+                          variableName: stepItem.variableName,
+                          taskId: taskId,
+                          value: stepItem.value,
+                          startDate: startDate, // using start date of questionnaire, should we use item date instead, or skip this value?
+                          $created: new Date()
+                        };
+                        store.put(data);
+                      }
+                    }
+                  } else {
+                    // regular questionnaire item
+                    const store = tx.objectStore("TaskResults");
+                    for (const step of result.stepResults) {
+                      for (const stepItem of step.stepItemResults) {
+                        const data = {
+                          studyId: studyId,
+                          userId: userId,
+                          taskId: taskId,
+                          variableName: stepItem.variableName,
+                          value: stepItem.value,
+                          startDate: startDate, // using start date of questionnaire, should we use item date instead?
+                          $created: new Date()
+                        };
+                        store.add(data);
+                      }
+                    }
+                  }
+                };
+
+                let store = tx.objectStore("Users");
+                const user = {
+                  userId: result.userId,
+                  studyId: studyId,
+                  $created: new Date()
+                };
+                store.put(user);
+              }
+              alert("Study results were imported");
+              return;
+            } // end of task result import
+
             if (!jsn.hasOwnProperty("_id")) {
+              // sanity checks:
               console.error("missing prop: _id");
               return;
             }
@@ -3436,7 +3503,10 @@ function instance$a($$self) {
               return;
             }
 
-            let tx = db.transaction(["Studies", "StudyVariables"], "readwrite");
+            let tx = db.transaction(
+              ["Studies", "StudyVariables", "StudyTasks"],
+              "readwrite"
+            );
             let storeName = "Studies";
             let store = tx.objectStore(storeName);
 
@@ -3461,11 +3531,18 @@ function instance$a($$self) {
               }
             };
             result.onsuccess = () => {
-              storeName = "StudyVariables";
-              store = tx.objectStore(storeName);
+              store = tx.objectStore("StudyVariables");
+              const store2 = tx.objectStore("StudyTasks");
 
               const stId = jsn._id;
               for (const task of jsn.tasks) {
+                const taskData = {
+                  studyId: stId,
+                  taskId: task._id,
+                  taskName: task.taskName,
+                  personalData: JSON.parse(task.personalData) // cast to boolean type
+                };
+                store2.put(taskData);
                 for (const step of task.steps) {
                   for (const stepItem of step.stepItems) {
                     stepItem.$created = new Date();

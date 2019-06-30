@@ -16,7 +16,7 @@ request.onupgradeneeded = (e) => {
     store = db.createObjectStore("Studies", { keyPath: "_id" })
     store.createIndex("studyName", "studyName", { unique: false })
 
-    // later used to quickly lookup taks to distinguish btw. demographics and regular questions
+    // later used to quickly lookup task properties to distinguish btw. demographics and regular questions
     store = db.createObjectStore("StudyTasks", { keyPath: "taskId" })
     store.createIndex("studyId", "studyId", { unique: false })
 
@@ -29,11 +29,14 @@ request.onupgradeneeded = (e) => {
     // store.createIndex("variableName", "variableName", { unique: false })
 
     // not sure if really needed
-    store = db.createObjectStore("Users", { keyPath: "userId" })
+    store = db.createObjectStore("Users", { keyPath: ["userId", "studyId"] })
+    store.createIndex("userId", "userId", { unique: false })
+    store.createIndex("studyId", "studyId", { unique: false })
 
     // store holding all demographics of each user (where task.personalData == true)
-    store = db.createObjectStore("Demographics", { keyPath: "userId" })
-    store.createIndex("taskId", "taskId", { unique: false })
+    store = db.createObjectStore("Demographics", { keyPath: ["userId", "variableName"] })
+    store.createIndex("userId", "userId", { unique: false })
+    store.createIndex("variableName", "variableName", { unique: false })
 
     // holds all results from all questionnaires
     store = db.createObjectStore("TaskResults", { autoIncrement: true })

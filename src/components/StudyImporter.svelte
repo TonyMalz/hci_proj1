@@ -25,8 +25,72 @@
             console.log(jsn);
             // import study into database
 
-            // sanity checks:
+            // check if it is a results file
+            if (
+              jsn.hasOwnProperty("taskResults") &&
+              jsn.taskResults instanceof Array
+            ) {
+              let tx = db.transaction(
+                ["Users", "Demographics", "TaskResults", "StudyTasks"],
+                "readwrite"
+              );
+
+              // importing questionnaire results
+              for (const result of jsn.taskResults) {
+                const { studyId, taskId, userId, startDate } = result;
+                const res = tx.objectStore("StudyTasks").get(taskId);
+                res.onsuccess = e => {
+                  const taskInfo = e.target.result;
+                  if (taskInfo.personalData === true) {
+                    // import data for demographics
+                    const store = tx.objectStore("Demographics");
+                    for (const step of result.stepResults) {
+                      for (const stepItem of step.stepItemResults) {
+                        const data = {
+                          userId: userId,
+                          variableName: stepItem.variableName,
+                          taskId: taskId,
+                          value: stepItem.value,
+                          startDate: startDate, // using start date of questionnaire, should we use item date instead, or skip this value?
+                          $created: new Date()
+                        };
+                        store.put(data);
+                      }
+                    }
+                  } else {
+                    // regular questionnaire item
+                    const store = tx.objectStore("TaskResults");
+                    for (const step of result.stepResults) {
+                      for (const stepItem of step.stepItemResults) {
+                        const data = {
+                          studyId: studyId,
+                          userId: userId,
+                          taskId: taskId,
+                          variableName: stepItem.variableName,
+                          value: stepItem.value,
+                          startDate: startDate, // using start date of questionnaire, should we use item date instead?
+                          $created: new Date()
+                        };
+                        store.add(data);
+                      }
+                    }
+                  }
+                };
+
+                let store = tx.objectStore("Users");
+                const user = {
+                  userId: result.userId,
+                  studyId: studyId,
+                  $created: new Date()
+                };
+                store.put(user);
+              }
+              alert("Study results were imported");
+              return;
+            } // end of task result import
+
             if (!jsn.hasOwnProperty("_id")) {
+              // sanity checks:
               console.error("missing prop: _id");
               return;
             }
@@ -45,7 +109,10 @@
               return;
             }
 
-            let tx = db.transaction(["Studies", "StudyVariables"], "readwrite");
+            let tx = db.transaction(
+              ["Studies", "StudyVariables", "StudyTasks"],
+              "readwrite"
+            );
             let storeName = "Studies";
             let store = tx.objectStore(storeName);
 
@@ -70,11 +137,18 @@
               }
             };
             result.onsuccess = () => {
-              storeName = "StudyVariables";
-              store = tx.objectStore(storeName);
+              store = tx.objectStore("StudyVariables");
+              const store2 = tx.objectStore("StudyTasks");
 
               const stId = jsn._id;
               for (const task of jsn.tasks) {
+                const taskData = {
+                  studyId: stId,
+                  taskId: task._id,
+                  taskName: task.taskName,
+                  personalData: JSON.parse(task.personalData) // cast to boolean type
+                };
+                store2.put(taskData);
                 for (const step of task.steps) {
                   for (const stepItem of step.stepItems) {
                     stepItem.$created = new Date();
@@ -139,5 +213,5 @@
         1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z" />
     </svg>
   </figure>
-    Upload new study
+    Upload study data
 </label>
