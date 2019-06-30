@@ -1,3 +1,5 @@
+import { studyStore } from './store.js'
+
 const dbName = "senseQ"
 const dbVersion = 1
 
@@ -60,26 +62,12 @@ function globalError(e) {
 request.onsuccess = (e) => {
     db = e.target.result
     db.onerror = globalError
-    // start transaction
-    // tx = db.transaction(storeName, "readwrite")
-    // store = tx.objectStore(storeName)
-    // idx = store.index("idx_name")
 
-    // // store.put({ name: "Hans", type: true, age: 45 })
-    // // store.put({ name: "Dampf", type: false, age: 23 })
-
-    // const res = store.get(7);
-    // res.onsuccess = () => {
-    //     console.log(res.result);
-    // }
-    // const res2 = idx.get("Hans")
-    // res2.onsuccess = (e) => {
-    //     console.log(res2.result);
-    // }
-    // // close transaction
-    // tx.oncomplete = () => {
-    //     db.close()
-    // }
-    // console.log("transaction complete");
+    // get current studies
+    const res = db.transaction("Studies").objectStore("Studies").getAll()
+    res.onsuccess = (e) => {
+        const results = e.target.result;
+        studyStore.set(results);
+    }
 }
 

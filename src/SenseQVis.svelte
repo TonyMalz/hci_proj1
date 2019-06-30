@@ -4,7 +4,7 @@
   import UndoRedo from "./components/UndoRedo.svelte";
   import Userview from "./pages/Userview.svelte";
   import Overview from "./pages/Overview.svelte";
-  import Studies from "./pages/Studies.svelte";
+  import Studies from "./pages/StudyList.svelte";
 
   import { fly } from "svelte/transition";
   import { activeUITab } from "./modules/store.js";

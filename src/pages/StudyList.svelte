@@ -1,6 +1,8 @@
 <script>
   import { fade } from "svelte/transition";
   import StudyImporter from "../components/StudyImporter.svelte";
+  import StudyCard from "../components/StudyCard.svelte";
+  import { studyStore } from "../modules/store.js";
 </script>
 
 <style>
@@ -12,20 +14,17 @@
   .study {
     position: relative;
     height: 15ch;
-    /* border: 1px solid #ccc; */
-    border-radius: 0.25rem;
-    box-shadow: 0 0 6px 0 rgb(214, 214, 214);
     cursor: pointer;
-    text-align: center;
-    overflow: hidden;
   }
 </style>
 
 <div class="container" in:fade={{ duration: 300 }}>
-  <div class="study">Study 1</div>
-  <div class="study">Study 2</div>
+  {#each $studyStore as study}
+    <div class="study">
+      <StudyCard {...study} />
+    </div>
+  {/each}
   <div class="study">
     <StudyImporter />
   </div>
-
 </div>

@@ -1,0 +1,296 @@
+{
+  "_id":"5d00027a21da1732941c85da",
+  "studyName":"LifeDomainStudy",
+  "description":"",
+  "tasks":[
+    {
+      "_id":"9n11963b8oqf419b6uz88hwi",
+      "taskName":"PreStudyQuestionnaire",
+      "personalData":"true",
+      "steps":[
+        {
+          "_id":"",
+          "stepName":"Demographics",
+          "stepItems":[
+            {
+              "_id":"",
+              "variableName":"Gender",
+              "variableLabel":"Gender (male/female/diverse)",
+              "optional":"false",
+              "confidential":"false",
+              "dataformat":{
+                "type":"TextChoice",
+                "origin":"User",
+                "resultFormat":"String",
+                "title":"What is your gender?",
+                "style":"singleChoice",
+                "textChoices":[
+                  {
+                    "text":"Male",
+                    "value":"0"
+                  },
+                  {
+                    "text":"Female",
+                    "value":"1"
+                  },
+                  {
+                    "text":"Diverse",
+                    "value":"2"
+                  },
+                  {
+                    "text":"Don't want to say",
+                    "value":"99999"
+                  }
+                ]
+              }
+            },
+            {
+              "_id":"",
+              "variableName":"Age",
+              "variableLabel":"Age in years",
+              "optional":"false",
+              "confidential":"false",
+              "dataformat":{
+                "type":"Numeric",
+                "origin":"User",
+                "resultFormat":"Numeric",
+                "title":"How old are you?",
+                "style":"integer"
+              }
+            }
+          ]
+        },
+        {
+          "_id":"",
+          "stepName":"Technology",
+          "stepItems":[
+            {
+                "_id":"",
+                "variableName":"TechnicalAffinity",
+                "variableLabel":"Technical Affinity from 1 to 9",
+                "optional":"false",
+                "confidential":"false",
+                "dataformat":{
+                  "type":"Scale",
+                  "origin":"User",
+                  "title":"What is your technical affinity?",
+                  "minimum":"1",
+                  "maximum":"9",
+                  "defaultValue":"5",
+                  "minimumValueDescription":"1",
+                  "maximumValueDescription":"9"
+                }
+            }
+          ]
+        }
+      ]
+    },
+    {
+    "_id":"06bbserg5573z91hifg36dchk",
+    "taskName":"ESMQuestionnaire",
+    "personalData":"false",
+    "steps":[
+      {
+        "_id":"",
+        "stepName":"Situation",
+        "stepItems":[
+          {
+            "_id":"",
+            "variableName":"domain",
+            "variableLabel":"Current domain",
+            "optional":"false",
+            "confidential":"false",
+            "dataformat":{
+              "type":"TextChoice",
+              "origin":"User",
+              "resultFormat":"String",
+              "title":"What is your current domain?",
+              "style":"singleChoice",
+              "textChoices":[
+                {
+                  "valueLabel":"Work",
+                  "value":"0"
+                },
+                {
+                  "valueLabel":"Home",
+                  "value":"1"
+                }
+              ]
+            }
+          },
+          {
+            "_id":"",
+            "variableName":"social",
+            "variableLabel":"Social Company",
+            "optional":"false",
+            "confidential":"false",
+            "dataformat":{
+              "type":"Numeric",
+              "origin":"User",
+              "resultFormat":"Numeric",
+              "title":"How many persons are around you?",
+              "style":"integer"
+            }
+          }
+        ]
+      },
+      {
+        "_id":"",
+        "stepName":"Stresslevel",
+        "stepItems":[
+          {
+            "_id":"",
+            "variableName":"timeload",
+            "variableLabel":"Current time load",
+            "optional":"false",
+            "confidential":"false",
+            "dataformat":{
+              "type":"TextChoice",
+              "origin":"User",
+              "resultFormat":"String",
+              "title":"Time Load",
+              "text":"Please choose the statement that best describes your time load.",
+              "style":"singleChoice",
+              "textChoices":[
+                {
+                  "valueLabel":"Often have spare time. Interruptions or overlap among activites occur infrequently or not at all.",
+                  "value":"0"
+                },
+                {
+                  "valueLabel":"Occasionally have spare time. Interruptions or overlap among acitivties occure frequently.",
+                  "value":"1"
+                },
+                {
+                  "valueLabel":"Almost never have spare time. Interruptions or overlap among activities are very frquent, or occur all the time.",
+                  "value":"2"
+                }
+              ]
+            }
+          },
+          {
+            "_id":"",
+            "variableName":"mentaleffortload",
+            "variableLabel":"Current mental effort load",
+            "optional":"false",
+            "confidential":"false",
+            "dataformat":{
+              "type":"TextChoice",
+              "origin":"User",
+              "resultFormat":"String",
+              "title":"Mental Effort Load",
+              "text":"Please choose the statement that describes your mental effort load best.",
+              "style":"singleChoice",
+              "textChoices":[
+                {
+                  "valueLabel":"Very little conscious mental effort or concentration required. Activity is alomost automatic requiring little or no attention.",
+                  "value":"0"
+                },
+                {
+                  "valueLabel":"Moderate conscious mental effort or concentration required. Complexity of my activity is moderatly high due to uncertainty, unpredictabiilty, or unfamiliarity and considerable attention is required.",
+                  "value":"1"
+                },
+                {
+                  "valueLabel":"Extensive mental effort and concentration are necessary. Very comple activity requiring total attention.",
+                  "value":"2"
+                }
+              ]
+            }
+          },
+          {
+            "_id":"",
+            "variableName":"psychologicalstressload",
+            "variableLabel":"Current psychological stress load",
+            "optional":"false",
+            "confidential":"false",
+            "dataformat":{
+              "type":"TextChoice",
+              "origin":"User",
+              "resultFormat":"String",
+              "title":"Psychological Stress Load",
+              "text":"Please choose the statement that describes your mental effort load best.",
+              "style":"singleChoice",
+              "textChoices":[
+                {
+                  "valueLabel":"Little confusion, frustration or anxiety exists and can be easily accommodated.",
+                  "value":"0"
+                },
+                {
+                  "valueLabel":"Moderate stress due to confusion, frustration, or anxiety. Noticeably adds to workload. Significant compensatin is required to maintain adequate performance.",
+                  "value":"1"
+                },
+                {
+                  "valueLabel":"High to very intense stress due to confusion, frustration, or anxiety. High to extreme determination of self-control required.",
+                  "value":"2"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "_id":"",
+        "stepName":"Task",
+        "stepItems":[
+          {
+            "_id":"",
+            "variableName":"activity",
+            "variableLabel":"Current activity",
+            "optional":"false",
+            "confidential":"false",
+            "dataformat":{
+              "type":"Text",
+              "origin":"User",
+              "resultFormat":"String",
+              "title":"What is your current activity?",
+              "maximumLength":"200"
+            }
+          }
+        ]
+        }, {
+          "_id":"",
+          "stepName":"Availability",
+          "stepItems":[
+            {
+              "_id":"",
+              "variableName":"availability_current_domain",
+              "variableLabel":"Availability for the current domain",
+              "optional":"false",
+              "confidential":"false",
+              "dataformat":{
+                "type":"Scale",
+                "origin":"User",
+                "resultFormat":"Numeric",
+                "title":"How available are you for your current domain?",
+                "text":"(The two domains are Work and Home)",
+                "minimum":"1",
+                "maximum":"9",
+                "defaultValue":"5",
+                "minimumValueDescription":"1",
+                "maximumValueDescription":"9"
+              }
+            },
+            {
+              "_id":"",
+              "variableName":"availability_other_domain",
+              "variableLabel":"Availability for the other domain",
+              "optional":"false",
+              "confidential":"false",
+              "dataformat":{
+                "type":"Scale",
+                "origin":"User",
+                "resultFormat":"Numeric",
+                "title":"How available are you for the other domain?",
+                "text":"(The two domains are Work and Home)",
+                "minimum":"1",
+                "maximum":"9",
+                "defaultValue":"5",
+                "minimumValueDescription":"1",
+                "maximumValueDescription":"9"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

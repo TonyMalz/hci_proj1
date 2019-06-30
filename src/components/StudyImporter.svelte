@@ -1,5 +1,6 @@
 <script>
   import { db } from "../modules/indexeddb.js";
+  import { studyStore } from "../modules/store.js";
   import { onMount } from "svelte";
   onMount(() => {
     const el = document.getElementById("studyImport");
@@ -52,7 +53,7 @@
                           taskId: taskId,
                           value: stepItem.value,
                           startDate: startDate, // using start date of questionnaire, should we use item date instead, or skip this value?
-                          $created: new Date()
+                          __created: new Date()
                         };
                         store.put(data);
                       }
@@ -69,7 +70,7 @@
                           variableName: stepItem.variableName,
                           value: stepItem.value,
                           startDate: startDate, // using start date of questionnaire, should we use item date instead?
-                          $created: new Date()
+                          __created: new Date()
                         };
                         store.add(data);
                       }
@@ -81,7 +82,7 @@
                 const user = {
                   userId: result.userId,
                   studyId: studyId,
-                  $created: new Date()
+                  __created: new Date()
                 };
                 store.put(user);
               }
@@ -116,7 +117,7 @@
             let storeName = "Studies";
             let store = tx.objectStore(storeName);
 
-            jsn.$created = new Date();
+            jsn.__created = new Date();
             let result = store.add(jsn); // put replaces existing items in the db
             result.onerror = event => {
               // ConstraintError occurs when an object with the same id already exists
@@ -151,13 +152,19 @@
                 store2.put(taskData);
                 for (const step of task.steps) {
                   for (const stepItem of step.stepItems) {
-                    stepItem.$created = new Date();
+                    stepItem.__created = new Date();
                     stepItem.studyId = stId;
                     store.put(stepItem);
                   }
                 }
               }
-              alert(`Study "${jsn.studyName}" was successfully imported`);
+
+              // notify study store
+              //FIXME: don't overwrite, just replace/add study in store?
+              const res = tx.objectStore("Studies").getAll();
+              res.onsuccess = e => studyStore.set(e.target.result);
+
+              //alert(`Study "${jsn.studyName}" was successfully imported`);
             };
           } catch (error) {
             console.error(`Error parsing ${file.name}: `, error);
