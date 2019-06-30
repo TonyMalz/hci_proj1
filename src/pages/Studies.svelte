@@ -10,9 +10,11 @@
     grid-gap: 1rem;
   }
   .study {
+    position: relative;
     height: 15ch;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    /* border: 1px solid #ccc; */
+    border-radius: 0.25rem;
+    box-shadow: 0 0 6px 0 rgb(214, 214, 214);
     cursor: pointer;
     text-align: center;
     overflow: hidden;

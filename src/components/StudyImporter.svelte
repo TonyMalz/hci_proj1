@@ -170,6 +170,7 @@
 
 <style>
   input {
+    /* hide system input field since it's ugly can't be styled properly*/
     cursor: pointer;
     width: 0.1px;
     height: 0.1px;
@@ -179,16 +180,18 @@
     z-index: -1;
   }
   label {
+    width: 100%;
+    height: 100%;
     background: tomato;
-    height: 15ch;
     text-align: center;
+    position: absolute;
     font-weight: 600;
     text-overflow: ellipsis;
     white-space: nowrap;
     cursor: pointer;
     overflow: hidden;
     padding: 1rem 1.25rem;
-    border-radius: 4px;
+    border-radius: 0.25rem;
     color: white;
   }
   label:hover {

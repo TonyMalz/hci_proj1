@@ -3349,20 +3349,20 @@ function create_fragment$d(ctx) {
 			attr(input, "type", "file");
 			input.multiple = true;
 			input.accept = "application/json";
-			input.className = "svelte-bptog8";
-			add_location(input, file$d, 198, 0, 7155);
+			input.className = "svelte-1ftga8c";
+			add_location(input, file$d, 201, 0, 7277);
 			attr(path, "fill", "white");
 			attr(path, "d", "M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3\r\n        11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8\r\n        2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6\r\n        1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4\r\n        1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z");
-			add_location(path, file$d, 206, 6, 7396);
+			add_location(path, file$d, 209, 6, 7518);
 			attr(svg, "xmlns", "http://www.w3.org/2000/svg");
 			attr(svg, "width", "2em");
 			attr(svg, "height", "1.8em");
 			attr(svg, "viewBox", "0 0 20 17");
-			add_location(svg, file$d, 201, 4, 7273);
-			add_location(figure, file$d, 200, 2, 7259);
+			add_location(svg, file$d, 204, 4, 7395);
+			add_location(figure, file$d, 203, 2, 7381);
 			label.htmlFor = "studyImport";
-			label.className = "svelte-bptog8";
-			add_location(label, file$d, 199, 0, 7230);
+			label.className = "svelte-1ftga8c";
+			add_location(label, file$d, 202, 0, 7352);
 		},
 
 		l: function claim(nodes) {
@@ -3591,14 +3591,14 @@ function create_fragment$e(ctx) {
 			t3 = space();
 			div2 = element("div");
 			studyimporter.$$.fragment.c();
-			div0.className = "study svelte-18f404u";
-			add_location(div0, file$e, 22, 2, 485);
-			div1.className = "study svelte-18f404u";
-			add_location(div1, file$e, 23, 2, 521);
-			div2.className = "study svelte-18f404u";
-			add_location(div2, file$e, 24, 2, 557);
-			div3.className = "container svelte-18f404u";
-			add_location(div3, file$e, 21, 0, 430);
+			div0.className = "study svelte-1pbgr59";
+			add_location(div0, file$e, 24, 2, 567);
+			div1.className = "study svelte-1pbgr59";
+			add_location(div1, file$e, 25, 2, 603);
+			div2.className = "study svelte-1pbgr59";
+			add_location(div2, file$e, 26, 2, 639);
+			div3.className = "container svelte-1pbgr59";
+			add_location(div3, file$e, 23, 0, 512);
 		},
 
 		l: function claim(nodes) {
