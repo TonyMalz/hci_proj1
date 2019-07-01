@@ -11,6 +11,8 @@ export function formatDate(date) {
 
     year = year.toString().slice(-2);
     month = month < 10 ? '0' + month : month;
+    hour = hour < 10 ? '0' + hour : hour;
+    minutes = minutes < 10 ? '0' + minutes : minutes;
     dayOfMonth = dayOfMonth < 10 ? '0' + dayOfMonth : dayOfMonth;
 
     if (diffSec < 1) {
@@ -20,6 +22,6 @@ export function formatDate(date) {
     } else if (diffHour < 1) {
         return `${diffMin.toFixed()} min. ago`
     } else {
-        return `${dayOfMonth}.${month}.${year} ${hour}:${minutes}`
+        return `${dayOfMonth}.${month}.'${year} ${hour}:${minutes}`
     }
 }
