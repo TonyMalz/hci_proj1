@@ -1,7 +1,7 @@
-import SenseQVis from './SenseQVis.svelte';
+import SensQVis from './SensQVis.svelte';
 import "./modules/indexeddb.js"
 
-const app = new SenseQVis({
+const app = new SensQVis({
 	target: document.body,
 });
 

@@ -29,5 +29,5 @@
     <div>Datasets collected: {datasets}</div>
   </div>
 {:else}
-  <div class="appTitle">SenseQVis</div>
+  <div class="appTitle">SensQVis</div>
 {/if}
