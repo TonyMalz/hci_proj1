@@ -17,6 +17,7 @@ request.onupgradeneeded = (e) => {
     // holds general study info
     store = db.createObjectStore("Studies", { keyPath: "_id" })
     store.createIndex("studyName", "studyName", { unique: false })
+    store.createIndex("created", "__created", { unique: false })
 
     // later used to quickly lookup task properties to distinguish btw. demographics and regular questions
     store = db.createObjectStore("StudyTasks", { keyPath: "taskId" })
@@ -45,8 +46,14 @@ request.onupgradeneeded = (e) => {
     store.createIndex("taskId", "taskId", { unique: false })
     store.createIndex("userId", "userId", { unique: false })
     store.createIndex("studyId", "studyId", { unique: false })
-    store.createIndex("startDate", "startDate", { unique: false })
     store.createIndex("variableName", "variableName", { unique: false })
+    store.createIndex("startDate", "startDate", { unique: false })
+
+    // holds all details on study responses
+    store = db.createObjectStore("StudyResponses", { keyPath: ["userId", "studyId", "startDate"] })
+    store.createIndex("userId", "userId", { unique: false })
+    store.createIndex("studyId", "studyId", { unique: false })
+    store.createIndex("taskId", "taskId", { unique: false })
 
 }
 
@@ -63,11 +70,14 @@ request.onsuccess = (e) => {
     db = e.target.result
     db.onerror = globalError
 
-    // get current studies
-    const res = db.transaction("Studies").objectStore("Studies").getAll()
+    // get current studies (order by date imported asc)
+    const res = db.transaction("Studies").objectStore("Studies").index("created").openCursor(null, "next")
     res.onsuccess = (e) => {
-        const results = e.target.result;
-        studyStore.set(results);
+        const cursor = e.target.result;
+        if (cursor) {
+            studyStore.update(studies => [...studies, cursor.value]);
+            cursor.continue()
+        }
     }
 }
 

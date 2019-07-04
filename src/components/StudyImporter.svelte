@@ -21,153 +21,177 @@
           console.log("file reader finished importing");
           try {
             console.log("parsing json file: ", file.name);
-            const jsn = JSON.parse(text);
+            let jsn = JSON.parse(text);
             console.log("finished parsing file");
             console.log(jsn);
-            // import study into database
 
-            // check if it is a results file
-            if (
-              jsn.hasOwnProperty("taskResults") &&
-              jsn.taskResults instanceof Array
-            ) {
+            // --------------- import study into database
+            // if it is not an array it only contains data of one study
+            if (!(jsn instanceof Array)) {
+              jsn = [jsn];
+            }
+
+            // import data of each study
+            for (let exportData of jsn) {
+              console.log("import study: ", exportData);
+              // sanity checks:
+              if (!exportData.hasOwnProperty("dataSchema")) {
+                console.error("missing prop: dataSchema");
+                return;
+              }
+
+              const study = exportData.dataSchema;
+              if (!study.hasOwnProperty("_id")) {
+                console.error("missing prop: _id");
+                return;
+              }
+              if (!study.hasOwnProperty("studyName")) {
+                console.error("missing prop: studyName");
+                return;
+              }
+              if (!study.hasOwnProperty("description")) {
+                console.error("missing prop: description");
+                return;
+              }
+
+              // insert study data into db
+              if (!db) {
+                console.error("missing database object");
+                return;
+              }
+
               let tx = db.transaction(
-                ["Users", "Demographics", "TaskResults", "StudyTasks"],
+                ["Studies", "StudyVariables", "StudyTasks"],
                 "readwrite"
               );
+              let store = tx.objectStore("Studies");
 
-              // importing questionnaire results
-              for (const result of jsn.taskResults) {
-                const { studyId, taskId, userId, startDate } = result;
-                const res = tx.objectStore("StudyTasks").get(taskId);
-                res.onsuccess = e => {
-                  const taskInfo = e.target.result;
-                  if (taskInfo.personalData === true) {
-                    // import data for demographics
-                    const store = tx.objectStore("Demographics");
-                    for (const step of result.stepResults) {
-                      for (const stepItem of step.stepItemResults) {
-                        const data = {
-                          userId: userId,
-                          variableName: stepItem.variableName,
-                          taskId: taskId,
-                          value: stepItem.value,
-                          startDate: startDate, // using start date of questionnaire, should we use item date instead, or skip this value?
-                          __created: new Date()
-                        };
-                        store.put(data);
-                      }
-                    }
+              study.__created = new Date();
+              let result = store.add(study);
+              result.onerror = event => {
+                // ConstraintError occurs when an object with the same id already exists
+                if (result.error.name == "ConstraintError") {
+                  if (
+                    confirm(
+                      "This study already exists, do you want to replace it?"
+                    )
+                  ) {
+                    console.log("replace study");
+                    event.preventDefault(); // don't abort the transaction
+                    event.stopPropagation();
+                    event.target.source.put(study); //source holds objectStore for this event
+                    result.onsuccess();
                   } else {
-                    // regular questionnaire item
-                    const store = tx.objectStore("TaskResults");
-                    for (const step of result.stepResults) {
-                      for (const stepItem of step.stepItemResults) {
-                        const data = {
-                          studyId: studyId,
-                          userId: userId,
-                          taskId: taskId,
-                          variableName: stepItem.variableName,
-                          value: stepItem.value,
-                          startDate: startDate, // using start date of questionnaire, should we use item date instead?
-                          __created: new Date()
-                        };
-                        store.add(data);
-                      }
+                    console.log("don't replace study");
+                  }
+                }
+              };
+              result.onsuccess = () => {
+                store = tx.objectStore("StudyVariables");
+                const store2 = tx.objectStore("StudyTasks");
+
+                const stId = study._id;
+                for (const task of study.tasks) {
+                  const taskData = {
+                    studyId: stId,
+                    taskId: task._id,
+                    taskName: task.taskName,
+                    personalData: JSON.parse(task.personalData) //hopefully cast to boolean type
+                  };
+                  store2.put(taskData);
+                  for (const step of task.steps) {
+                    for (const stepItem of step.stepItems) {
+                      stepItem.__created = new Date();
+                      stepItem.studyId = stId;
+                      store.put(stepItem);
                     }
                   }
-                };
+                }
 
-                let store = tx.objectStore("Users");
-                const user = {
-                  userId: result.userId,
-                  studyId: studyId,
-                  __created: new Date()
-                };
-                store.put(user);
-              }
+                // notify study store
+                const res = tx.objectStore("Studies").getAll();
+                //FIXME: don't overwrite, just replace/add study in store?
+                res.onsuccess = e => studyStore.set(e.target.result);
+              };
+
+              // ---------- Import task results
+              // check if there are any questionnaire results in the export file
+              if (
+                exportData.hasOwnProperty("taskResults") &&
+                exportData.taskResults instanceof Array
+              ) {
+                let tx = db.transaction(
+                  [
+                    "Users",
+                    "Demographics",
+                    "TaskResults",
+                    "StudyTasks",
+                    "StudyResponses"
+                  ],
+                  "readwrite"
+                );
+
+                // importing questionnaire results
+                for (const result of exportData.taskResults) {
+                  // TODO: check if props exist
+                  const { studyId, taskId, userId } = result;
+
+                  //find task to which these results belong
+                  const res = tx.objectStore("StudyTasks").get(taskId);
+                  res.onsuccess = e => {
+                    const taskInfo = e.target.result;
+                    if (taskInfo.personalData === true) {
+                      // import data for demographics
+                      const store = tx.objectStore("Demographics");
+                      for (const step of result.stepResults) {
+                        for (const stepItem of step.stepItemResults) {
+                          const data = {
+                            userId: userId,
+                            variableName: stepItem.variableName,
+                            taskId: taskId,
+                            value: stepItem.value,
+                            __created: new Date()
+                          };
+                          store.put(data); // replace existing data
+                        }
+                      }
+                    } else {
+                      // regular questionnaire item
+                      const store = tx.objectStore("TaskResults");
+                      for (const step of result.stepResults) {
+                        for (const stepItem of step.stepItemResults) {
+                          const data = {
+                            studyId: studyId,
+                            userId: userId,
+                            taskId: taskId,
+                            stepItem,
+                            __created: new Date()
+                          };
+                          store.add(data);
+                        }
+                      }
+                    }
+                  };
+
+                  // update users table
+                  let store = tx.objectStore("Users");
+                  const user = {
+                    userId: result.userId,
+                    studyId: studyId,
+                    __created: new Date()
+                  };
+                  store.put(user);
+
+                  // add response info
+                  tx.objectStore("StudyResponses").put(result);
+                } // for each taskResult
+
+                // DONE
+              } // end of task result import
               alert("Study results were imported");
-              return;
-            } // end of task result import
-
-            if (!jsn.hasOwnProperty("_id")) {
-              // sanity checks:
-              console.error("missing prop: _id");
-              return;
             }
-            if (!jsn.hasOwnProperty("studyName")) {
-              console.error("missing prop: studyName");
-              return;
-            }
-            if (!jsn.hasOwnProperty("description")) {
-              console.error("missing prop: description");
-              return;
-            }
-
-            // insert study data into db
-            if (!db) {
-              console.error("missing database object");
-              return;
-            }
-
-            let tx = db.transaction(
-              ["Studies", "StudyVariables", "StudyTasks"],
-              "readwrite"
-            );
-            let storeName = "Studies";
-            let store = tx.objectStore(storeName);
-
-            jsn.__created = new Date();
-            let result = store.add(jsn); // put replaces existing items in the db
-            result.onerror = event => {
-              // ConstraintError occurs when an object with the same id already exists
-              if (result.error.name == "ConstraintError") {
-                if (
-                  confirm(
-                    "This study already exists, do you want to replace it?"
-                  )
-                ) {
-                  console.log("replace study");
-                  event.preventDefault(); // don't abort the transaction
-                  event.stopPropagation();
-                  event.target.source.put(jsn); //source holds objectStore for this event
-                  result.onsuccess();
-                } else {
-                  console.log("don't replace study");
-                }
-              }
-            };
-            result.onsuccess = () => {
-              store = tx.objectStore("StudyVariables");
-              const store2 = tx.objectStore("StudyTasks");
-
-              const stId = jsn._id;
-              for (const task of jsn.tasks) {
-                const taskData = {
-                  studyId: stId,
-                  taskId: task._id,
-                  taskName: task.taskName,
-                  personalData: JSON.parse(task.personalData) // cast to boolean type
-                };
-                store2.put(taskData);
-                for (const step of task.steps) {
-                  for (const stepItem of step.stepItems) {
-                    stepItem.__created = new Date();
-                    stepItem.studyId = stId;
-                    store.put(stepItem);
-                  }
-                }
-              }
-
-              // notify study store
-              //FIXME: don't overwrite, just replace/add study in store?
-              const res = tx.objectStore("Studies").getAll();
-              res.onsuccess = e => studyStore.set(e.target.result);
-
-              //alert(`Study "${jsn.studyName}" was successfully imported`);
-            };
           } catch (error) {
-            console.error(`Error parsing ${file.name}: `, error);
+            console.error(`Error importing ${file.name}: `, error);
           }
         };
       }

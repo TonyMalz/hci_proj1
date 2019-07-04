@@ -3302,6 +3302,7 @@ request.onupgradeneeded = (e) => {
     // holds general study info
     store = db.createObjectStore("Studies", { keyPath: "_id" });
     store.createIndex("studyName", "studyName", { unique: false });
+    store.createIndex("created", "__created", { unique: false });
 
     // later used to quickly lookup task properties to distinguish btw. demographics and regular questions
     store = db.createObjectStore("StudyTasks", { keyPath: "taskId" });
@@ -3330,8 +3331,14 @@ request.onupgradeneeded = (e) => {
     store.createIndex("taskId", "taskId", { unique: false });
     store.createIndex("userId", "userId", { unique: false });
     store.createIndex("studyId", "studyId", { unique: false });
-    store.createIndex("startDate", "startDate", { unique: false });
     store.createIndex("variableName", "variableName", { unique: false });
+    store.createIndex("startDate", "startDate", { unique: false });
+
+    // holds all details on study responses
+    store = db.createObjectStore("StudyResponses", { keyPath: ["userId", "studyId", "startDate"] });
+    store.createIndex("userId", "userId", { unique: false });
+    store.createIndex("studyId", "studyId", { unique: false });
+    store.createIndex("taskId", "taskId", { unique: false });
 
 };
 
@@ -3348,11 +3355,14 @@ request.onsuccess = (e) => {
     db = e.target.result;
     db.onerror = globalError;
 
-    // get current studies
-    const res = db.transaction("Studies").objectStore("Studies").getAll();
+    // get current studies (order by date imported asc)
+    const res = db.transaction("Studies").objectStore("Studies").index("created").openCursor(null, "next");
     res.onsuccess = (e) => {
-        const results = e.target.result;
-        studyStore.set(results);
+        const cursor = e.target.result;
+        if (cursor) {
+            studyStore.update(studies => [...studies, cursor.value]);
+            cursor.continue();
+        }
     };
 };
 
@@ -3377,19 +3387,19 @@ function create_fragment$d(ctx) {
 			input.multiple = true;
 			input.accept = "application/json";
 			input.className = "svelte-1ftga8c";
-			add_location(input, file$d, 208, 0, 7584);
+			add_location(input, file$d, 232, 0, 8461);
 			attr(path, "fill", "white");
 			attr(path, "d", "M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3\r\n        11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8\r\n        2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6\r\n        1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4\r\n        1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z");
-			add_location(path, file$d, 216, 6, 7825);
+			add_location(path, file$d, 240, 6, 8702);
 			attr(svg, "xmlns", "http://www.w3.org/2000/svg");
 			attr(svg, "width", "2em");
 			attr(svg, "height", "1.8em");
 			attr(svg, "viewBox", "0 0 20 17");
-			add_location(svg, file$d, 211, 4, 7702);
-			add_location(figure, file$d, 210, 2, 7688);
+			add_location(svg, file$d, 235, 4, 8579);
+			add_location(figure, file$d, 234, 2, 8565);
 			label.htmlFor = "studyImport";
 			label.className = "svelte-1ftga8c";
-			add_location(label, file$d, 209, 0, 7659);
+			add_location(label, file$d, 233, 0, 8536);
 		},
 
 		l: function claim(nodes) {
@@ -3441,153 +3451,177 @@ function instance$a($$self) {
           console.log("file reader finished importing");
           try {
             console.log("parsing json file: ", file.name);
-            const jsn = JSON.parse(text);
+            let jsn = JSON.parse(text);
             console.log("finished parsing file");
             console.log(jsn);
-            // import study into database
 
-            // check if it is a results file
-            if (
-              jsn.hasOwnProperty("taskResults") &&
-              jsn.taskResults instanceof Array
-            ) {
+            // --------------- import study into database
+            // if it is not an array it only contains data of one study
+            if (!(jsn instanceof Array)) {
+              jsn = [jsn];
+            }
+
+            // import data of each study
+            for (let exportData of jsn) {
+              console.log("import study: ", exportData);
+              // sanity checks:
+              if (!exportData.hasOwnProperty("dataSchema")) {
+                console.error("missing prop: dataSchema");
+                return;
+              }
+
+              const study = exportData.dataSchema;
+              if (!study.hasOwnProperty("_id")) {
+                console.error("missing prop: _id");
+                return;
+              }
+              if (!study.hasOwnProperty("studyName")) {
+                console.error("missing prop: studyName");
+                return;
+              }
+              if (!study.hasOwnProperty("description")) {
+                console.error("missing prop: description");
+                return;
+              }
+
+              // insert study data into db
+              if (!db) {
+                console.error("missing database object");
+                return;
+              }
+
               let tx = db.transaction(
-                ["Users", "Demographics", "TaskResults", "StudyTasks"],
+                ["Studies", "StudyVariables", "StudyTasks"],
                 "readwrite"
               );
+              let store = tx.objectStore("Studies");
 
-              // importing questionnaire results
-              for (const result of jsn.taskResults) {
-                const { studyId, taskId, userId, startDate } = result;
-                const res = tx.objectStore("StudyTasks").get(taskId);
-                res.onsuccess = e => {
-                  const taskInfo = e.target.result;
-                  if (taskInfo.personalData === true) {
-                    // import data for demographics
-                    const store = tx.objectStore("Demographics");
-                    for (const step of result.stepResults) {
-                      for (const stepItem of step.stepItemResults) {
-                        const data = {
-                          userId: userId,
-                          variableName: stepItem.variableName,
-                          taskId: taskId,
-                          value: stepItem.value,
-                          startDate: startDate, // using start date of questionnaire, should we use item date instead, or skip this value?
-                          __created: new Date()
-                        };
-                        store.put(data);
-                      }
-                    }
+              study.__created = new Date();
+              let result = store.add(study);
+              result.onerror = event => {
+                // ConstraintError occurs when an object with the same id already exists
+                if (result.error.name == "ConstraintError") {
+                  if (
+                    confirm(
+                      "This study already exists, do you want to replace it?"
+                    )
+                  ) {
+                    console.log("replace study");
+                    event.preventDefault(); // don't abort the transaction
+                    event.stopPropagation();
+                    event.target.source.put(study); //source holds objectStore for this event
+                    result.onsuccess();
                   } else {
-                    // regular questionnaire item
-                    const store = tx.objectStore("TaskResults");
-                    for (const step of result.stepResults) {
-                      for (const stepItem of step.stepItemResults) {
-                        const data = {
-                          studyId: studyId,
-                          userId: userId,
-                          taskId: taskId,
-                          variableName: stepItem.variableName,
-                          value: stepItem.value,
-                          startDate: startDate, // using start date of questionnaire, should we use item date instead?
-                          __created: new Date()
-                        };
-                        store.add(data);
-                      }
+                    console.log("don't replace study");
+                  }
+                }
+              };
+              result.onsuccess = () => {
+                store = tx.objectStore("StudyVariables");
+                const store2 = tx.objectStore("StudyTasks");
+
+                const stId = study._id;
+                for (const task of study.tasks) {
+                  const taskData = {
+                    studyId: stId,
+                    taskId: task._id,
+                    taskName: task.taskName,
+                    personalData: JSON.parse(task.personalData) //hopefully cast to boolean type
+                  };
+                  store2.put(taskData);
+                  for (const step of task.steps) {
+                    for (const stepItem of step.stepItems) {
+                      stepItem.__created = new Date();
+                      stepItem.studyId = stId;
+                      store.put(stepItem);
                     }
                   }
-                };
+                }
 
-                let store = tx.objectStore("Users");
-                const user = {
-                  userId: result.userId,
-                  studyId: studyId,
-                  __created: new Date()
-                };
-                store.put(user);
-              }
+                // notify study store
+                const res = tx.objectStore("Studies").getAll();
+                //FIXME: don't overwrite, just replace/add study in store?
+                res.onsuccess = e => studyStore.set(e.target.result);
+              };
+
+              // ---------- Import task results
+              // check if there are any questionnaire results in the export file
+              if (
+                exportData.hasOwnProperty("taskResults") &&
+                exportData.taskResults instanceof Array
+              ) {
+                let tx = db.transaction(
+                  [
+                    "Users",
+                    "Demographics",
+                    "TaskResults",
+                    "StudyTasks",
+                    "StudyResponses"
+                  ],
+                  "readwrite"
+                );
+
+                // importing questionnaire results
+                for (const result of exportData.taskResults) {
+                  // TODO: check if props exist
+                  const { studyId, taskId, userId } = result;
+
+                  //find task to which these results belong
+                  const res = tx.objectStore("StudyTasks").get(taskId);
+                  res.onsuccess = e => {
+                    const taskInfo = e.target.result;
+                    if (taskInfo.personalData === true) {
+                      // import data for demographics
+                      const store = tx.objectStore("Demographics");
+                      for (const step of result.stepResults) {
+                        for (const stepItem of step.stepItemResults) {
+                          const data = {
+                            userId: userId,
+                            variableName: stepItem.variableName,
+                            taskId: taskId,
+                            value: stepItem.value,
+                            __created: new Date()
+                          };
+                          store.put(data); // replace existing data
+                        }
+                      }
+                    } else {
+                      // regular questionnaire item
+                      const store = tx.objectStore("TaskResults");
+                      for (const step of result.stepResults) {
+                        for (const stepItem of step.stepItemResults) {
+                          const data = {
+                            studyId: studyId,
+                            userId: userId,
+                            taskId: taskId,
+                            stepItem,
+                            __created: new Date()
+                          };
+                          store.add(data);
+                        }
+                      }
+                    }
+                  };
+
+                  // update users table
+                  let store = tx.objectStore("Users");
+                  const user = {
+                    userId: result.userId,
+                    studyId: studyId,
+                    __created: new Date()
+                  };
+                  store.put(user);
+
+                  // add response info
+                  tx.objectStore("StudyResponses").put(result);
+                } // for each taskResult
+
+                // DONE
+              } // end of task result import
               alert("Study results were imported");
-              return;
-            } // end of task result import
-
-            if (!jsn.hasOwnProperty("_id")) {
-              // sanity checks:
-              console.error("missing prop: _id");
-              return;
             }
-            if (!jsn.hasOwnProperty("studyName")) {
-              console.error("missing prop: studyName");
-              return;
-            }
-            if (!jsn.hasOwnProperty("description")) {
-              console.error("missing prop: description");
-              return;
-            }
-
-            // insert study data into db
-            if (!db) {
-              console.error("missing database object");
-              return;
-            }
-
-            let tx = db.transaction(
-              ["Studies", "StudyVariables", "StudyTasks"],
-              "readwrite"
-            );
-            let storeName = "Studies";
-            let store = tx.objectStore(storeName);
-
-            jsn.__created = new Date();
-            let result = store.add(jsn); // put replaces existing items in the db
-            result.onerror = event => {
-              // ConstraintError occurs when an object with the same id already exists
-              if (result.error.name == "ConstraintError") {
-                if (
-                  confirm(
-                    "This study already exists, do you want to replace it?"
-                  )
-                ) {
-                  console.log("replace study");
-                  event.preventDefault(); // don't abort the transaction
-                  event.stopPropagation();
-                  event.target.source.put(jsn); //source holds objectStore for this event
-                  result.onsuccess();
-                } else {
-                  console.log("don't replace study");
-                }
-              }
-            };
-            result.onsuccess = () => {
-              store = tx.objectStore("StudyVariables");
-              const store2 = tx.objectStore("StudyTasks");
-
-              const stId = jsn._id;
-              for (const task of jsn.tasks) {
-                const taskData = {
-                  studyId: stId,
-                  taskId: task._id,
-                  taskName: task.taskName,
-                  personalData: JSON.parse(task.personalData) // cast to boolean type
-                };
-                store2.put(taskData);
-                for (const step of task.steps) {
-                  for (const stepItem of step.stepItems) {
-                    stepItem.__created = new Date();
-                    stepItem.studyId = stId;
-                    store.put(stepItem);
-                  }
-                }
-              }
-
-              // notify study store
-              //FIXME: don't overwrite, just replace/add study in store?
-              const res = tx.objectStore("Studies").getAll();
-              res.onsuccess = e => studyStore.set(e.target.result);
-
-              //alert(`Study "${jsn.studyName}" was successfully imported`);
-            };
           } catch (error) {
-            console.error(`Error parsing ${file.name}: `, error);
+            console.error(`Error importing ${file.name}: `, error);
           }
         };
       }
@@ -3637,28 +3671,36 @@ function formatDate(date) {
 const file$e = "src\\components\\StudyCard.svelte";
 
 function create_fragment$e(ctx) {
-	var div2, h4, t0, t1, div0, t2, t3, t4, div1, t5, t6_value = formatDate(ctx.__created), t6, div2_intro;
+	var div3, h4, t0, t1, div0, t2, t3, t4, t5, t6, div1, t7, t8_value = formatDate(new Date(ctx.earliestBeginOfDataGathering)), t8, t9, div2, t10, t11_value = formatDate(ctx.__created), t11, div3_intro;
 
 	return {
 		c: function create() {
-			div2 = element("div");
+			div3 = element("div");
 			h4 = element("h4");
 			t0 = text(ctx.studyName);
 			t1 = space();
 			div0 = element("div");
 			t2 = text("Tasks: ");
 			t3 = text(ctx.countTasks);
-			t4 = space();
+			t4 = text(" Responses: ");
+			t5 = text(ctx.responses);
+			t6 = space();
 			div1 = element("div");
-			t5 = text("imported: ");
-			t6 = text(t6_value);
-			add_location(h4, file$e, 24, 2, 556);
+			t7 = text("Start: ");
+			t8 = text(t8_value);
+			t9 = space();
+			div2 = element("div");
+			t10 = text("imported: ");
+			t11 = text(t11_value);
+			add_location(h4, file$e, 48, 2, 1134);
 			div0.className = "tasks";
-			add_location(div0, file$e, 25, 2, 580);
-			div1.className = "created svelte-19bfvo6";
-			add_location(div1, file$e, 26, 2, 629);
-			div2.className = "card svelte-19bfvo6";
-			add_location(div2, file$e, 23, 0, 506);
+			add_location(div0, file$e, 49, 2, 1158);
+			div1.className = "start svelte-ncrq7r";
+			add_location(div1, file$e, 50, 2, 1229);
+			div2.className = "created svelte-ncrq7r";
+			add_location(div2, file$e, 53, 2, 1327);
+			div3.className = "card svelte-ncrq7r";
+			add_location(div3, file$e, 47, 0, 1084);
 		},
 
 		l: function claim(nodes) {
@@ -3666,17 +3708,23 @@ function create_fragment$e(ctx) {
 		},
 
 		m: function mount(target, anchor) {
-			insert(target, div2, anchor);
-			append(div2, h4);
+			insert(target, div3, anchor);
+			append(div3, h4);
 			append(h4, t0);
-			append(div2, t1);
-			append(div2, div0);
+			append(div3, t1);
+			append(div3, div0);
 			append(div0, t2);
 			append(div0, t3);
-			append(div2, t4);
-			append(div2, div1);
-			append(div1, t5);
-			append(div1, t6);
+			append(div0, t4);
+			append(div0, t5);
+			append(div3, t6);
+			append(div3, div1);
+			append(div1, t7);
+			append(div1, t8);
+			append(div3, t9);
+			append(div3, div2);
+			append(div2, t10);
+			append(div2, t11);
 		},
 
 		p: function update(changed, ctx) {
@@ -3684,16 +3732,24 @@ function create_fragment$e(ctx) {
 				set_data(t0, ctx.studyName);
 			}
 
-			if ((changed.__created) && t6_value !== (t6_value = formatDate(ctx.__created))) {
-				set_data(t6, t6_value);
+			if (changed.responses) {
+				set_data(t5, ctx.responses);
+			}
+
+			if ((changed.earliestBeginOfDataGathering) && t8_value !== (t8_value = formatDate(new Date(ctx.earliestBeginOfDataGathering)))) {
+				set_data(t8, t8_value);
+			}
+
+			if ((changed.__created) && t11_value !== (t11_value = formatDate(ctx.__created))) {
+				set_data(t11, t11_value);
 			}
 		},
 
 		i: function intro(local) {
-			if (!div2_intro) {
+			if (!div3_intro) {
 				add_render_callback(() => {
-					div2_intro = create_in_transition(div2, fade, { duration: 400 });
-					div2_intro.start();
+					div3_intro = create_in_transition(div3, fade, { duration: 400 });
+					div3_intro.start();
 				});
 			}
 		},
@@ -3702,7 +3758,7 @@ function create_fragment$e(ctx) {
 
 		d: function destroy(detaching) {
 			if (detaching) {
-				detach(div2);
+				detach(div3);
 			}
 		}
 	};
@@ -3710,10 +3766,21 @@ function create_fragment$e(ctx) {
 
 function instance$b($$self, $$props, $$invalidate) {
 	
-  let { _id, studyName, description, tasks, __created } = $$props;
+  let { _id, studyName, description, tasks, __created, minimumStudyDurationPerPerson, maximumStudyDurationPerPerson, earliestBeginOfDataGathering, latestBeginOfDataGathering } = $$props;
   let countTasks = tasks.length;
-
-	const writable_props = ['_id', 'studyName', 'description', 'tasks', '__created'];
+  let responses = 0;
+  //FIXME: use store instead of db
+  const res = db
+    .transaction("StudyResponses")
+    .objectStore("StudyResponses")
+    .index("studyId")
+    .count(_id);
+  res.onsuccess = e => {
+    const count = e.target.result;
+    console.log("response count:", count);
+    $$invalidate('responses', responses = count);
+  };
+	const writable_props = ['_id', 'studyName', 'description', 'tasks', '__created', 'minimumStudyDurationPerPerson', 'maximumStudyDurationPerPerson', 'earliestBeginOfDataGathering', 'latestBeginOfDataGathering'];
 	Object.keys($$props).forEach(key => {
 		if (!writable_props.includes(key) && !key.startsWith('$$')) console.warn(`<StudyCard> was created with unknown prop '${key}'`);
 	});
@@ -3724,6 +3791,10 @@ function instance$b($$self, $$props, $$invalidate) {
 		if ('description' in $$props) $$invalidate('description', description = $$props.description);
 		if ('tasks' in $$props) $$invalidate('tasks', tasks = $$props.tasks);
 		if ('__created' in $$props) $$invalidate('__created', __created = $$props.__created);
+		if ('minimumStudyDurationPerPerson' in $$props) $$invalidate('minimumStudyDurationPerPerson', minimumStudyDurationPerPerson = $$props.minimumStudyDurationPerPerson);
+		if ('maximumStudyDurationPerPerson' in $$props) $$invalidate('maximumStudyDurationPerPerson', maximumStudyDurationPerPerson = $$props.maximumStudyDurationPerPerson);
+		if ('earliestBeginOfDataGathering' in $$props) $$invalidate('earliestBeginOfDataGathering', earliestBeginOfDataGathering = $$props.earliestBeginOfDataGathering);
+		if ('latestBeginOfDataGathering' in $$props) $$invalidate('latestBeginOfDataGathering', latestBeginOfDataGathering = $$props.latestBeginOfDataGathering);
 	};
 
 	return {
@@ -3732,14 +3803,19 @@ function instance$b($$self, $$props, $$invalidate) {
 		description,
 		tasks,
 		__created,
-		countTasks
+		minimumStudyDurationPerPerson,
+		maximumStudyDurationPerPerson,
+		earliestBeginOfDataGathering,
+		latestBeginOfDataGathering,
+		countTasks,
+		responses
 	};
 }
 
 class StudyCard extends SvelteComponentDev {
 	constructor(options) {
 		super(options);
-		init(this, options, instance$b, create_fragment$e, safe_not_equal, ["_id", "studyName", "description", "tasks", "__created"]);
+		init(this, options, instance$b, create_fragment$e, safe_not_equal, ["_id", "studyName", "description", "tasks", "__created", "minimumStudyDurationPerPerson", "maximumStudyDurationPerPerson", "earliestBeginOfDataGathering", "latestBeginOfDataGathering"]);
 
 		const { ctx } = this.$$;
 		const props = options.props || {};
@@ -3757,6 +3833,18 @@ class StudyCard extends SvelteComponentDev {
 		}
 		if (ctx.__created === undefined && !('__created' in props)) {
 			console.warn("<StudyCard> was created without expected prop '__created'");
+		}
+		if (ctx.minimumStudyDurationPerPerson === undefined && !('minimumStudyDurationPerPerson' in props)) {
+			console.warn("<StudyCard> was created without expected prop 'minimumStudyDurationPerPerson'");
+		}
+		if (ctx.maximumStudyDurationPerPerson === undefined && !('maximumStudyDurationPerPerson' in props)) {
+			console.warn("<StudyCard> was created without expected prop 'maximumStudyDurationPerPerson'");
+		}
+		if (ctx.earliestBeginOfDataGathering === undefined && !('earliestBeginOfDataGathering' in props)) {
+			console.warn("<StudyCard> was created without expected prop 'earliestBeginOfDataGathering'");
+		}
+		if (ctx.latestBeginOfDataGathering === undefined && !('latestBeginOfDataGathering' in props)) {
+			console.warn("<StudyCard> was created without expected prop 'latestBeginOfDataGathering'");
 		}
 	}
 
@@ -3797,6 +3885,38 @@ class StudyCard extends SvelteComponentDev {
 	}
 
 	set __created(value) {
+		throw new Error("<StudyCard>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+	}
+
+	get minimumStudyDurationPerPerson() {
+		throw new Error("<StudyCard>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+	}
+
+	set minimumStudyDurationPerPerson(value) {
+		throw new Error("<StudyCard>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+	}
+
+	get maximumStudyDurationPerPerson() {
+		throw new Error("<StudyCard>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+	}
+
+	set maximumStudyDurationPerPerson(value) {
+		throw new Error("<StudyCard>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+	}
+
+	get earliestBeginOfDataGathering() {
+		throw new Error("<StudyCard>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+	}
+
+	set earliestBeginOfDataGathering(value) {
+		throw new Error("<StudyCard>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+	}
+
+	get latestBeginOfDataGathering() {
+		throw new Error("<StudyCard>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+	}
+
+	set latestBeginOfDataGathering(value) {
 		throw new Error("<StudyCard>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	}
 }
