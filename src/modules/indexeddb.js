@@ -27,6 +27,7 @@ request.onupgradeneeded = (e) => {
     store = db.createObjectStore("StudyVariables", { keyPath: ["variableName", "studyId"] })
     store.createIndex("variableName", "variableName", { unique: false })
     store.createIndex("studyId", "studyId", { unique: false })
+    store.createIndex("measure", "measure", { unique: false })
     // store = db.createObjectStore("StudyVariables", { autoIncrement: true })
     // store.createIndex("studyId", "studyId", { unique: false })
     // store.createIndex("variableName", "variableName", { unique: false })

@@ -96,13 +96,27 @@
                     studyId: stId,
                     taskId: task._id,
                     taskName: task.taskName,
-                    personalData: JSON.parse(task.personalData) //hopefully cast to boolean type
+                    personalData: JSON.parse(task.personalData) // cast string "false" to boolean false
                   };
+
+                  //Update StudyTasks
                   store2.put(taskData);
+
+                  const typeMapping = new Map([
+                    ["Numeric", "scale"],
+                    ["TextChoice", "nominal"],
+                    ["DiscreteScale", "ordinal"], // scale?
+                    ["ContinuousScale", "scale"],
+                    ["Text", "qualitative"]
+                  ]);
+                  //Update StudyVariables
                   for (const step of task.steps) {
                     for (const stepItem of step.stepItems) {
                       stepItem.__created = new Date();
                       stepItem.studyId = stId;
+                      stepItem.measure = typeMapping.get(
+                        stepItem.dataformat.type
+                      );
                       store.put(stepItem);
                     }
                   }

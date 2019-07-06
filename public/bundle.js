@@ -3312,6 +3312,7 @@ request.onupgradeneeded = (e) => {
     store = db.createObjectStore("StudyVariables", { keyPath: ["variableName", "studyId"] });
     store.createIndex("variableName", "variableName", { unique: false });
     store.createIndex("studyId", "studyId", { unique: false });
+    store.createIndex("measure", "measure", { unique: false });
     // store = db.createObjectStore("StudyVariables", { autoIncrement: true })
     // store.createIndex("studyId", "studyId", { unique: false })
     // store.createIndex("variableName", "variableName", { unique: false })
@@ -3387,19 +3388,19 @@ function create_fragment$d(ctx) {
 			input.multiple = true;
 			input.accept = "application/json";
 			input.className = "svelte-1ftga8c";
-			add_location(input, file$d, 232, 0, 8486);
+			add_location(input, file$d, 246, 0, 9034);
 			attr(path, "fill", "white");
 			attr(path, "d", "M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3\r\n        11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8\r\n        2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6\r\n        1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4\r\n        1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z");
-			add_location(path, file$d, 240, 6, 8727);
+			add_location(path, file$d, 254, 6, 9275);
 			attr(svg, "xmlns", "http://www.w3.org/2000/svg");
 			attr(svg, "width", "2em");
 			attr(svg, "height", "1.8em");
 			attr(svg, "viewBox", "0 0 20 17");
-			add_location(svg, file$d, 235, 4, 8604);
-			add_location(figure, file$d, 234, 2, 8590);
+			add_location(svg, file$d, 249, 4, 9152);
+			add_location(figure, file$d, 248, 2, 9138);
 			label.htmlFor = "studyImport";
 			label.className = "svelte-1ftga8c";
-			add_location(label, file$d, 233, 0, 8561);
+			add_location(label, file$d, 247, 0, 9109);
 		},
 
 		l: function claim(nodes) {
@@ -3526,13 +3527,27 @@ function instance$a($$self) {
                     studyId: stId,
                     taskId: task._id,
                     taskName: task.taskName,
-                    personalData: JSON.parse(task.personalData) //hopefully cast to boolean type
+                    personalData: JSON.parse(task.personalData) // cast string "false" to boolean false
                   };
+
+                  //Update StudyTasks
                   store2.put(taskData);
+
+                  const typeMapping = new Map([
+                    ["Numeric", "scale"],
+                    ["TextChoice", "nominal"],
+                    ["DiscreteScale", "ordinal"], // scale?
+                    ["ContinuousScale", "scale"],
+                    ["Text", "qualitative"]
+                  ]);
+                  //Update StudyVariables
                   for (const step of task.steps) {
                     for (const stepItem of step.stepItems) {
                       stepItem.__created = new Date();
                       stepItem.studyId = stId;
+                      stepItem.measure = typeMapping.get(
+                        stepItem.dataformat.type
+                      );
                       store.put(stepItem);
                     }
                   }
