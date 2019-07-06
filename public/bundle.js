@@ -358,6 +358,111 @@ function create_in_transition(node, fn, params) {
         }
     };
 }
+function create_bidirectional_transition(node, fn, params, intro) {
+    let config = fn(node, params);
+    let t = intro ? 0 : 1;
+    let running_program = null;
+    let pending_program = null;
+    let animation_name = null;
+    function clear_animation() {
+        if (animation_name)
+            delete_rule(node, animation_name);
+    }
+    function init(program, duration) {
+        const d = program.b - t;
+        duration *= Math.abs(d);
+        return {
+            a: t,
+            b: program.b,
+            d,
+            duration,
+            start: program.start,
+            end: program.start + duration,
+            group: program.group
+        };
+    }
+    function go(b) {
+        const { delay = 0, duration = 300, easing = identity, tick: tick$$1 = noop, css } = config;
+        const program = {
+            start: now() + delay,
+            b
+        };
+        if (!b) {
+            // @ts-ignore todo: improve typings
+            program.group = outros;
+            outros.remaining += 1;
+        }
+        if (running_program) {
+            pending_program = program;
+        }
+        else {
+            // if this is an intro, and there's a delay, we need to do
+            // an initial tick and/or apply CSS animation immediately
+            if (css) {
+                clear_animation();
+                animation_name = create_rule(node, t, b, duration, delay, easing, css);
+            }
+            if (b)
+                tick$$1(0, 1);
+            running_program = init(program, duration);
+            add_render_callback(() => dispatch(node, b, 'start'));
+            loop(now$$1 => {
+                if (pending_program && now$$1 > pending_program.start) {
+                    running_program = init(pending_program, duration);
+                    pending_program = null;
+                    dispatch(node, running_program.b, 'start');
+                    if (css) {
+                        clear_animation();
+                        animation_name = create_rule(node, t, running_program.b, running_program.duration, 0, easing, config.css);
+                    }
+                }
+                if (running_program) {
+                    if (now$$1 >= running_program.end) {
+                        tick$$1(t = running_program.b, 1 - t);
+                        dispatch(node, running_program.b, 'end');
+                        if (!pending_program) {
+                            // we're done
+                            if (running_program.b) {
+                                // intro — we can tidy up immediately
+                                clear_animation();
+                            }
+                            else {
+                                // outro — needs to be coordinated
+                                if (!--running_program.group.remaining)
+                                    run_all(running_program.group.callbacks);
+                            }
+                        }
+                        running_program = null;
+                    }
+                    else if (now$$1 >= running_program.start) {
+                        const p = now$$1 - running_program.start;
+                        t = running_program.a + running_program.d * easing(p / running_program.duration);
+                        tick$$1(t, 1 - t);
+                    }
+                }
+                return !!(running_program || pending_program);
+            });
+        }
+    }
+    return {
+        run(b) {
+            if (is_function(config)) {
+                wait().then(() => {
+                    // @ts-ignore
+                    config = config();
+                    go(b);
+                });
+            }
+            else {
+                go(b);
+            }
+        },
+        end() {
+            clear_animation();
+            running_program = pending_program = null;
+        }
+    };
+}
 
 function get_spread_update(levels, updates) {
     const update = {};
@@ -697,12 +802,31 @@ class Tab extends SvelteComponentDev {
 	}
 }
 
+function cubicOut(t) {
+    const f = t - 1.0;
+    return f * f * f + 1.0;
+}
+
 function fade(node, { delay = 0, duration = 400 }) {
     const o = +getComputedStyle(node).opacity;
     return {
         delay,
         duration,
         css: t => `opacity: ${t * o}`
+    };
+}
+function fly(node, { delay = 0, duration = 400, easing = cubicOut, x = 0, y = 0, opacity = 0 }) {
+    const style = getComputedStyle(node);
+    const target_opacity = +style.opacity;
+    const transform = style.transform === 'none' ? '' : style.transform;
+    const od = target_opacity * (1 - opacity);
+    return {
+        delay,
+        duration,
+        easing,
+        css: (t, u) => `
+			transform: ${transform} translate(${(1 - t) * x}px, ${(1 - t) * y}px);
+			opacity: ${target_opacity - (od * u)}`
     };
 }
 
@@ -3532,7 +3656,6 @@ function instance$a($$self) {
 
                   //Update StudyTasks
                   store2.put(taskData);
-
                   const typeMapping = new Map([
                     ["Numeric", "scale"],
                     ["TextChoice", "nominal"],
@@ -3540,6 +3663,7 @@ function instance$a($$self) {
                     ["ContinuousScale", "scale"],
                     ["Text", "qualitative"]
                   ]);
+
                   //Update StudyVariables
                   for (const step of task.steps) {
                     for (const stepItem of step.stepItems) {
@@ -3689,7 +3813,7 @@ function formatDate(date) {
 const file$e = "src\\components\\StudyCard.svelte";
 
 function create_fragment$e(ctx) {
-	var div4, div0, svg, path, t0, h4, t1, t2, div1, t3, t4, t5, t6, t7, div2, span0, t9, t10_value = formatDate(new ctx.Date(ctx.earliestBeginOfDataGathering)), t10, t11, span1, t13, t14_value = formatDate(ctx.endDate), t14, t15, div3, t16, t17_value = formatDate(ctx.__created), t17, div4_intro, dispose;
+	var div4, div0, svg, path, t0, h4, t1, t2, div1, t3, t4, t5, t6, t7, span0, t8, t9, t10, div2, span1, t12, t13_value = formatDate(new ctx.Date(ctx.earliestBeginOfDataGathering)), t13, t14, span2, t16, t17_value = formatDate(ctx.endDate), t17, t18, div3, t19, t20_value = formatDate(ctx.__created), t20, div4_intro, dispose;
 
 	return {
 		c: function create() {
@@ -3707,44 +3831,54 @@ function create_fragment$e(ctx) {
 			t5 = text(" Responses: ");
 			t6 = text(ctx.responses);
 			t7 = space();
-			div2 = element("div");
 			span0 = element("span");
-			span0.textContent = "Start:";
-			t9 = space();
-			t10 = text(t10_value);
-			t11 = space();
+			t8 = text("Variables: ");
+			t9 = text(ctx.variableCount);
+			t10 = space();
+			div2 = element("div");
 			span1 = element("span");
-			span1.textContent = "End:";
-			t13 = space();
-			t14 = text(t14_value);
-			t15 = space();
-			div3 = element("div");
-			t16 = text("imported: ");
+			span1.textContent = "Start:";
+			t12 = space();
+			t13 = text(t13_value);
+			t14 = space();
+			span2 = element("span");
+			span2.textContent = "End:";
+			t16 = space();
 			t17 = text(t17_value);
-			attr(path, "fill", "#999");
+			t18 = space();
+			div3 = element("div");
+			t19 = text("imported: ");
+			t20 = text(t20_value);
+			attr(path, "fill", "#777");
 			attr(path, "d", "M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59\r\n        20,12C20,16.41 16.41,20 12,20M12,2C6.47,2 2,6.47 2,12C2,17.53 6.47,22\r\n        12,22C17.53,22 22,17.53 22,12C22,6.47 17.53,2\r\n        12,2M14.59,8L12,10.59L9.41,8L8,9.41L10.59,12L8,14.59L9.41,16L12,13.41L14.59,16L16,14.59L13.41,12L16,9.41L14.59,8Z");
-			add_location(path, file$e, 143, 6, 3432);
+			add_location(path, file$e, 175, 6, 4133);
 			set_style(svg, "width", "24px");
 			set_style(svg, "height", "24px");
 			attr(svg, "viewBox", "0 0 24 24");
-			add_location(svg, file$e, 142, 4, 3367);
-			div0.className = "delete svelte-1q0ldce";
-			add_location(div0, file$e, 141, 2, 3318);
-			h4.className = "svelte-1q0ldce";
-			add_location(h4, file$e, 151, 2, 3820);
-			div1.className = "mainInfo";
-			add_location(div1, file$e, 152, 2, 3844);
-			span0.className = "svelte-1q0ldce";
-			add_location(span0, file$e, 154, 4, 3941);
-			span1.className = "svelte-1q0ldce";
-			add_location(span1, file$e, 156, 4, 4025);
-			div2.className = "date svelte-1q0ldce";
-			add_location(div2, file$e, 153, 2, 3917);
-			div3.className = "created svelte-1q0ldce";
-			add_location(div3, file$e, 159, 2, 4084);
-			div4.className = "card svelte-1q0ldce";
-			add_location(div4, file$e, 140, 0, 3268);
-			dispose = listen(div0, "click", ctx.deleteStudy);
+			add_location(svg, file$e, 174, 4, 4068);
+			div0.className = "delete svelte-cjkha5";
+			add_location(div0, file$e, 173, 2, 4019);
+			h4.className = "svelte-cjkha5";
+			add_location(h4, file$e, 183, 2, 4521);
+			span0.className = "vars svelte-cjkha5";
+			add_location(span0, file$e, 186, 4, 4620);
+			div1.className = "mainInfo svelte-cjkha5";
+			add_location(div1, file$e, 184, 2, 4545);
+			span1.className = "svelte-cjkha5";
+			add_location(span1, file$e, 191, 4, 4749);
+			span2.className = "svelte-cjkha5";
+			add_location(span2, file$e, 193, 4, 4833);
+			div2.className = "date svelte-cjkha5";
+			add_location(div2, file$e, 190, 2, 4725);
+			div3.className = "created svelte-cjkha5";
+			add_location(div3, file$e, 196, 2, 4892);
+			div4.className = "card svelte-cjkha5";
+			add_location(div4, file$e, 172, 0, 3969);
+
+			dispose = [
+				listen(div0, "click", ctx.deleteStudy),
+				listen(span0, "click", ctx.showVariables)
+			];
 		},
 
 		l: function claim(nodes) {
@@ -3765,19 +3899,23 @@ function create_fragment$e(ctx) {
 			append(div1, t4);
 			append(div1, t5);
 			append(div1, t6);
-			append(div4, t7);
+			append(div1, t7);
+			append(div1, span0);
+			append(span0, t8);
+			append(span0, t9);
+			append(div4, t10);
 			append(div4, div2);
-			append(div2, span0);
-			append(div2, t9);
-			append(div2, t10);
-			append(div2, t11);
 			append(div2, span1);
+			append(div2, t12);
 			append(div2, t13);
 			append(div2, t14);
-			append(div4, t15);
+			append(div2, span2);
+			append(div2, t16);
+			append(div2, t17);
+			append(div4, t18);
 			append(div4, div3);
-			append(div3, t16);
-			append(div3, t17);
+			append(div3, t19);
+			append(div3, t20);
 		},
 
 		p: function update(changed, ctx) {
@@ -3793,12 +3931,16 @@ function create_fragment$e(ctx) {
 				set_data(t6, ctx.responses);
 			}
 
-			if ((changed.earliestBeginOfDataGathering) && t10_value !== (t10_value = formatDate(new ctx.Date(ctx.earliestBeginOfDataGathering)))) {
-				set_data(t10, t10_value);
+			if (changed.variableCount) {
+				set_data(t9, ctx.variableCount);
 			}
 
-			if ((changed.__created) && t17_value !== (t17_value = formatDate(ctx.__created))) {
-				set_data(t17, t17_value);
+			if ((changed.earliestBeginOfDataGathering) && t13_value !== (t13_value = formatDate(new ctx.Date(ctx.earliestBeginOfDataGathering)))) {
+				set_data(t13, t13_value);
+			}
+
+			if ((changed.__created) && t20_value !== (t20_value = formatDate(ctx.__created))) {
+				set_data(t20, t20_value);
 			}
 		},
 
@@ -3818,7 +3960,7 @@ function create_fragment$e(ctx) {
 				detach(div4);
 			}
 
-			dispose();
+			run_all(dispose);
 		}
 	};
 }
@@ -3827,9 +3969,17 @@ function instance$b($$self, $$props, $$invalidate) {
 	
 
   let { _id, studyName, description, tasks, __created, minimumStudyDurationPerPerson, maximumStudyDurationPerPerson, earliestBeginOfDataGathering, latestBeginOfDataGathering } = $$props;
+
+  const dispatch = createEventDispatcher();
+  function showVariables() {
+    dispatch("showVariables", { studyId: _id, studyName });
+  }
+
   let taskCount = tasks.length;
   let responses = 0;
   let userCount = 0;
+
+  let variableCount = 0;
 
   //calc last day of study
   console.log(latestBeginOfDataGathering);
@@ -3861,6 +4011,16 @@ function instance$b($$self, $$props, $$invalidate) {
     const count = e.target.result;
     console.log("user count:", count);
     $$invalidate('userCount', userCount = count);
+  };
+  res = db
+    .transaction("StudyVariables")
+    .objectStore("StudyVariables")
+    .index("studyId")
+    .count(_id);
+  res.onsuccess = e => {
+    const count = e.target.result;
+    console.log("var count:", count);
+    $$invalidate('variableCount', variableCount = count);
   };
   function deleteStudy() {
     if (!confirm("Do you really want to delete this study?")) return;
@@ -3935,8 +4095,10 @@ function instance$b($$self, $$props, $$invalidate) {
 		maximumStudyDurationPerPerson,
 		earliestBeginOfDataGathering,
 		latestBeginOfDataGathering,
+		showVariables,
 		responses,
 		userCount,
+		variableCount,
 		endDate,
 		deleteStudy,
 		Date
@@ -4052,18 +4214,342 @@ class StudyCard extends SvelteComponentDev {
 	}
 }
 
-/* src\pages\StudyList.svelte generated by Svelte v3.5.1 */
+/* src\components\StudyVariables.svelte generated by Svelte v3.5.1 */
 
-const file$f = "src\\pages\\StudyList.svelte";
+const file$f = "src\\components\\StudyVariables.svelte";
 
 function get_each_context$1(ctx, list, i) {
+	const child_ctx = Object.create(ctx);
+	child_ctx.v = list[i];
+	return child_ctx;
+}
+
+// (57:4) {#each variables as v}
+function create_each_block$1(ctx) {
+	var tr, td0, t0_value = ctx.v.variableName, t0, t1, td1, t2_value = ctx.v.variableLabel, t2, t3, td2, t4_value = ctx.v.measure, t4, t5;
+
+	return {
+		c: function create() {
+			tr = element("tr");
+			td0 = element("td");
+			t0 = text(t0_value);
+			t1 = space();
+			td1 = element("td");
+			t2 = text(t2_value);
+			t3 = space();
+			td2 = element("td");
+			t4 = text(t4_value);
+			t5 = space();
+			td0.className = "name svelte-yfaafk";
+			add_location(td0, file$f, 58, 8, 1064);
+			td1.className = "label svelte-yfaafk";
+			add_location(td1, file$f, 59, 8, 1114);
+			td2.className = "measure svelte-yfaafk";
+			add_location(td2, file$f, 60, 8, 1166);
+			tr.className = "svelte-yfaafk";
+			add_location(tr, file$f, 57, 6, 1050);
+		},
+
+		m: function mount(target, anchor) {
+			insert(target, tr, anchor);
+			append(tr, td0);
+			append(td0, t0);
+			append(tr, t1);
+			append(tr, td1);
+			append(td1, t2);
+			append(tr, t3);
+			append(tr, td2);
+			append(td2, t4);
+			append(tr, t5);
+		},
+
+		p: function update(changed, ctx) {
+			if ((changed.variables) && t0_value !== (t0_value = ctx.v.variableName)) {
+				set_data(t0, t0_value);
+			}
+
+			if ((changed.variables) && t2_value !== (t2_value = ctx.v.variableLabel)) {
+				set_data(t2, t2_value);
+			}
+
+			if ((changed.variables) && t4_value !== (t4_value = ctx.v.measure)) {
+				set_data(t4, t4_value);
+			}
+		},
+
+		d: function destroy(detaching) {
+			if (detaching) {
+				detach(tr);
+			}
+		}
+	};
+}
+
+function create_fragment$f(ctx) {
+	var div, p, t0, strong, t1, t2, table, tr, th0, t4, th1, t6, th2, t8;
+
+	var each_value = ctx.variables;
+
+	var each_blocks = [];
+
+	for (var i = 0; i < each_value.length; i += 1) {
+		each_blocks[i] = create_each_block$1(get_each_context$1(ctx, each_value, i));
+	}
+
+	return {
+		c: function create() {
+			div = element("div");
+			p = element("p");
+			t0 = text("Variables of\r\n    ");
+			strong = element("strong");
+			t1 = text(ctx.studyName);
+			t2 = space();
+			table = element("table");
+			tr = element("tr");
+			th0 = element("th");
+			th0.textContent = "Name";
+			t4 = space();
+			th1 = element("th");
+			th1.textContent = "Label";
+			t6 = space();
+			th2 = element("th");
+			th2.textContent = "Measure";
+			t8 = space();
+
+			for (var i = 0; i < each_blocks.length; i += 1) {
+				each_blocks[i].c();
+			}
+			add_location(strong, file$f, 48, 4, 879);
+			add_location(p, file$f, 46, 2, 852);
+			th0.className = "svelte-yfaafk";
+			add_location(th0, file$f, 52, 6, 944);
+			th1.className = "svelte-yfaafk";
+			add_location(th1, file$f, 53, 6, 965);
+			th2.className = "svelte-yfaafk";
+			add_location(th2, file$f, 54, 6, 987);
+			tr.className = "svelte-yfaafk";
+			add_location(tr, file$f, 51, 4, 932);
+			table.className = "svelte-yfaafk";
+			add_location(table, file$f, 50, 2, 919);
+			div.className = "container svelte-yfaafk";
+			add_location(div, file$f, 45, 0, 825);
+		},
+
+		l: function claim(nodes) {
+			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+		},
+
+		m: function mount(target, anchor) {
+			insert(target, div, anchor);
+			append(div, p);
+			append(p, t0);
+			append(p, strong);
+			append(strong, t1);
+			append(div, t2);
+			append(div, table);
+			append(table, tr);
+			append(tr, th0);
+			append(tr, t4);
+			append(tr, th1);
+			append(tr, t6);
+			append(tr, th2);
+			append(table, t8);
+
+			for (var i = 0; i < each_blocks.length; i += 1) {
+				each_blocks[i].m(table, null);
+			}
+		},
+
+		p: function update(changed, ctx) {
+			if (changed.studyName) {
+				set_data(t1, ctx.studyName);
+			}
+
+			if (changed.variables) {
+				each_value = ctx.variables;
+
+				for (var i = 0; i < each_value.length; i += 1) {
+					const child_ctx = get_each_context$1(ctx, each_value, i);
+
+					if (each_blocks[i]) {
+						each_blocks[i].p(changed, child_ctx);
+					} else {
+						each_blocks[i] = create_each_block$1(child_ctx);
+						each_blocks[i].c();
+						each_blocks[i].m(table, null);
+					}
+				}
+
+				for (; i < each_blocks.length; i += 1) {
+					each_blocks[i].d(1);
+				}
+				each_blocks.length = each_value.length;
+			}
+		},
+
+		i: noop,
+		o: noop,
+
+		d: function destroy(detaching) {
+			if (detaching) {
+				detach(div);
+			}
+
+			destroy_each(each_blocks, detaching);
+		}
+	};
+}
+
+function instance$c($$self, $$props, $$invalidate) {
+	
+
+  let { studyId = 0, studyName = "" } = $$props;
+  let variables = [];
+
+  onMount(() => {
+    if (studyId) {
+      const res = db
+        .transaction("StudyVariables")
+        .objectStore("StudyVariables")
+        .getAll();
+      res.onsuccess = e => {
+        $$invalidate('variables', variables = e.target.result);
+        console.log(vars);
+      };
+    }
+  });
+
+	const writable_props = ['studyId', 'studyName'];
+	Object.keys($$props).forEach(key => {
+		if (!writable_props.includes(key) && !key.startsWith('$$')) console.warn(`<StudyVariables> was created with unknown prop '${key}'`);
+	});
+
+	$$self.$set = $$props => {
+		if ('studyId' in $$props) $$invalidate('studyId', studyId = $$props.studyId);
+		if ('studyName' in $$props) $$invalidate('studyName', studyName = $$props.studyName);
+	};
+
+	return { studyId, studyName, variables };
+}
+
+class StudyVariables extends SvelteComponentDev {
+	constructor(options) {
+		super(options);
+		init(this, options, instance$c, create_fragment$f, safe_not_equal, ["studyId", "studyName"]);
+	}
+
+	get studyId() {
+		throw new Error("<StudyVariables>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+	}
+
+	set studyId(value) {
+		throw new Error("<StudyVariables>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+	}
+
+	get studyName() {
+		throw new Error("<StudyVariables>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+	}
+
+	set studyName(value) {
+		throw new Error("<StudyVariables>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+	}
+}
+
+/* src\pages\StudyList.svelte generated by Svelte v3.5.1 */
+
+const file$g = "src\\pages\\StudyList.svelte";
+
+function get_each_context$2(ctx, list, i) {
 	const child_ctx = Object.create(ctx);
 	child_ctx.study = list[i];
 	return child_ctx;
 }
 
-// (40:2) {#each $studyStore as study}
-function create_each_block$1(ctx) {
+// (66:0) {#if toggle}
+function create_if_block$3(ctx) {
+	var div1, t, div0, div1_transition, current, dispose;
+
+	var studyvariables_spread_levels = [
+		ctx.varData
+	];
+
+	let studyvariables_props = {};
+	for (var i = 0; i < studyvariables_spread_levels.length; i += 1) {
+		studyvariables_props = assign(studyvariables_props, studyvariables_spread_levels[i]);
+	}
+	var studyvariables = new StudyVariables({
+		props: studyvariables_props,
+		$$inline: true
+	});
+
+	return {
+		c: function create() {
+			div1 = element("div");
+			studyvariables.$$.fragment.c();
+			t = space();
+			div0 = element("div");
+			div0.textContent = "x close";
+			div0.className = "close svelte-1uoyyie";
+			add_location(div0, file$g, 68, 4, 1668);
+			div1.className = "varInfo svelte-1uoyyie";
+			add_location(div1, file$g, 66, 2, 1560);
+			dispose = listen(div0, "click", ctx.click_handler);
+		},
+
+		m: function mount(target, anchor) {
+			insert(target, div1, anchor);
+			mount_component(studyvariables, div1, null);
+			append(div1, t);
+			append(div1, div0);
+			current = true;
+		},
+
+		p: function update(changed, ctx) {
+			var studyvariables_changes = changed.varData ? get_spread_update(studyvariables_spread_levels, [
+				ctx.varData
+			]) : {};
+			studyvariables.$set(studyvariables_changes);
+		},
+
+		i: function intro(local) {
+			if (current) return;
+			studyvariables.$$.fragment.i(local);
+
+			add_render_callback(() => {
+				if (!div1_transition) div1_transition = create_bidirectional_transition(div1, fly, { x: -200, duration: 200 }, true);
+				div1_transition.run(1);
+			});
+
+			current = true;
+		},
+
+		o: function outro(local) {
+			studyvariables.$$.fragment.o(local);
+
+			if (!div1_transition) div1_transition = create_bidirectional_transition(div1, fly, { x: -200, duration: 200 }, false);
+			div1_transition.run(0);
+
+			current = false;
+		},
+
+		d: function destroy(detaching) {
+			if (detaching) {
+				detach(div1);
+			}
+
+			studyvariables.$destroy();
+
+			if (detaching) {
+				if (div1_transition) div1_transition.end();
+			}
+
+			dispose();
+		}
+	};
+}
+
+// (74:2) {#each $studyStore as study}
+function create_each_block$2(ctx) {
 	var div, current;
 
 	var studycard_spread_levels = [
@@ -4075,13 +4561,14 @@ function create_each_block$1(ctx) {
 		studycard_props = assign(studycard_props, studycard_spread_levels[i]);
 	}
 	var studycard = new StudyCard({ props: studycard_props, $$inline: true });
+	studycard.$on("showVariables", ctx.showVars);
 
 	return {
 		c: function create() {
 			div = element("div");
 			studycard.$$.fragment.c();
-			div.className = "study svelte-izwwut";
-			add_location(div, file$f, 40, 4, 1031);
+			div.className = "study svelte-1uoyyie";
+			add_location(div, file$g, 74, 4, 1844);
 		},
 
 		m: function mount(target, anchor) {
@@ -4119,15 +4606,17 @@ function create_each_block$1(ctx) {
 	};
 }
 
-function create_fragment$f(ctx) {
-	var div1, t0, div0, div1_intro, t1, div2, current, dispose;
+function create_fragment$g(ctx) {
+	var t0, div1, t1, div0, div1_intro, t2, div2, current, dispose;
+
+	var if_block = (ctx.toggle) && create_if_block$3(ctx);
 
 	var each_value = ctx.$studyStore;
 
 	var each_blocks = [];
 
 	for (var i = 0; i < each_value.length; i += 1) {
-		each_blocks[i] = create_each_block$1(get_each_context$1(ctx, each_value, i));
+		each_blocks[i] = create_each_block$2(get_each_context$2(ctx, each_value, i));
 	}
 
 	function outro_block(i, detaching, local) {
@@ -4147,24 +4636,26 @@ function create_fragment$f(ctx) {
 
 	return {
 		c: function create() {
+			if (if_block) if_block.c();
+			t0 = space();
 			div1 = element("div");
 
 			for (var i = 0; i < each_blocks.length; i += 1) {
 				each_blocks[i].c();
 			}
 
-			t0 = space();
+			t1 = space();
 			div0 = element("div");
 			studyimporter.$$.fragment.c();
-			t1 = space();
+			t2 = space();
 			div2 = element("div");
 			div2.textContent = "Debug: wipe database";
-			div0.className = "study svelte-izwwut";
-			add_location(div0, file$f, 44, 2, 1109);
-			div1.className = "container svelte-izwwut";
-			add_location(div1, file$f, 38, 0, 942);
-			div2.className = "debug svelte-izwwut";
-			add_location(div2, file$f, 48, 0, 1171);
+			div0.className = "study svelte-1uoyyie";
+			add_location(div0, file$g, 78, 2, 1950);
+			div1.className = "container svelte-1uoyyie";
+			add_location(div1, file$g, 72, 0, 1755);
+			div2.className = "debug svelte-1uoyyie";
+			add_location(div2, file$g, 83, 0, 2014);
 			dispose = listen(div2, "click", dropDB);
 		},
 
@@ -4173,35 +4664,58 @@ function create_fragment$f(ctx) {
 		},
 
 		m: function mount(target, anchor) {
+			if (if_block) if_block.m(target, anchor);
+			insert(target, t0, anchor);
 			insert(target, div1, anchor);
 
 			for (var i = 0; i < each_blocks.length; i += 1) {
 				each_blocks[i].m(div1, null);
 			}
 
-			append(div1, t0);
+			append(div1, t1);
 			append(div1, div0);
 			mount_component(studyimporter, div0, null);
-			insert(target, t1, anchor);
+			insert(target, t2, anchor);
 			insert(target, div2, anchor);
 			current = true;
 		},
 
 		p: function update(changed, ctx) {
-			if (changed.$studyStore) {
+			if (ctx.toggle) {
+				if (if_block) {
+					if_block.p(changed, ctx);
+					if_block.i(1);
+				} else {
+					if_block = create_if_block$3(ctx);
+					if_block.c();
+					if_block.i(1);
+					if_block.m(t0.parentNode, t0);
+				}
+			} else if (if_block) {
+				group_outros();
+				on_outro(() => {
+					if_block.d(1);
+					if_block = null;
+				});
+
+				if_block.o(1);
+				check_outros();
+			}
+
+			if (changed.$studyStore || changed.showVars) {
 				each_value = ctx.$studyStore;
 
 				for (var i = 0; i < each_value.length; i += 1) {
-					const child_ctx = get_each_context$1(ctx, each_value, i);
+					const child_ctx = get_each_context$2(ctx, each_value, i);
 
 					if (each_blocks[i]) {
 						each_blocks[i].p(changed, child_ctx);
 						each_blocks[i].i(1);
 					} else {
-						each_blocks[i] = create_each_block$1(child_ctx);
+						each_blocks[i] = create_each_block$2(child_ctx);
 						each_blocks[i].c();
 						each_blocks[i].i(1);
-						each_blocks[i].m(div1, t0);
+						each_blocks[i].m(div1, t1);
 					}
 				}
 
@@ -4213,6 +4727,8 @@ function create_fragment$f(ctx) {
 
 		i: function intro(local) {
 			if (current) return;
+			if (if_block) if_block.i();
+
 			for (var i = 0; i < each_value.length; i += 1) each_blocks[i].i();
 
 			studyimporter.$$.fragment.i(local);
@@ -4228,6 +4744,8 @@ function create_fragment$f(ctx) {
 		},
 
 		o: function outro(local) {
+			if (if_block) if_block.o();
+
 			each_blocks = each_blocks.filter(Boolean);
 			for (let i = 0; i < each_blocks.length; i += 1) outro_block(i, 0, 0);
 
@@ -4236,7 +4754,10 @@ function create_fragment$f(ctx) {
 		},
 
 		d: function destroy(detaching) {
+			if (if_block) if_block.d(detaching);
+
 			if (detaching) {
+				detach(t0);
 				detach(div1);
 			}
 
@@ -4245,7 +4766,7 @@ function create_fragment$f(ctx) {
 			studyimporter.$destroy();
 
 			if (detaching) {
-				detach(t1);
+				detach(t2);
 				detach(div2);
 			}
 
@@ -4262,27 +4783,49 @@ function dropDB() {
   location.reload(true);
 }
 
-function instance$c($$self, $$props, $$invalidate) {
+function instance$d($$self, $$props, $$invalidate) {
 	let $studyStore;
 
 	validate_store(studyStore, 'studyStore');
 	subscribe($$self, studyStore, $$value => { $studyStore = $$value; $$invalidate('$studyStore', $studyStore); });
 
-	return { $studyStore };
+	
+
+  let varData = {};
+  let toggle = false;
+  function showVars(event) {
+    $$invalidate('varData', varData = event.detail);
+    console.log(varData);
+    $$invalidate('toggle', toggle = true);
+  }
+
+	function click_handler() {
+		const $$result = (toggle = false);
+		$$invalidate('toggle', toggle);
+		return $$result;
+	}
+
+	return {
+		varData,
+		toggle,
+		showVars,
+		$studyStore,
+		click_handler
+	};
 }
 
 class StudyList extends SvelteComponentDev {
 	constructor(options) {
 		super(options);
-		init(this, options, instance$c, create_fragment$f, safe_not_equal, []);
+		init(this, options, instance$d, create_fragment$g, safe_not_equal, []);
 	}
 }
 
 /* src\SensQVis.svelte generated by Svelte v3.5.1 */
 
-const file$g = "src\\SensQVis.svelte";
+const file$h = "src\\SensQVis.svelte";
 
-// (85:33) 
+// (86:33) 
 function create_if_block_2(ctx) {
 	var current;
 
@@ -4316,7 +4859,7 @@ function create_if_block_2(ctx) {
 	};
 }
 
-// (83:33) 
+// (84:33) 
 function create_if_block_1$1(ctx) {
 	var current;
 
@@ -4350,8 +4893,8 @@ function create_if_block_1$1(ctx) {
 	};
 }
 
-// (81:4) {#if $activeUITab === 0}
-function create_if_block$3(ctx) {
+// (82:4) {#if $activeUITab === 0}
+function create_if_block$4(ctx) {
 	var current;
 
 	var studies = new StudyList({ $$inline: true });
@@ -4384,7 +4927,7 @@ function create_if_block$3(ctx) {
 	};
 }
 
-function create_fragment$g(ctx) {
+function create_fragment$h(ctx) {
 	var main, header, t0, nav, div0, t1, div1, t2, section, current_block_type_index, if_block, current;
 
 	var studyinfo = new StudyInfo({ $$inline: true });
@@ -4394,7 +4937,7 @@ function create_fragment$g(ctx) {
 	var undoredo = new UndoRedo({ $$inline: true });
 
 	var if_block_creators = [
-		create_if_block$3,
+		create_if_block$4,
 		create_if_block_1$1,
 		create_if_block_2
 	];
@@ -4427,18 +4970,18 @@ function create_fragment$g(ctx) {
 			t2 = space();
 			section = element("section");
 			if (if_block) if_block.c();
-			header.className = "svelte-7e2twn";
-			add_location(header, file$g, 68, 2, 1506);
-			div0.className = "tabs svelte-7e2twn";
-			add_location(div0, file$g, 72, 4, 1561);
-			div1.className = "undoRedo svelte-7e2twn";
-			add_location(div1, file$g, 75, 4, 1613);
-			nav.className = "svelte-7e2twn";
-			add_location(nav, file$g, 71, 2, 1550);
-			section.className = "svelte-7e2twn";
-			add_location(section, file$g, 79, 2, 1681);
-			main.className = "svelte-7e2twn";
-			add_location(main, file$g, 67, 0, 1496);
+			header.className = "svelte-1upxu8k";
+			add_location(header, file$h, 69, 2, 1531);
+			div0.className = "tabs svelte-1upxu8k";
+			add_location(div0, file$h, 73, 4, 1586);
+			div1.className = "undoRedo svelte-1upxu8k";
+			add_location(div1, file$h, 76, 4, 1638);
+			nav.className = "svelte-1upxu8k";
+			add_location(nav, file$h, 72, 2, 1575);
+			section.className = "svelte-1upxu8k";
+			add_location(section, file$h, 80, 2, 1706);
+			main.className = "svelte-1upxu8k";
+			add_location(main, file$h, 68, 0, 1521);
 		},
 
 		l: function claim(nodes) {
@@ -4526,7 +5069,7 @@ function create_fragment$g(ctx) {
 	};
 }
 
-function instance$d($$self, $$props, $$invalidate) {
+function instance$e($$self, $$props, $$invalidate) {
 	let $activeUITab;
 
 	validate_store(activeUITab, 'activeUITab');
@@ -4538,7 +5081,7 @@ function instance$d($$self, $$props, $$invalidate) {
 class SensQVis extends SvelteComponentDev {
 	constructor(options) {
 		super(options);
-		init(this, options, instance$d, create_fragment$g, safe_not_equal, []);
+		init(this, options, instance$e, create_fragment$h, safe_not_equal, []);
 	}
 }
 

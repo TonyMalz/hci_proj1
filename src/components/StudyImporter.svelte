@@ -101,7 +101,6 @@
 
                   //Update StudyTasks
                   store2.put(taskData);
-
                   const typeMapping = new Map([
                     ["Numeric", "scale"],
                     ["TextChoice", "nominal"],
@@ -109,6 +108,7 @@
                     ["ContinuousScale", "scale"],
                     ["Text", "qualitative"]
                   ]);
+
                   //Update StudyVariables
                   for (const step of task.steps) {
                     for (const stepItem of step.stepItems) {

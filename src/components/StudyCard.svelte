@@ -3,6 +3,7 @@
   import { fade } from "svelte/transition";
   import { db } from "../modules/indexeddb.js";
   import { studyStore } from "../modules/store.js";
+  import { createEventDispatcher } from "svelte";
 
   export let _id,
     studyName,
@@ -13,9 +14,17 @@
     maximumStudyDurationPerPerson,
     earliestBeginOfDataGathering,
     latestBeginOfDataGathering;
+
+  const dispatch = createEventDispatcher();
+  function showVariables() {
+    dispatch("showVariables", { studyId: _id, studyName });
+  }
+
   let taskCount = tasks.length;
   let responses = 0;
   let userCount = 0;
+
+  let variableCount = 0;
 
   //calc last day of study
   console.log(latestBeginOfDataGathering);
@@ -48,6 +57,17 @@
     const count = e.target.result;
     console.log("user count:", count);
     userCount = count;
+  };
+
+  res = db
+    .transaction("StudyVariables")
+    .objectStore("StudyVariables")
+    .index("studyId")
+    .count(_id);
+  res.onsuccess = e => {
+    const count = e.target.result;
+    console.log("var count:", count);
+    variableCount = count;
   };
 
   function deleteStudy() {
@@ -107,7 +127,9 @@
     height: 100%;
   }
   .created {
-    margin-top: 0.5rem;
+    position: absolute;
+    top: 2.4rem;
+    left: 25%;
     font-size: 0.7rem;
     font-style: italic;
     color: rgb(172, 172, 172);
@@ -136,13 +158,23 @@
   .card:hover > .delete {
     opacity: 1;
   }
+  .mainInfo {
+    padding-top: 0.25rem;
+  }
+  .vars {
+    cursor: pointer;
+    text-decoration-line: initial;
+  }
+  .vars:hover {
+    text-decoration-line: underline;
+  }
 </style>
 
 <div class="card" in:fade={{ duration: 400 }}>
   <div class="delete" on:click={deleteStudy}>
     <svg style="width:24px;height:24px;" viewBox="0 0 24 24">
       <path
-        fill="#999"
+        fill="#777"
         d="M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59
         20,12C20,16.41 16.41,20 12,20M12,2C6.47,2 2,6.47 2,12C2,17.53 6.47,22
         12,22C17.53,22 22,17.53 22,12C22,6.47 17.53,2
@@ -150,7 +182,12 @@
     </svg>
   </div>
   <h4>{studyName}</h4>
-  <div class="mainInfo">Users: {userCount} Responses: {responses}</div>
+  <div class="mainInfo">
+    Users: {userCount} Responses: {responses}
+    <span class="vars" on:click={showVariables}>
+      Variables: {variableCount}
+    </span>
+  </div>
   <div class="date">
     <span>Start:</span>
      {formatDate(new Date(earliestBeginOfDataGathering))}

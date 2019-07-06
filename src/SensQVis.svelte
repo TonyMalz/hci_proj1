@@ -52,6 +52,7 @@
   }
 
   section {
+    position: relative;
     padding: 1em;
     grid-area: content;
     background: var(--color-content);
