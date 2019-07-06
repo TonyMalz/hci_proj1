@@ -188,7 +188,7 @@
 
                 // DONE
               } // end of task result import
-              alert("Study results were imported");
+              alert(`Study results for "${study.studyName}" were imported`);
             }
           } catch (error) {
             console.error(`Error importing ${file.name}: `, error);

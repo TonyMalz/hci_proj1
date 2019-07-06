@@ -1,6 +1,6 @@
 import { studyStore } from './store.js'
 
-const dbName = "senseQ"
+export const dbName = "senseQ"
 const dbVersion = 1
 
 let request = window.indexedDB.open(dbName, dbVersion)

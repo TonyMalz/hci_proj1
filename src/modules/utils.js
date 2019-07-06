@@ -15,6 +15,9 @@ export function formatDate(date) {
     minutes = minutes < 10 ? '0' + minutes : minutes;
     dayOfMonth = dayOfMonth < 10 ? '0' + dayOfMonth : dayOfMonth;
 
+    if (diffMs < 0) {
+        return `${dayOfMonth}.${month}.'${year} ${hour}:${minutes}`
+    }
     if (diffSec < 1) {
         return 'right now';
     } else if (diffMin < 1) {
