@@ -1,29 +1,30 @@
 <script>
   import { db } from "../modules/indexeddb.js";
-  import { onMount } from "svelte";
 
   export let studyId = 0;
   export let studyName = "";
   let variables = [];
 
-  onMount(() => {
-    if (studyId) {
-      const res = db
-        .transaction("StudyVariables")
-        .objectStore("StudyVariables")
-        .getAll();
-      res.onsuccess = e => {
-        variables = e.target.result;
-        console.log(vars);
-      };
-    }
-  });
+  if (studyId) {
+    const res = db
+      .transaction("StudyVariables")
+      .objectStore("StudyVariables")
+      .getAll();
+    res.onsuccess = e => {
+      variables = e.target.result;
+    };
+  }
+
+  function ucFirst(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
 </script>
 
 <style>
   .container {
     position: relative;
     padding: 1em;
+    padding-bottom: 2em;
   }
   table {
     border-collapse: collapse;
@@ -58,7 +59,7 @@
       <tr>
         <td class="name"> {v.variableName} </td>
         <td class="label"> {v.variableLabel} </td>
-        <td class="measure"> {v.measure} </td>
+        <td class="measure"> {ucFirst(v.measure)} </td>
       </tr>
     {/each}
   </table>

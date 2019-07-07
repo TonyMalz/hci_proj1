@@ -19,6 +19,9 @@
   function showVariables() {
     dispatch("showVariables", { studyId: _id, studyName });
   }
+  function showUsers() {
+    dispatch("showUsers", { studyId: _id, studyName });
+  }
 
   let taskCount = tasks.length;
   let responses = 0;
@@ -183,7 +186,8 @@
   </div>
   <h4>{studyName}</h4>
   <div class="mainInfo">
-    Users: {userCount} Responses: {responses}
+    <span class="vars" on:click={showUsers}>Users: {userCount}</span>
+    Responses: {responses}
     <span class="vars" on:click={showVariables}>
       Variables: {variableCount}
     </span>

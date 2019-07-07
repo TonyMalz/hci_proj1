@@ -3,6 +3,7 @@
   import StudyImporter from "../components/StudyImporter.svelte";
   import StudyCard from "../components/StudyCard.svelte";
   import StudyVariables from "../components/StudyVariables.svelte";
+  import StudyUsers from "../components/StudyUsers.svelte";
   import { studyStore } from "../modules/store.js";
   import { dbName } from "../modules/indexeddb.js";
 
@@ -14,12 +15,16 @@
     location.reload(true);
   }
 
-  let varData = {};
-  let toggle = false;
+  let studyData = {};
+  let toggleVars = false;
   function showVars(event) {
-    varData = event.detail;
-    console.log(varData);
-    toggle = true;
+    studyData = event.detail;
+    toggleVars = true;
+  }
+  let toggleUsers = false;
+  function showUsers(event) {
+    studyData = event.detail;
+    toggleUsers = true;
   }
 </script>
 
@@ -55,25 +60,35 @@
   }
   .close {
     position: absolute;
-    right: 0.5rem;
-    top: 0.3rem;
+    right: 1rem;
+    top: 0.5rem;
     cursor: pointer;
     font-size: 0.7rem;
     font-weight: 400;
   }
 </style>
 
-{#if toggle}
+{#if toggleVars}
   <div class="varInfo" transition:fly={{ x: -200, duration: 200 }}>
-    <StudyVariables {...varData} />
-    <div class="close" on:click={() => (toggle = false)}>x close</div>
+    <StudyVariables {...studyData} />
+    <div class="close" on:click={() => (toggleVars = false)}>x close</div>
+  </div>
+{/if}
+
+{#if toggleUsers}
+  <div class="varInfo" transition:fly={{ x: -200, duration: 200 }}>
+    <StudyUsers {...studyData} />
+    <div class="close" on:click={() => (toggleUsers = false)}>x close</div>
   </div>
 {/if}
 
 <div class="container" in:fade={{ duration: 300 }}>
   {#each $studyStore as study}
     <div class="study">
-      <StudyCard {...study} on:showVariables={showVars} />
+      <StudyCard
+        {...study}
+        on:showVariables={showVars}
+        on:showUsers={showUsers} />
     </div>
   {/each}
   <div class="study">
