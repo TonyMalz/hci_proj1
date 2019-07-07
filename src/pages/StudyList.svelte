@@ -4,6 +4,7 @@
   import StudyCard from "../components/StudyCard.svelte";
   import StudyVariables from "../components/StudyVariables.svelte";
   import StudyUsers from "../components/StudyUsers.svelte";
+  import StudyResponses from "../components/StudyResponses.svelte";
   import { studyStore } from "../modules/store.js";
   import { dbName } from "../modules/indexeddb.js";
 
@@ -25,6 +26,11 @@
   function showUsers(event) {
     studyData = event.detail;
     toggleUsers = true;
+  }
+  let toggleResponses = false;
+  function showResponses(event) {
+    studyData = event.detail;
+    toggleResponses = true;
   }
 </script>
 
@@ -82,12 +88,20 @@
   </div>
 {/if}
 
+{#if toggleResponses}
+  <div class="varInfo" transition:fly={{ x: -200, duration: 200 }}>
+    <StudyResponses {...studyData} />
+    <div class="close" on:click={() => (toggleResponses = false)}>x close</div>
+  </div>
+{/if}
+
 <div class="container" in:fade={{ duration: 300 }}>
   {#each $studyStore as study}
     <div class="study">
       <StudyCard
         {...study}
         on:showVariables={showVars}
+        on:showResponses={showResponses}
         on:showUsers={showUsers} />
     </div>
   {/each}

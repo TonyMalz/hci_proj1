@@ -1,30 +1,20 @@
 <script>
   import { db } from "../modules/indexeddb.js";
+  import { formatDate } from "../modules/utils.js";
 
   export let studyId = 0;
   export let studyName = "";
-  let users = [];
-  const userMap = new Map();
+  let responses = [];
   if (studyId) {
-    const tx = db.transaction(["Users", "Demographics"]);
-    const res = tx
-      .objectStore("Users")
+    const res = db
+      .transaction("StudyResponses")
+      .objectStore("StudyResponses")
       .index("studyId")
       .getAll(studyId);
     res.onsuccess = e => {
-      const studyUsers = e.target.result;
-      for (const userData of studyUsers) {
-        const userId = userData.userId;
-
-        const res = tx
-          .objectStore("Demographics")
-          .index("userId")
-          .getAll(userId);
-        res.onsuccess = e => {
-          const demographics = e.target.result;
-          userMap.set(userId, { demographics });
-          users = [...userMap];
-        };
+      const userResponses = e.target.result;
+      for (const response of userResponses) {
+        responses = [...responses, response];
       }
     };
   }
@@ -56,21 +46,30 @@
 
 <div class="container">
   <p>
-    Users of
+    Responses of
     <strong>{studyName}</strong>
   </p>
   <table>
     <tr>
       <th>User Id</th>
-      <th>Demographics</th>
+      <th>Task</th>
+      <th>Date</th>
+      <th>Results</th>
     </tr>
-    {#each users as data}
+    {#each responses as response}
       <tr>
-        <td> {data[0]} </td>
+        <td> {response.userId} </td>
+        <td> {response.taskName} </td>
         <td>
-          {#each data[1].demographics as demo}
-            {demo.variableName}: {demo.value}
-            <br />
+           {formatDate(new Date(response.startDate))} - {formatDate(new Date(response.endDate))}
+
+        </td>
+        <td>
+          {#each response.stepResults as steps}
+            {#each steps.stepItemResults as item}
+              {item.variableName}: {item.value}
+              <br />
+            {/each}
           {/each}
         </td>
       </tr>
