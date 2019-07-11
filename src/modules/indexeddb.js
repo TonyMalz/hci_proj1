@@ -71,14 +71,20 @@ request.onsuccess = (e) => {
     db = e.target.result
     db.onerror = globalError
 
-    // get current studies (order by date imported asc)
-    const res = db.transaction("Studies").objectStore("Studies").index("created").openCursor(null, "next")
+    // // get current studies (order by date imported asc)
+    // const res = db.transaction("Studies").objectStore("Studies").index("created").openCursor(null, "next")
+    // res.onsuccess = (e) => {
+    //     const cursor = e.target.result;
+    //     if (cursor) {
+    //         studyStore.update(studies => [...studies, cursor.value]);
+    //         cursor.continue()
+    //     }
+    // }
+
+    // get current studies
+    const res = db.transaction("Studies").objectStore("Studies").getAll()
     res.onsuccess = (e) => {
-        const cursor = e.target.result;
-        if (cursor) {
-            studyStore.update(studies => [...studies, cursor.value]);
-            cursor.continue()
-        }
+        studyStore.set(e.target.result);
     }
 }
 
