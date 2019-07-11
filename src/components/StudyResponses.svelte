@@ -62,17 +62,22 @@
       <tr>
         <td> {response.userId} </td>
         <td> {response.taskName} </td>
-        <td>
-           {formatDate(new Date(response.startDate))} - {formatDate(new Date(response.endDate))}
-
+        <td nowrap>
+          Start: {formatDate(new Date(response.startDate))}
+          <br />
+           End: {formatDate(new Date(response.endDate))}
         </td>
         <td>
-          {#each response.stepResults as steps}
-            {#each steps.stepItemResults as item}
-              {item.variableName}: {item.value}
-              <br />
+          <table style="width:100%">
+            {#each response.stepResults as steps}
+              {#each steps.stepItemResults as item}
+                <tr>
+                  <td style="width:65%">{item.variableName}:</td>
+                  <td>{item.value}</td>
+                </tr>
+              {/each}
             {/each}
-          {/each}
+          </table>
         </td>
       </tr>
     {/each}

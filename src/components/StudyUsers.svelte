@@ -70,10 +70,14 @@
       <tr>
         <td> {data[0]} </td>
         <td>
-          {#each data[1].demographics as demo}
-            {demo.variableName}: {demo.value}
-            <br />
-          {/each}
+          <table>
+            {#each data[1].demographics as demo}
+              <tr>
+                <td>{demo.variableName}:</td>
+                <td> {demo.value}</td>
+              </tr>
+            {/each}
+          </table>
         </td>
       </tr>
     {/each}

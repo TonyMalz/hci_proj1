@@ -4496,26 +4496,35 @@ function get_each_context$2(ctx, list, i) {
 	return child_ctx;
 }
 
-// (73:10) {#each data[1].demographics as demo}
+// (74:12) {#each data[1].demographics as demo}
 function create_each_block_1(ctx) {
-	var t0_value = ctx.demo.variableName, t0, t1, t2_value = ctx.demo.value, t2, t3, br;
+	var tr, td0, t0_value = ctx.demo.variableName, t0, t1, t2, td1, t3_value = ctx.demo.value, t3;
 
 	return {
 		c: function create() {
+			tr = element("tr");
+			td0 = element("td");
 			t0 = text(t0_value);
-			t1 = text(": ");
-			t2 = text(t2_value);
-			t3 = space();
-			br = element("br");
-			add_location(br, file$g, 74, 12, 1614);
+			t1 = text(":");
+			t2 = space();
+			td1 = element("td");
+			t3 = text(t3_value);
+			td0.className = "svelte-vhmrc0";
+			add_location(td0, file$g, 75, 16, 1612);
+			td1.className = "svelte-vhmrc0";
+			add_location(td1, file$g, 76, 16, 1659);
+			tr.className = "svelte-vhmrc0";
+			add_location(tr, file$g, 74, 14, 1590);
 		},
 
 		m: function mount(target, anchor) {
-			insert(target, t0, anchor);
-			insert(target, t1, anchor);
-			insert(target, t2, anchor);
-			insert(target, t3, anchor);
-			insert(target, br, anchor);
+			insert(target, tr, anchor);
+			append(tr, td0);
+			append(td0, t0);
+			append(td0, t1);
+			append(tr, t2);
+			append(tr, td1);
+			append(td1, t3);
 		},
 
 		p: function update(changed, ctx) {
@@ -4523,18 +4532,14 @@ function create_each_block_1(ctx) {
 				set_data(t0, t0_value);
 			}
 
-			if ((changed.users) && t2_value !== (t2_value = ctx.demo.value)) {
-				set_data(t2, t2_value);
+			if ((changed.users) && t3_value !== (t3_value = ctx.demo.value)) {
+				set_data(t3, t3_value);
 			}
 		},
 
 		d: function destroy(detaching) {
 			if (detaching) {
-				detach(t0);
-				detach(t1);
-				detach(t2);
-				detach(t3);
-				detach(br);
+				detach(tr);
 			}
 		}
 	};
@@ -4542,7 +4547,7 @@ function create_each_block_1(ctx) {
 
 // (69:4) {#each users as data}
 function create_each_block$2(ctx) {
-	var tr, td0, t0_value = ctx.data[0], t0, t1, td1, t2;
+	var tr, td0, t0_value = ctx.data[0], t0, t1, td1, table, t2;
 
 	var each_value_1 = ctx.data[1].demographics;
 
@@ -4559,6 +4564,7 @@ function create_each_block$2(ctx) {
 			t0 = text(t0_value);
 			t1 = space();
 			td1 = element("td");
+			table = element("table");
 
 			for (var i = 0; i < each_blocks.length; i += 1) {
 				each_blocks[i].c();
@@ -4567,6 +4573,8 @@ function create_each_block$2(ctx) {
 			t2 = space();
 			td0.className = "svelte-vhmrc0";
 			add_location(td0, file$g, 70, 8, 1471);
+			table.className = "svelte-vhmrc0";
+			add_location(table, file$g, 72, 10, 1517);
 			td1.className = "svelte-vhmrc0";
 			add_location(td1, file$g, 71, 8, 1501);
 			tr.className = "svelte-vhmrc0";
@@ -4579,9 +4587,10 @@ function create_each_block$2(ctx) {
 			append(td0, t0);
 			append(tr, t1);
 			append(tr, td1);
+			append(td1, table);
 
 			for (var i = 0; i < each_blocks.length; i += 1) {
-				each_blocks[i].m(td1, null);
+				each_blocks[i].m(table, null);
 			}
 
 			append(tr, t2);
@@ -4603,7 +4612,7 @@ function create_each_block$2(ctx) {
 					} else {
 						each_blocks[i] = create_each_block_1(child_ctx);
 						each_blocks[i].c();
-						each_blocks[i].m(td1, null);
+						each_blocks[i].m(table, null);
 					}
 				}
 
@@ -4818,26 +4827,36 @@ function get_each_context$3(ctx, list, i) {
 	return child_ctx;
 }
 
-// (71:12) {#each steps.stepItemResults as item}
+// (73:14) {#each steps.stepItemResults as item}
 function create_each_block_2(ctx) {
-	var t0_value = ctx.item.variableName, t0, t1, t2_value = ctx.item.value, t2, t3, br;
+	var tr, td0, t0_value = ctx.item.variableName, t0, t1, t2, td1, t3_value = ctx.item.value, t3;
 
 	return {
 		c: function create() {
+			tr = element("tr");
+			td0 = element("td");
 			t0 = text(t0_value);
-			t1 = text(": ");
-			t2 = text(t2_value);
-			t3 = space();
-			br = element("br");
-			add_location(br, file$h, 72, 14, 1625);
+			t1 = text(":");
+			t2 = space();
+			td1 = element("td");
+			t3 = text(t3_value);
+			set_style(td0, "width", "65%");
+			td0.className = "svelte-vhmrc0";
+			add_location(td0, file$h, 74, 18, 1688);
+			td1.className = "svelte-vhmrc0";
+			add_location(td1, file$h, 75, 18, 1755);
+			tr.className = "svelte-vhmrc0";
+			add_location(tr, file$h, 73, 16, 1664);
 		},
 
 		m: function mount(target, anchor) {
-			insert(target, t0, anchor);
-			insert(target, t1, anchor);
-			insert(target, t2, anchor);
-			insert(target, t3, anchor);
-			insert(target, br, anchor);
+			insert(target, tr, anchor);
+			append(tr, td0);
+			append(td0, t0);
+			append(td0, t1);
+			append(tr, t2);
+			append(tr, td1);
+			append(td1, t3);
 		},
 
 		p: function update(changed, ctx) {
@@ -4845,24 +4864,20 @@ function create_each_block_2(ctx) {
 				set_data(t0, t0_value);
 			}
 
-			if ((changed.responses) && t2_value !== (t2_value = ctx.item.value)) {
-				set_data(t2, t2_value);
+			if ((changed.responses) && t3_value !== (t3_value = ctx.item.value)) {
+				set_data(t3, t3_value);
 			}
 		},
 
 		d: function destroy(detaching) {
 			if (detaching) {
-				detach(t0);
-				detach(t1);
-				detach(t2);
-				detach(t3);
-				detach(br);
+				detach(tr);
 			}
 		}
 	};
 }
 
-// (70:10) {#each response.stepResults as steps}
+// (72:12) {#each response.stepResults as steps}
 function create_each_block_1$1(ctx) {
 	var each_1_anchor;
 
@@ -4926,7 +4941,7 @@ function create_each_block_1$1(ctx) {
 
 // (61:4) {#each responses as response}
 function create_each_block$3(ctx) {
-	var tr, td0, t0_value = ctx.response.userId, t0, t1, td1, t2_value = ctx.response.taskName, t2, t3, td2, t4_value = formatDate(new Date(ctx.response.startDate)), t4, t5, t6_value = formatDate(new Date(ctx.response.endDate)), t6, t7, td3, t8;
+	var tr, td0, t0_value = ctx.response.userId, t0, t1, td1, t2_value = ctx.response.taskName, t2, t3, td2, t4, t5_value = formatDate(new Date(ctx.response.startDate)), t5, t6, br, t7, t8_value = formatDate(new Date(ctx.response.endDate)), t8, t9, td3, table, t10;
 
 	var each_value_1 = ctx.response.stepResults;
 
@@ -4946,25 +4961,34 @@ function create_each_block$3(ctx) {
 			t2 = text(t2_value);
 			t3 = space();
 			td2 = element("td");
-			t4 = text(t4_value);
-			t5 = text(" - ");
-			t6 = text(t6_value);
-			t7 = space();
+			t4 = text("Start: ");
+			t5 = text(t5_value);
+			t6 = space();
+			br = element("br");
+			t7 = text("\r\n           End: ");
+			t8 = text(t8_value);
+			t9 = space();
 			td3 = element("td");
+			table = element("table");
 
 			for (var i = 0; i < each_blocks.length; i += 1) {
 				each_blocks[i].c();
 			}
 
-			t8 = space();
+			t10 = space();
 			td0.className = "svelte-vhmrc0";
 			add_location(td0, file$h, 62, 8, 1249);
 			td1.className = "svelte-vhmrc0";
 			add_location(td1, file$h, 63, 8, 1287);
+			add_location(br, file$h, 66, 10, 1411);
+			attr(td2, "nowrap", "");
 			td2.className = "svelte-vhmrc0";
 			add_location(td2, file$h, 64, 8, 1327);
+			set_style(table, "width", "100%");
+			table.className = "svelte-vhmrc0";
+			add_location(table, file$h, 70, 10, 1516);
 			td3.className = "svelte-vhmrc0";
-			add_location(td3, file$h, 68, 8, 1456);
+			add_location(td3, file$h, 69, 8, 1500);
 			tr.className = "svelte-vhmrc0";
 			add_location(tr, file$h, 61, 6, 1235);
 		},
@@ -4981,14 +5005,18 @@ function create_each_block$3(ctx) {
 			append(td2, t4);
 			append(td2, t5);
 			append(td2, t6);
-			append(tr, t7);
+			append(td2, br);
+			append(td2, t7);
+			append(td2, t8);
+			append(tr, t9);
 			append(tr, td3);
+			append(td3, table);
 
 			for (var i = 0; i < each_blocks.length; i += 1) {
-				each_blocks[i].m(td3, null);
+				each_blocks[i].m(table, null);
 			}
 
-			append(tr, t8);
+			append(tr, t10);
 		},
 
 		p: function update(changed, ctx) {
@@ -5000,12 +5028,12 @@ function create_each_block$3(ctx) {
 				set_data(t2, t2_value);
 			}
 
-			if ((changed.responses) && t4_value !== (t4_value = formatDate(new Date(ctx.response.startDate)))) {
-				set_data(t4, t4_value);
+			if ((changed.responses) && t5_value !== (t5_value = formatDate(new Date(ctx.response.startDate)))) {
+				set_data(t5, t5_value);
 			}
 
-			if ((changed.responses) && t6_value !== (t6_value = formatDate(new Date(ctx.response.endDate)))) {
-				set_data(t6, t6_value);
+			if ((changed.responses) && t8_value !== (t8_value = formatDate(new Date(ctx.response.endDate)))) {
+				set_data(t8, t8_value);
 			}
 
 			if (changed.responses) {
@@ -5019,7 +5047,7 @@ function create_each_block$3(ctx) {
 					} else {
 						each_blocks[i] = create_each_block_1$1(child_ctx);
 						each_blocks[i].c();
-						each_blocks[i].m(td3, null);
+						each_blocks[i].m(table, null);
 					}
 				}
 
