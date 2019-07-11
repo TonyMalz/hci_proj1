@@ -9,7 +9,8 @@
     const res = db
       .transaction("StudyVariables")
       .objectStore("StudyVariables")
-      .getAll();
+      .index("studyId")
+      .getAll(studyId);
     res.onsuccess = e => {
       variables = e.target.result;
     };

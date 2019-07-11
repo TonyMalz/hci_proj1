@@ -3512,19 +3512,19 @@ function create_fragment$d(ctx) {
 			input.multiple = true;
 			input.accept = "application/json";
 			input.className = "svelte-1ftga8c";
-			add_location(input, file$d, 246, 0, 9034);
+			add_location(input, file$d, 246, 0, 9036);
 			attr(path, "fill", "white");
 			attr(path, "d", "M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3\r\n        11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8\r\n        2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6\r\n        1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4\r\n        1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z");
-			add_location(path, file$d, 254, 6, 9275);
+			add_location(path, file$d, 254, 6, 9277);
 			attr(svg, "xmlns", "http://www.w3.org/2000/svg");
 			attr(svg, "width", "2em");
 			attr(svg, "height", "1.8em");
 			attr(svg, "viewBox", "0 0 20 17");
-			add_location(svg, file$d, 249, 4, 9152);
-			add_location(figure, file$d, 248, 2, 9138);
+			add_location(svg, file$d, 249, 4, 9154);
+			add_location(figure, file$d, 248, 2, 9140);
 			label.htmlFor = "studyImport";
 			label.className = "svelte-1ftga8c";
-			add_location(label, file$d, 247, 0, 9109);
+			add_location(label, file$d, 247, 0, 9111);
 		},
 
 		l: function claim(nodes) {
@@ -3757,7 +3757,7 @@ function instance$a($$self) {
 
                 // DONE
               } // end of task result import
-              alert(`Study results for "${study.studyName}" were imported`);
+              //alert(`Study results for "${study.studyName}" were imported`);
             }
           } catch (error) {
             console.error(`Error importing ${file.name}: `, error);
@@ -3813,7 +3813,7 @@ function formatDate(date) {
 const file$e = "src\\components\\StudyCard.svelte";
 
 function create_fragment$e(ctx) {
-	var div4, div0, svg, path, t0, h4, t1, t2, div1, span0, t3, t4, t5, span1, t6, t7, t8, span2, t9, t10, t11, div2, span3, t13, t14_value = formatDate(new ctx.Date(ctx.earliestBeginOfDataGathering)), t14, t15, span4, t17, t18_value = formatDate(ctx.endDate), t18, t19, div3, t20, t21_value = formatDate(ctx.__created), t21, div4_intro, dispose;
+	var div4, div0, svg, path, t0, h4, t1, t2, div1, span0, t3, t4, t5, span1, t6, t7, t8, br, t9, span2, t10, t11, t12, div2, span3, t14, t15_value = formatDate(new ctx.Date(ctx.earliestBeginOfDataGathering)), t15, t16, span4, t18, t19_value = formatDate(ctx.endDate), t19, t20, div3, t21, t22_value = formatDate(ctx.__created), t22, div4_intro, dispose;
 
 	return {
 		c: function create() {
@@ -3834,24 +3834,26 @@ function create_fragment$e(ctx) {
 			t6 = text("Responses: ");
 			t7 = text(ctx.responses);
 			t8 = space();
+			br = element("br");
+			t9 = space();
 			span2 = element("span");
-			t9 = text("Variables: ");
-			t10 = text(ctx.variableCount);
-			t11 = space();
+			t10 = text("Variables: ");
+			t11 = text(ctx.variableCount);
+			t12 = space();
 			div2 = element("div");
 			span3 = element("span");
 			span3.textContent = "Start:";
-			t13 = space();
-			t14 = text(t14_value);
-			t15 = space();
+			t14 = space();
+			t15 = text(t15_value);
+			t16 = space();
 			span4 = element("span");
 			span4.textContent = "End:";
-			t17 = space();
-			t18 = text(t18_value);
-			t19 = space();
+			t18 = space();
+			t19 = text(t19_value);
+			t20 = space();
 			div3 = element("div");
-			t20 = text("imported: ");
-			t21 = text(t21_value);
+			t21 = text("imported: ");
+			t22 = text(t22_value);
 			attr(path, "fill", "#777");
 			attr(path, "d", "M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59\r\n        20,12C20,16.41 16.41,20 12,20M12,2C6.47,2 2,6.47 2,12C2,17.53 6.47,22\r\n        12,22C17.53,22 22,17.53 22,12C22,6.47 17.53,2\r\n        12,2M14.59,8L12,10.59L9.41,8L8,9.41L10.59,12L8,14.59L9.41,16L12,13.41L14.59,16L16,14.59L13.41,12L16,9.41L14.59,8Z");
 			add_location(path, file$e, 181, 6, 4317);
@@ -3867,18 +3869,19 @@ function create_fragment$e(ctx) {
 			add_location(span0, file$e, 191, 4, 4757);
 			span1.className = "vars svelte-cjkha5";
 			add_location(span1, file$e, 192, 4, 4828);
+			add_location(br, file$e, 193, 4, 4907);
 			span2.className = "vars svelte-cjkha5";
-			add_location(span2, file$e, 193, 4, 4907);
+			add_location(span2, file$e, 194, 4, 4919);
 			div1.className = "mainInfo svelte-cjkha5";
 			add_location(div1, file$e, 190, 2, 4729);
 			span3.className = "svelte-cjkha5";
-			add_location(span3, file$e, 198, 4, 5036);
+			add_location(span3, file$e, 199, 4, 5048);
 			span4.className = "svelte-cjkha5";
-			add_location(span4, file$e, 200, 4, 5120);
+			add_location(span4, file$e, 201, 4, 5132);
 			div2.className = "date svelte-cjkha5";
-			add_location(div2, file$e, 197, 2, 5012);
+			add_location(div2, file$e, 198, 2, 5024);
 			div3.className = "created svelte-cjkha5";
-			add_location(div3, file$e, 203, 2, 5179);
+			add_location(div3, file$e, 204, 2, 5191);
 			div4.className = "card svelte-cjkha5";
 			add_location(div4, file$e, 178, 0, 4153);
 
@@ -3912,22 +3915,24 @@ function create_fragment$e(ctx) {
 			append(span1, t6);
 			append(span1, t7);
 			append(div1, t8);
+			append(div1, br);
+			append(div1, t9);
 			append(div1, span2);
-			append(span2, t9);
 			append(span2, t10);
-			append(div4, t11);
+			append(span2, t11);
+			append(div4, t12);
 			append(div4, div2);
 			append(div2, span3);
-			append(div2, t13);
 			append(div2, t14);
 			append(div2, t15);
+			append(div2, t16);
 			append(div2, span4);
-			append(div2, t17);
 			append(div2, t18);
-			append(div4, t19);
+			append(div2, t19);
+			append(div4, t20);
 			append(div4, div3);
-			append(div3, t20);
 			append(div3, t21);
+			append(div3, t22);
 		},
 
 		p: function update(changed, ctx) {
@@ -3944,15 +3949,15 @@ function create_fragment$e(ctx) {
 			}
 
 			if (changed.variableCount) {
-				set_data(t10, ctx.variableCount);
+				set_data(t11, ctx.variableCount);
 			}
 
-			if ((changed.earliestBeginOfDataGathering) && t14_value !== (t14_value = formatDate(new ctx.Date(ctx.earliestBeginOfDataGathering)))) {
-				set_data(t14, t14_value);
+			if ((changed.earliestBeginOfDataGathering) && t15_value !== (t15_value = formatDate(new ctx.Date(ctx.earliestBeginOfDataGathering)))) {
+				set_data(t15, t15_value);
 			}
 
-			if ((changed.__created) && t21_value !== (t21_value = formatDate(ctx.__created))) {
-				set_data(t21, t21_value);
+			if ((changed.__created) && t22_value !== (t22_value = formatDate(ctx.__created))) {
+				set_data(t22, t22_value);
 			}
 		},
 
@@ -4244,7 +4249,7 @@ function get_each_context$1(ctx, list, i) {
 	return child_ctx;
 }
 
-// (58:4) {#each variables as v}
+// (59:4) {#each variables as v}
 function create_each_block$1(ctx) {
 	var tr, td0, t0_value = ctx.v.variableName, t0, t1, td1, t2_value = ctx.v.variableLabel, t2, t3, td2, t4_value = ucFirst(ctx.v.measure), t4, t5;
 
@@ -4261,13 +4266,13 @@ function create_each_block$1(ctx) {
 			t4 = text(t4_value);
 			t5 = space();
 			td0.className = "name svelte-1rsokqv";
-			add_location(td0, file$f, 59, 8, 1080);
+			add_location(td0, file$f, 60, 8, 1112);
 			td1.className = "label svelte-1rsokqv";
-			add_location(td1, file$f, 60, 8, 1130);
+			add_location(td1, file$f, 61, 8, 1162);
 			td2.className = "measure svelte-1rsokqv";
-			add_location(td2, file$f, 61, 8, 1182);
+			add_location(td2, file$f, 62, 8, 1214);
 			tr.className = "svelte-1rsokqv";
-			add_location(tr, file$f, 58, 6, 1066);
+			add_location(tr, file$f, 59, 6, 1098);
 		},
 
 		m: function mount(target, anchor) {
@@ -4339,20 +4344,20 @@ function create_fragment$f(ctx) {
 			for (var i = 0; i < each_blocks.length; i += 1) {
 				each_blocks[i].c();
 			}
-			add_location(strong, file$f, 49, 4, 895);
-			add_location(p, file$f, 47, 2, 868);
+			add_location(strong, file$f, 50, 4, 927);
+			add_location(p, file$f, 48, 2, 900);
 			th0.className = "svelte-1rsokqv";
-			add_location(th0, file$f, 53, 6, 960);
+			add_location(th0, file$f, 54, 6, 992);
 			th1.className = "svelte-1rsokqv";
-			add_location(th1, file$f, 54, 6, 981);
+			add_location(th1, file$f, 55, 6, 1013);
 			th2.className = "svelte-1rsokqv";
-			add_location(th2, file$f, 55, 6, 1003);
+			add_location(th2, file$f, 56, 6, 1035);
 			tr.className = "svelte-1rsokqv";
-			add_location(tr, file$f, 52, 4, 948);
+			add_location(tr, file$f, 53, 4, 980);
 			table.className = "svelte-1rsokqv";
-			add_location(table, file$f, 51, 2, 935);
+			add_location(table, file$f, 52, 2, 967);
 			div.className = "container svelte-1rsokqv";
-			add_location(div, file$f, 46, 0, 841);
+			add_location(div, file$f, 47, 0, 873);
 		},
 
 		l: function claim(nodes) {
@@ -4432,7 +4437,8 @@ function instance$c($$self, $$props, $$invalidate) {
     const res = db
       .transaction("StudyVariables")
       .objectStore("StudyVariables")
-      .getAll();
+      .index("studyId")
+      .getAll(studyId);
     res.onsuccess = e => {
       $$invalidate('variables', variables = e.target.result);
     };

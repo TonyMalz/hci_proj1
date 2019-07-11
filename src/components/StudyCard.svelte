@@ -191,6 +191,7 @@
   <div class="mainInfo">
     <span class="vars" on:click={showUsers}>Users: {userCount}</span>
     <span class="vars" on:click={showResponses}>Responses: {responses}</span>
+    <br />
     <span class="vars" on:click={showVariables}>
       Variables: {variableCount}
     </span>
