@@ -1,5 +1,6 @@
 <script>
   import { fly, fade } from "svelte/transition";
+  import { flip } from "svelte/animate";
   import StudyImporter from "../components/StudyImporter.svelte";
   import StudyCard from "../components/StudyCard.svelte";
   import StudyVariables from "../components/StudyVariables.svelte";
@@ -12,26 +13,23 @@
     if (!confirm("Drop current database?")) return;
     console.log("delete db", dbName);
 
-    const res = window.indexedDB.deleteDatabase(dbName);
+    window.indexedDB.deleteDatabase(dbName);
     location.reload(true);
   }
 
   let studyData = {};
   let toggleVars = false;
   function showVars(event) {
-    document.onkeyup = closeDetailView;
     studyData = event.detail;
     toggleVars = true;
   }
   let toggleUsers = false;
   function showUsers(event) {
-    document.onkeyup = closeDetailView;
     studyData = event.detail;
     toggleUsers = true;
   }
   let toggleResponses = false;
   function showResponses(event) {
-    document.onkeyup = closeDetailView;
     studyData = event.detail;
     toggleResponses = true;
   }
@@ -73,7 +71,8 @@
     left: 0;
     z-index: 1;
     border-radius: 0.25rem;
-    box-shadow: 1px 3px 6px 0px rgb(64, 64, 64);
+    box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
   }
   .close {
     position: absolute;
@@ -85,6 +84,8 @@
     font-weight: 400;
   }
 </style>
+
+<svelte:window on:keyup={closeDetailView} />
 
 {#if toggleVars}
   <div class="varInfo" transition:fly={{ x: -200, duration: 200 }}>
@@ -108,8 +109,11 @@
 {/if}
 
 <div class="container" in:fade={{ duration: 300 }}>
-  {#each $studyStore as study}
-    <div class="study">
+  {#each $studyStore as study (study._id)}
+    <div
+      animate:flip={{ duration: 300 }}
+      in:fly={{ duration: 300, y: -100 }}
+      class="study">
       <StudyCard
         {...study}
         on:showVariables={showVars}

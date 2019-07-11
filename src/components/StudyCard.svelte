@@ -26,21 +26,16 @@
     dispatch("showResponses", { studyId: _id, studyName });
   }
 
-  let taskCount = tasks.length;
   let responses = 0;
   let userCount = 0;
 
   let variableCount = 0;
 
   //calc last day of study
-  console.log(latestBeginOfDataGathering);
-  console.log(new Date(latestBeginOfDataGathering));
   let days =
     Math.max(minimumStudyDurationPerPerson, maximumStudyDurationPerPerson) || 0;
-  console.log(days);
   let endDate = new Date(latestBeginOfDataGathering);
   endDate.setDate(endDate.getDate() + days);
-  console.log("end date", endDate);
 
   //FIXME: use stores instead of db
   let res = db
@@ -50,7 +45,6 @@
     .count(_id);
   res.onsuccess = e => {
     const count = e.target.result;
-    console.log("response count:", count);
     responses = count;
   };
 
@@ -61,7 +55,6 @@
     .count(_id);
   res.onsuccess = e => {
     const count = e.target.result;
-    console.log("user count:", count);
     userCount = count;
   };
 
@@ -72,7 +65,6 @@
     .count(_id);
   res.onsuccess = e => {
     const count = e.target.result;
-    console.log("var count:", count);
     variableCount = count;
   };
 
@@ -176,7 +168,7 @@
   }
 </style>
 
-<div class="card" in:fade={{ duration: 400 }}>
+<div class="card">
   <div class="delete" on:click={deleteStudy}>
     <svg style="width:24px;height:24px;" viewBox="0 0 24 24">
       <path

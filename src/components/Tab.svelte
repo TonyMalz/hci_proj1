@@ -9,7 +9,7 @@
 
   const dispatch = createEventDispatcher();
   function update() {
-    console.log("blur");
+    // console.log("blur");
     toggleEdit();
     dispatch("notify", title);
   }

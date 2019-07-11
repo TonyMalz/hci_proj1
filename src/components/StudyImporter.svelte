@@ -33,7 +33,7 @@
 
             // import data of each study
             for (let exportData of jsn) {
-              console.log("import study: ", exportData);
+              // console.log("import study: ", exportData);
               // sanity checks:
               if (!exportData.hasOwnProperty("dataSchema")) {
                 console.error("missing prop: dataSchema");

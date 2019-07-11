@@ -7,7 +7,6 @@
   let activeTab = 0;
 
   function activate(tab) {
-    console.log(new Date().toLocaleTimeString() + " activate tab", tab);
     activeTab = tab;
     activeUITab.set(tab);
   }
