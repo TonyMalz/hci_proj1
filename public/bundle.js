@@ -4249,7 +4249,7 @@ function get_each_context$1(ctx, list, i) {
 	return child_ctx;
 }
 
-// (59:4) {#each variables as v}
+// (61:4) {#each variables as v}
 function create_each_block$1(ctx) {
 	var tr, td0, t0_value = ctx.v.variableName, t0, t1, td1, t2_value = ctx.v.variableLabel, t2, t3, td2, t4_value = ucFirst(ctx.v.measure), t4, t5;
 
@@ -4265,14 +4265,14 @@ function create_each_block$1(ctx) {
 			td2 = element("td");
 			t4 = text(t4_value);
 			t5 = space();
-			td0.className = "name svelte-1rsokqv";
-			add_location(td0, file$f, 60, 8, 1112);
-			td1.className = "label svelte-1rsokqv";
-			add_location(td1, file$f, 61, 8, 1162);
-			td2.className = "measure svelte-1rsokqv";
-			add_location(td2, file$f, 62, 8, 1214);
-			tr.className = "svelte-1rsokqv";
-			add_location(tr, file$f, 59, 6, 1098);
+			td0.className = "name svelte-vhmrc0";
+			add_location(td0, file$f, 62, 8, 1154);
+			td1.className = "label svelte-vhmrc0";
+			add_location(td1, file$f, 63, 8, 1204);
+			td2.className = "measure svelte-vhmrc0";
+			add_location(td2, file$f, 64, 8, 1256);
+			tr.className = "svelte-vhmrc0";
+			add_location(tr, file$f, 61, 6, 1140);
 		},
 
 		m: function mount(target, anchor) {
@@ -4344,20 +4344,20 @@ function create_fragment$f(ctx) {
 			for (var i = 0; i < each_blocks.length; i += 1) {
 				each_blocks[i].c();
 			}
-			add_location(strong, file$f, 50, 4, 927);
-			add_location(p, file$f, 48, 2, 900);
-			th0.className = "svelte-1rsokqv";
-			add_location(th0, file$f, 54, 6, 992);
-			th1.className = "svelte-1rsokqv";
-			add_location(th1, file$f, 55, 6, 1013);
-			th2.className = "svelte-1rsokqv";
-			add_location(th2, file$f, 56, 6, 1035);
-			tr.className = "svelte-1rsokqv";
-			add_location(tr, file$f, 53, 4, 980);
-			table.className = "svelte-1rsokqv";
-			add_location(table, file$f, 52, 2, 967);
-			div.className = "container svelte-1rsokqv";
-			add_location(div, file$f, 47, 0, 873);
+			add_location(strong, file$f, 52, 4, 969);
+			add_location(p, file$f, 50, 2, 942);
+			th0.className = "svelte-vhmrc0";
+			add_location(th0, file$f, 56, 6, 1034);
+			th1.className = "svelte-vhmrc0";
+			add_location(th1, file$f, 57, 6, 1055);
+			th2.className = "svelte-vhmrc0";
+			add_location(th2, file$f, 58, 6, 1077);
+			tr.className = "svelte-vhmrc0";
+			add_location(tr, file$f, 55, 4, 1022);
+			table.className = "svelte-vhmrc0";
+			add_location(table, file$f, 54, 2, 1009);
+			div.className = "container svelte-vhmrc0";
+			add_location(div, file$f, 49, 0, 915);
 		},
 
 		l: function claim(nodes) {
@@ -4496,7 +4496,7 @@ function get_each_context$2(ctx, list, i) {
 	return child_ctx;
 }
 
-// (71:10) {#each data[1].demographics as demo}
+// (73:10) {#each data[1].demographics as demo}
 function create_each_block_1(ctx) {
 	var t0_value = ctx.demo.variableName, t0, t1, t2_value = ctx.demo.value, t2, t3, br;
 
@@ -4507,7 +4507,7 @@ function create_each_block_1(ctx) {
 			t2 = text(t2_value);
 			t3 = space();
 			br = element("br");
-			add_location(br, file$g, 72, 12, 1572);
+			add_location(br, file$g, 74, 12, 1614);
 		},
 
 		m: function mount(target, anchor) {
@@ -4540,7 +4540,7 @@ function create_each_block_1(ctx) {
 	};
 }
 
-// (67:4) {#each users as data}
+// (69:4) {#each users as data}
 function create_each_block$2(ctx) {
 	var tr, td0, t0_value = ctx.data[0], t0, t1, td1, t2;
 
@@ -4565,12 +4565,12 @@ function create_each_block$2(ctx) {
 			}
 
 			t2 = space();
-			td0.className = "svelte-1rsokqv";
-			add_location(td0, file$g, 68, 8, 1429);
-			td1.className = "svelte-1rsokqv";
-			add_location(td1, file$g, 69, 8, 1459);
-			tr.className = "svelte-1rsokqv";
-			add_location(tr, file$g, 67, 6, 1415);
+			td0.className = "svelte-vhmrc0";
+			add_location(td0, file$g, 70, 8, 1471);
+			td1.className = "svelte-vhmrc0";
+			add_location(td1, file$g, 71, 8, 1501);
+			tr.className = "svelte-vhmrc0";
+			add_location(tr, file$g, 69, 6, 1457);
 		},
 
 		m: function mount(target, anchor) {
@@ -4655,18 +4655,18 @@ function create_fragment$g(ctx) {
 			for (var i = 0; i < each_blocks.length; i += 1) {
 				each_blocks[i].c();
 			}
-			add_location(strong, file$g, 59, 4, 1259);
-			add_location(p, file$g, 57, 2, 1236);
-			th0.className = "svelte-1rsokqv";
-			add_location(th0, file$g, 63, 6, 1324);
-			th1.className = "svelte-1rsokqv";
-			add_location(th1, file$g, 64, 6, 1348);
-			tr.className = "svelte-1rsokqv";
-			add_location(tr, file$g, 62, 4, 1312);
-			table.className = "svelte-1rsokqv";
-			add_location(table, file$g, 61, 2, 1299);
-			div.className = "container svelte-1rsokqv";
-			add_location(div, file$g, 56, 0, 1209);
+			add_location(strong, file$g, 61, 4, 1301);
+			add_location(p, file$g, 59, 2, 1278);
+			th0.className = "svelte-vhmrc0";
+			add_location(th0, file$g, 65, 6, 1366);
+			th1.className = "svelte-vhmrc0";
+			add_location(th1, file$g, 66, 6, 1390);
+			tr.className = "svelte-vhmrc0";
+			add_location(tr, file$g, 64, 4, 1354);
+			table.className = "svelte-vhmrc0";
+			add_location(table, file$g, 63, 2, 1341);
+			div.className = "container svelte-vhmrc0";
+			add_location(div, file$g, 58, 0, 1251);
 		},
 
 		l: function claim(nodes) {
@@ -4818,7 +4818,7 @@ function get_each_context$3(ctx, list, i) {
 	return child_ctx;
 }
 
-// (69:12) {#each steps.stepItemResults as item}
+// (71:12) {#each steps.stepItemResults as item}
 function create_each_block_2(ctx) {
 	var t0_value = ctx.item.variableName, t0, t1, t2_value = ctx.item.value, t2, t3, br;
 
@@ -4829,7 +4829,7 @@ function create_each_block_2(ctx) {
 			t2 = text(t2_value);
 			t3 = space();
 			br = element("br");
-			add_location(br, file$h, 70, 14, 1583);
+			add_location(br, file$h, 72, 14, 1625);
 		},
 
 		m: function mount(target, anchor) {
@@ -4862,7 +4862,7 @@ function create_each_block_2(ctx) {
 	};
 }
 
-// (68:10) {#each response.stepResults as steps}
+// (70:10) {#each response.stepResults as steps}
 function create_each_block_1$1(ctx) {
 	var each_1_anchor;
 
@@ -4924,7 +4924,7 @@ function create_each_block_1$1(ctx) {
 	};
 }
 
-// (59:4) {#each responses as response}
+// (61:4) {#each responses as response}
 function create_each_block$3(ctx) {
 	var tr, td0, t0_value = ctx.response.userId, t0, t1, td1, t2_value = ctx.response.taskName, t2, t3, td2, t4_value = formatDate(new Date(ctx.response.startDate)), t4, t5, t6_value = formatDate(new Date(ctx.response.endDate)), t6, t7, td3, t8;
 
@@ -4957,16 +4957,16 @@ function create_each_block$3(ctx) {
 			}
 
 			t8 = space();
-			td0.className = "svelte-1rsokqv";
-			add_location(td0, file$h, 60, 8, 1207);
-			td1.className = "svelte-1rsokqv";
-			add_location(td1, file$h, 61, 8, 1245);
-			td2.className = "svelte-1rsokqv";
-			add_location(td2, file$h, 62, 8, 1285);
-			td3.className = "svelte-1rsokqv";
-			add_location(td3, file$h, 66, 8, 1414);
-			tr.className = "svelte-1rsokqv";
-			add_location(tr, file$h, 59, 6, 1193);
+			td0.className = "svelte-vhmrc0";
+			add_location(td0, file$h, 62, 8, 1249);
+			td1.className = "svelte-vhmrc0";
+			add_location(td1, file$h, 63, 8, 1287);
+			td2.className = "svelte-vhmrc0";
+			add_location(td2, file$h, 64, 8, 1327);
+			td3.className = "svelte-vhmrc0";
+			add_location(td3, file$h, 68, 8, 1456);
+			tr.className = "svelte-vhmrc0";
+			add_location(tr, file$h, 61, 6, 1235);
 		},
 
 		m: function mount(target, anchor) {
@@ -5077,22 +5077,22 @@ function create_fragment$h(ctx) {
 			for (var i = 0; i < each_blocks.length; i += 1) {
 				each_blocks[i].c();
 			}
-			add_location(strong, file$h, 49, 4, 992);
-			add_location(p, file$h, 47, 2, 965);
-			th0.className = "svelte-1rsokqv";
-			add_location(th0, file$h, 53, 6, 1057);
-			th1.className = "svelte-1rsokqv";
-			add_location(th1, file$h, 54, 6, 1081);
-			th2.className = "svelte-1rsokqv";
-			add_location(th2, file$h, 55, 6, 1102);
-			th3.className = "svelte-1rsokqv";
-			add_location(th3, file$h, 56, 6, 1123);
-			tr.className = "svelte-1rsokqv";
-			add_location(tr, file$h, 52, 4, 1045);
-			table.className = "svelte-1rsokqv";
-			add_location(table, file$h, 51, 2, 1032);
-			div.className = "container svelte-1rsokqv";
-			add_location(div, file$h, 46, 0, 938);
+			add_location(strong, file$h, 51, 4, 1034);
+			add_location(p, file$h, 49, 2, 1007);
+			th0.className = "svelte-vhmrc0";
+			add_location(th0, file$h, 55, 6, 1099);
+			th1.className = "svelte-vhmrc0";
+			add_location(th1, file$h, 56, 6, 1123);
+			th2.className = "svelte-vhmrc0";
+			add_location(th2, file$h, 57, 6, 1144);
+			th3.className = "svelte-vhmrc0";
+			add_location(th3, file$h, 58, 6, 1165);
+			tr.className = "svelte-vhmrc0";
+			add_location(tr, file$h, 54, 4, 1087);
+			table.className = "svelte-vhmrc0";
+			add_location(table, file$h, 53, 2, 1074);
+			div.className = "container svelte-vhmrc0";
+			add_location(div, file$h, 48, 0, 980);
 		},
 
 		l: function claim(nodes) {
@@ -5227,7 +5227,7 @@ function get_each_context$4(ctx, list, i) {
 	return child_ctx;
 }
 
-// (77:0) {#if toggleVars}
+// (89:0) {#if toggleVars}
 function create_if_block_2(ctx) {
 	var div1, t, div0, div1_transition, current, dispose;
 
@@ -5251,10 +5251,10 @@ function create_if_block_2(ctx) {
 			t = space();
 			div0 = element("div");
 			div0.textContent = "x close";
-			div0.className = "close svelte-11vez3e";
-			add_location(div0, file$i, 79, 4, 2039);
-			div1.className = "varInfo svelte-11vez3e";
-			add_location(div1, file$i, 77, 2, 1929);
+			div0.className = "close svelte-17kt9d4";
+			add_location(div0, file$i, 91, 4, 2354);
+			div1.className = "varInfo svelte-17kt9d4";
+			add_location(div1, file$i, 89, 2, 2244);
 			dispose = listen(div0, "click", ctx.click_handler);
 		},
 
@@ -5310,7 +5310,7 @@ function create_if_block_2(ctx) {
 	};
 }
 
-// (84:0) {#if toggleUsers}
+// (96:0) {#if toggleUsers}
 function create_if_block_1$1(ctx) {
 	var div1, t, div0, div1_transition, current, dispose;
 
@@ -5331,10 +5331,10 @@ function create_if_block_1$1(ctx) {
 			t = space();
 			div0 = element("div");
 			div0.textContent = "x close";
-			div0.className = "close svelte-11vez3e";
-			add_location(div0, file$i, 86, 4, 2257);
-			div1.className = "varInfo svelte-11vez3e";
-			add_location(div1, file$i, 84, 2, 2151);
+			div0.className = "close svelte-17kt9d4";
+			add_location(div0, file$i, 98, 4, 2572);
+			div1.className = "varInfo svelte-17kt9d4";
+			add_location(div1, file$i, 96, 2, 2466);
 			dispose = listen(div0, "click", ctx.click_handler_1);
 		},
 
@@ -5390,7 +5390,7 @@ function create_if_block_1$1(ctx) {
 	};
 }
 
-// (91:0) {#if toggleResponses}
+// (103:0) {#if toggleResponses}
 function create_if_block$3(ctx) {
 	var div1, t, div0, div1_transition, current, dispose;
 
@@ -5414,10 +5414,10 @@ function create_if_block$3(ctx) {
 			t = space();
 			div0 = element("div");
 			div0.textContent = "x close";
-			div0.className = "close svelte-11vez3e";
-			add_location(div0, file$i, 93, 4, 2484);
-			div1.className = "varInfo svelte-11vez3e";
-			add_location(div1, file$i, 91, 2, 2374);
+			div0.className = "close svelte-17kt9d4";
+			add_location(div0, file$i, 105, 4, 2799);
+			div1.className = "varInfo svelte-17kt9d4";
+			add_location(div1, file$i, 103, 2, 2689);
 			dispose = listen(div0, "click", ctx.click_handler_2);
 		},
 
@@ -5473,7 +5473,7 @@ function create_if_block$3(ctx) {
 	};
 }
 
-// (99:2) {#each $studyStore as study}
+// (111:2) {#each $studyStore as study}
 function create_each_block$4(ctx) {
 	var div, current;
 
@@ -5494,8 +5494,8 @@ function create_each_block$4(ctx) {
 		c: function create() {
 			div = element("div");
 			studycard.$$.fragment.c();
-			div.className = "study svelte-11vez3e";
-			add_location(div, file$i, 99, 4, 2669);
+			div.className = "study svelte-17kt9d4";
+			add_location(div, file$i, 111, 4, 2984);
 		},
 
 		m: function mount(target, anchor) {
@@ -5585,12 +5585,12 @@ function create_fragment$i(ctx) {
 			t4 = space();
 			div2 = element("div");
 			div2.textContent = "Debug: wipe database";
-			div0.className = "study svelte-11vez3e";
-			add_location(div0, file$i, 107, 2, 2869);
-			div1.className = "container svelte-11vez3e";
-			add_location(div1, file$i, 97, 0, 2580);
-			div2.className = "debug svelte-11vez3e";
-			add_location(div2, file$i, 112, 0, 2933);
+			div0.className = "study svelte-17kt9d4";
+			add_location(div0, file$i, 119, 2, 3184);
+			div1.className = "container svelte-17kt9d4";
+			add_location(div1, file$i, 109, 0, 2895);
+			div2.className = "debug svelte-17kt9d4";
+			add_location(div2, file$i, 124, 0, 3248);
 			dispose = listen(div2, "click", dropDB);
 		},
 
@@ -5791,18 +5791,29 @@ function instance$f($$self, $$props, $$invalidate) {
   let studyData = {};
   let toggleVars = false;
   function showVars(event) {
+    document.onkeyup = closeDetailView;
     $$invalidate('studyData', studyData = event.detail);
     $$invalidate('toggleVars', toggleVars = true);
   }
   let toggleUsers = false;
   function showUsers(event) {
+    document.onkeyup = closeDetailView;
     $$invalidate('studyData', studyData = event.detail);
     $$invalidate('toggleUsers', toggleUsers = true);
   }
   let toggleResponses = false;
   function showResponses(event) {
+    document.onkeyup = closeDetailView;
     $$invalidate('studyData', studyData = event.detail);
     $$invalidate('toggleResponses', toggleResponses = true);
+  }
+
+  function closeDetailView(e) {
+    if (e.code === "Escape") {
+      $$invalidate('toggleVars', toggleVars = false);
+      $$invalidate('toggleUsers', toggleUsers = false);
+      $$invalidate('toggleResponses', toggleResponses = false);
+    }
   }
 
 	function click_handler() {

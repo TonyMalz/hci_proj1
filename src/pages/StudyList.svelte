@@ -19,18 +19,29 @@
   let studyData = {};
   let toggleVars = false;
   function showVars(event) {
+    document.onkeyup = closeDetailView;
     studyData = event.detail;
     toggleVars = true;
   }
   let toggleUsers = false;
   function showUsers(event) {
+    document.onkeyup = closeDetailView;
     studyData = event.detail;
     toggleUsers = true;
   }
   let toggleResponses = false;
   function showResponses(event) {
+    document.onkeyup = closeDetailView;
     studyData = event.detail;
     toggleResponses = true;
+  }
+
+  function closeDetailView(e) {
+    if (e.code === "Escape") {
+      toggleVars = false;
+      toggleUsers = false;
+      toggleResponses = false;
+    }
   }
 </script>
 
@@ -66,7 +77,8 @@
   }
   .close {
     position: absolute;
-    right: 1rem;
+    background: white;
+    right: 1.5rem;
     top: 0.5rem;
     cursor: pointer;
     font-size: 0.7rem;

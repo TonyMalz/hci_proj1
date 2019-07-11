@@ -35,6 +35,8 @@
     position: relative;
     padding: 1em;
     padding-bottom: 2em;
+    height: 85vh;
+    overflow-y: auto;
   }
   table {
     border-collapse: collapse;
