@@ -104,7 +104,7 @@
                   const typeMapping = new Map([
                     ["Numeric", "scale"],
                     ["TextChoice", "nominal"],
-                    ["DiscreteScale", "ordinal"], // scale?
+                    ["DiscreteScale", "scale"], //FIXME: check answer labels
                     ["ContinuousScale", "scale"],
                     ["Text", "qualitative"]
                   ]);
@@ -169,20 +169,18 @@
                           store.put(data); // replace existing data
                         }
                       }
-                    } else {
-                      // regular questionnaire item
-                      const store = tx.objectStore("TaskResults");
-                      for (const step of result.stepResults) {
-                        for (const stepItem of step.stepItemResults) {
-                          const data = {
-                            studyId: studyId,
-                            userId: userId,
-                            taskId: taskId,
-                            stepItem,
-                            __created: new Date()
-                          };
-                          store.add(data);
-                        }
+                    }
+                    const store = tx.objectStore("TaskResults");
+                    for (const step of result.stepResults) {
+                      for (const stepItem of step.stepItemResults) {
+                        const data = {
+                          studyId: studyId,
+                          userId: userId,
+                          taskId: taskId,
+                          stepItem,
+                          __created: new Date()
+                        };
+                        store.add(data);
                       }
                     }
                   };

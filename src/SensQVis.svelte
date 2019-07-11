@@ -5,6 +5,7 @@
   import Userview from "./pages/Userview.svelte";
   import Overview from "./pages/Overview.svelte";
   import Studies from "./pages/StudyList.svelte";
+  import Descriptives from "./pages/Descriptives.svelte";
 
   import { fly } from "svelte/transition";
   import { activeUITab } from "./modules/store.js";
@@ -85,6 +86,8 @@
       <Overview />
     {:else if $activeUITab === 2}
       <Userview />
+    {:else if $activeUITab === 3}
+      <Descriptives />
     {/if}
   </section>
 </main>
