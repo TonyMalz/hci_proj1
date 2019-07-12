@@ -6,8 +6,8 @@
   let currentTabs = [
     "Studies",
     "Overview Study 1",
-    "User View Study 1"
-    // "Descriptive Stats Study 1"
+    "User View Study 1",
+    "Descriptive Stats Study 1"
   ];
   let activeTab = 0;
 

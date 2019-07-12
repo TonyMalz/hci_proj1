@@ -1060,7 +1060,7 @@ function create_else_block_1(ctx) {
 			li = element("li");
 			tabitem.$$.fragment.c();
 			li.className = "active svelte-tibrtl";
-			add_location(li, file$1, 79, 6, 1640);
+			add_location(li, file$1, 79, 6, 1638);
 		},
 
 		m: function mount(target, anchor) {
@@ -1115,7 +1115,7 @@ function create_if_block_1(ctx) {
 			li = element("li");
 			tabitem.$$.fragment.c();
 			li.className = "svelte-tibrtl";
-			add_location(li, file$1, 75, 6, 1544);
+			add_location(li, file$1, 75, 6, 1542);
 			dispose = listen(li, "click", click_handler);
 		},
 
@@ -1241,7 +1241,7 @@ function create_else_block$1(ctx) {
 			div = element("div");
 			div.textContent = "+";
 			div.className = "svelte-tibrtl";
-			add_location(div, file$1, 94, 6, 2005);
+			add_location(div, file$1, 94, 6, 2003);
 			dispose = listen(div, "click", ctx.toggle);
 		},
 
@@ -1273,7 +1273,7 @@ function create_if_block$1(ctx) {
 			input.id = "newTab";
 			attr(input, "type", "text");
 			input.autofocus = true;
-			add_location(input, file$1, 86, 6, 1785);
+			add_location(input, file$1, 86, 6, 1783);
 
 			dispose = [
 				listen(input, "blur", ctx.addTab),
@@ -1353,9 +1353,9 @@ function create_fragment$1(ctx) {
 			li = element("li");
 			if_block.c();
 			li.className = "svelte-tibrtl";
-			add_location(li, file$1, 84, 2, 1752);
+			add_location(li, file$1, 84, 2, 1750);
 			ul.className = "svelte-tibrtl";
-			add_location(ul, file$1, 72, 0, 1470);
+			add_location(ul, file$1, 72, 0, 1468);
 		},
 
 		l: function claim(nodes) {
@@ -1444,8 +1444,8 @@ function instance$1($$self, $$props, $$invalidate) {
   let currentTabs = [
     "Studies",
     "Overview Study 1",
-    "User View Study 1"
-    // "Descriptive Stats Study 1"
+    "User View Study 1",
+    "Descriptive Stats Study 1"
   ];
   let activeTab = 0;
 
@@ -6064,15 +6064,370 @@ var simpleStatistics_min = createCommonjsModule(function (module, exports) {
 
 const file$j = "src\\pages\\Descriptives.svelte";
 
+function get_each_context_1$2(ctx, list, i) {
+	const child_ctx = Object.create(ctx);
+	child_ctx.varName = list[i].varName;
+	child_ctx.statistics = list[i].statistics;
+	return child_ctx;
+}
+
 function get_each_context$5(ctx, list, i) {
 	const child_ctx = Object.create(ctx);
 	child_ctx.v = list[i];
 	return child_ctx;
 }
 
-// (130:4) {#each variables as v}
+// (215:14) {#if varName == v.variableName}
+function create_if_block$4(ctx) {
+	var if_block_anchor;
+
+	function select_block_type(ctx) {
+		if (ctx.v.measure == 'nominal') return create_if_block_1$2;
+		if (ctx.v.measure == 'scale') return create_if_block_2$1;
+	}
+
+	var current_block_type = select_block_type(ctx);
+	var if_block = current_block_type && current_block_type(ctx);
+
+	return {
+		c: function create() {
+			if (if_block) if_block.c();
+			if_block_anchor = empty();
+		},
+
+		m: function mount(target, anchor) {
+			if (if_block) if_block.m(target, anchor);
+			insert(target, if_block_anchor, anchor);
+		},
+
+		p: function update(changed, ctx) {
+			if (current_block_type === (current_block_type = select_block_type(ctx)) && if_block) {
+				if_block.p(changed, ctx);
+			} else {
+				if (if_block) if_block.d(1);
+				if_block = current_block_type && current_block_type(ctx);
+				if (if_block) {
+					if_block.c();
+					if_block.m(if_block_anchor.parentNode, if_block_anchor);
+				}
+			}
+		},
+
+		d: function destroy(detaching) {
+			if (if_block) if_block.d(detaching);
+
+			if (detaching) {
+				detach(if_block_anchor);
+			}
+		}
+	};
+}
+
+// (232:47) 
+function create_if_block_2$1(ctx) {
+	var tr0, td0, t1, td1, t2_value = ctx.statistics.count, t2, t3, tr1, td2, t5, td3, t6_value = ctx.statistics.min, t6, t7, t8_value = ctx.statistics.max, t8, t9, tr2, td4, t11, td5, t12_value = ctx.statistics.mode, t12, t13, tr3, td6, t15, td7, t16_value = ctx.statistics.median, t16, t17, tr4, td8, t19, td9, t20_value = ctx.statistics.mean, t20, t21, tr5, td10, t23, td11, t24_value = ctx.statistics.sd, t24;
+
+	return {
+		c: function create() {
+			tr0 = element("tr");
+			td0 = element("td");
+			td0.textContent = "count";
+			t1 = space();
+			td1 = element("td");
+			t2 = text(t2_value);
+			t3 = space();
+			tr1 = element("tr");
+			td2 = element("td");
+			td2.textContent = "min - max";
+			t5 = space();
+			td3 = element("td");
+			t6 = text(t6_value);
+			t7 = text(" - ");
+			t8 = text(t8_value);
+			t9 = space();
+			tr2 = element("tr");
+			td4 = element("td");
+			td4.textContent = "mode";
+			t11 = space();
+			td5 = element("td");
+			t12 = text(t12_value);
+			t13 = space();
+			tr3 = element("tr");
+			td6 = element("td");
+			td6.textContent = "median";
+			t15 = space();
+			td7 = element("td");
+			t16 = text(t16_value);
+			t17 = space();
+			tr4 = element("tr");
+			td8 = element("td");
+			td8.textContent = "mean";
+			t19 = space();
+			td9 = element("td");
+			t20 = text(t20_value);
+			t21 = space();
+			tr5 = element("tr");
+			td10 = element("td");
+			td10.textContent = "sd";
+			t23 = space();
+			td11 = element("td");
+			t24 = text(t24_value);
+			td0.className = "svelte-fvd36u";
+			add_location(td0, file$j, 233, 20, 7471);
+			td1.className = "svelte-fvd36u";
+			add_location(td1, file$j, 234, 20, 7507);
+			tr0.className = "svelte-fvd36u";
+			add_location(tr0, file$j, 232, 18, 7445);
+			td2.className = "svelte-fvd36u";
+			add_location(td2, file$j, 237, 20, 7606);
+			td3.className = "svelte-fvd36u";
+			add_location(td3, file$j, 238, 20, 7646);
+			tr1.className = "svelte-fvd36u";
+			add_location(tr1, file$j, 236, 18, 7580);
+			td4.className = "svelte-fvd36u";
+			add_location(td4, file$j, 241, 20, 7762);
+			td5.className = "svelte-fvd36u";
+			add_location(td5, file$j, 242, 20, 7797);
+			tr2.className = "svelte-fvd36u";
+			add_location(tr2, file$j, 240, 18, 7736);
+			td6.className = "svelte-fvd36u";
+			add_location(td6, file$j, 245, 20, 7894);
+			td7.className = "svelte-fvd36u";
+			add_location(td7, file$j, 246, 20, 7931);
+			tr3.className = "svelte-fvd36u";
+			add_location(tr3, file$j, 244, 18, 7868);
+			td8.className = "svelte-fvd36u";
+			add_location(td8, file$j, 249, 20, 8030);
+			td9.className = "svelte-fvd36u";
+			add_location(td9, file$j, 250, 20, 8065);
+			tr4.className = "svelte-fvd36u";
+			add_location(tr4, file$j, 248, 18, 8004);
+			td10.className = "svelte-fvd36u";
+			add_location(td10, file$j, 253, 20, 8162);
+			td11.className = "svelte-fvd36u";
+			add_location(td11, file$j, 254, 20, 8195);
+			tr5.className = "svelte-fvd36u";
+			add_location(tr5, file$j, 252, 18, 8136);
+		},
+
+		m: function mount(target, anchor) {
+			insert(target, tr0, anchor);
+			append(tr0, td0);
+			append(tr0, t1);
+			append(tr0, td1);
+			append(td1, t2);
+			insert(target, t3, anchor);
+			insert(target, tr1, anchor);
+			append(tr1, td2);
+			append(tr1, t5);
+			append(tr1, td3);
+			append(td3, t6);
+			append(td3, t7);
+			append(td3, t8);
+			insert(target, t9, anchor);
+			insert(target, tr2, anchor);
+			append(tr2, td4);
+			append(tr2, t11);
+			append(tr2, td5);
+			append(td5, t12);
+			insert(target, t13, anchor);
+			insert(target, tr3, anchor);
+			append(tr3, td6);
+			append(tr3, t15);
+			append(tr3, td7);
+			append(td7, t16);
+			insert(target, t17, anchor);
+			insert(target, tr4, anchor);
+			append(tr4, td8);
+			append(tr4, t19);
+			append(tr4, td9);
+			append(td9, t20);
+			insert(target, t21, anchor);
+			insert(target, tr5, anchor);
+			append(tr5, td10);
+			append(tr5, t23);
+			append(tr5, td11);
+			append(td11, t24);
+		},
+
+		p: function update(changed, ctx) {
+			if ((changed.stats) && t2_value !== (t2_value = ctx.statistics.count)) {
+				set_data(t2, t2_value);
+			}
+
+			if ((changed.stats) && t6_value !== (t6_value = ctx.statistics.min)) {
+				set_data(t6, t6_value);
+			}
+
+			if ((changed.stats) && t8_value !== (t8_value = ctx.statistics.max)) {
+				set_data(t8, t8_value);
+			}
+
+			if ((changed.stats) && t12_value !== (t12_value = ctx.statistics.mode)) {
+				set_data(t12, t12_value);
+			}
+
+			if ((changed.stats) && t16_value !== (t16_value = ctx.statistics.median)) {
+				set_data(t16, t16_value);
+			}
+
+			if ((changed.stats) && t20_value !== (t20_value = ctx.statistics.mean)) {
+				set_data(t20, t20_value);
+			}
+
+			if ((changed.stats) && t24_value !== (t24_value = ctx.statistics.sd)) {
+				set_data(t24, t24_value);
+			}
+		},
+
+		d: function destroy(detaching) {
+			if (detaching) {
+				detach(tr0);
+				detach(t3);
+				detach(tr1);
+				detach(t9);
+				detach(tr2);
+				detach(t13);
+				detach(tr3);
+				detach(t17);
+				detach(tr4);
+				detach(t21);
+				detach(tr5);
+			}
+		}
+	};
+}
+
+// (216:16) {#if v.measure == 'nominal'}
+function create_if_block_1$2(ctx) {
+	var tr0, td0, t1, td1, t2_value = ctx.statistics.count, t2, t3, tr1, td2, t5, td3, t6_value = ctx.statistics.mode, t6, t7, t8_value = ctx.statistics.modeLabel, t8, t9;
+
+	return {
+		c: function create() {
+			tr0 = element("tr");
+			td0 = element("td");
+			td0.textContent = "count";
+			t1 = space();
+			td1 = element("td");
+			t2 = text(t2_value);
+			t3 = space();
+			tr1 = element("tr");
+			td2 = element("td");
+			td2.textContent = "mode";
+			t5 = space();
+			td3 = element("td");
+			t6 = text(t6_value);
+			t7 = text(" (");
+			t8 = text(t8_value);
+			t9 = text(")");
+			td0.className = "svelte-fvd36u";
+			add_location(td0, file$j, 217, 20, 6878);
+			td1.className = "svelte-fvd36u";
+			add_location(td1, file$j, 218, 20, 6914);
+			tr0.className = "svelte-fvd36u";
+			add_location(tr0, file$j, 216, 18, 6852);
+			td2.className = "svelte-fvd36u";
+			add_location(td2, file$j, 228, 20, 7265);
+			td3.className = "svelte-fvd36u";
+			add_location(td3, file$j, 229, 20, 7300);
+			tr1.className = "svelte-fvd36u";
+			add_location(tr1, file$j, 227, 18, 7239);
+		},
+
+		m: function mount(target, anchor) {
+			insert(target, tr0, anchor);
+			append(tr0, td0);
+			append(tr0, t1);
+			append(tr0, td1);
+			append(td1, t2);
+			insert(target, t3, anchor);
+			insert(target, tr1, anchor);
+			append(tr1, td2);
+			append(tr1, t5);
+			append(tr1, td3);
+			append(td3, t6);
+			append(td3, t7);
+			append(td3, t8);
+			append(td3, t9);
+		},
+
+		p: function update(changed, ctx) {
+			if ((changed.stats) && t2_value !== (t2_value = ctx.statistics.count)) {
+				set_data(t2, t2_value);
+			}
+
+			if ((changed.stats) && t6_value !== (t6_value = ctx.statistics.mode)) {
+				set_data(t6, t6_value);
+			}
+
+			if ((changed.stats) && t8_value !== (t8_value = ctx.statistics.modeLabel)) {
+				set_data(t8, t8_value);
+			}
+		},
+
+		d: function destroy(detaching) {
+			if (detaching) {
+				detach(tr0);
+				detach(t3);
+				detach(tr1);
+			}
+		}
+	};
+}
+
+// (214:12) {#each stats as { varName, statistics }}
+function create_each_block_1$2(ctx) {
+	var if_block_anchor;
+
+	var if_block = (ctx.varName == ctx.v.variableName) && create_if_block$4(ctx);
+
+	return {
+		c: function create() {
+			if (if_block) if_block.c();
+			if_block_anchor = empty();
+		},
+
+		m: function mount(target, anchor) {
+			if (if_block) if_block.m(target, anchor);
+			insert(target, if_block_anchor, anchor);
+		},
+
+		p: function update(changed, ctx) {
+			if (ctx.varName == ctx.v.variableName) {
+				if (if_block) {
+					if_block.p(changed, ctx);
+				} else {
+					if_block = create_if_block$4(ctx);
+					if_block.c();
+					if_block.m(if_block_anchor.parentNode, if_block_anchor);
+				}
+			} else if (if_block) {
+				if_block.d(1);
+				if_block = null;
+			}
+		},
+
+		d: function destroy(detaching) {
+			if (if_block) if_block.d(detaching);
+
+			if (detaching) {
+				detach(if_block_anchor);
+			}
+		}
+	};
+}
+
+// (203:4) {#each variables as v}
 function create_each_block$5(ctx) {
-	var tr, td0, t0_value = ctx.v.variableName, t0, t1, td1, t2_value = ctx.v.variableLabel, t2, t3, td2, t4_value = ucFirst$1(ctx.v.measure), t4, t5, td3, t6;
+	var tr, td0, t0_value = ctx.v.variableName, t0, t1, td1, t2_value = ctx.v.variableLabel, t2, t3, td2, t4_value = ucFirst$1(ctx.v.measure), t4, t5, td3, div0, div0_id_value, t6, div1, div1_id_value, t7, td4, table, t8;
+
+	var each_value_1 = ctx.stats;
+
+	var each_blocks = [];
+
+	for (var i = 0; i < each_value_1.length; i += 1) {
+		each_blocks[i] = create_each_block_1$2(get_each_context_1$2(ctx, each_value_1, i));
+	}
 
 	return {
 		c: function create() {
@@ -6087,17 +6442,38 @@ function create_each_block$5(ctx) {
 			t4 = text(t4_value);
 			t5 = space();
 			td3 = element("td");
+			div0 = element("div");
 			t6 = space();
-			td0.className = "name svelte-vhmrc0";
-			add_location(td0, file$j, 131, 8, 3646);
-			td1.className = "label svelte-vhmrc0";
-			add_location(td1, file$j, 132, 8, 3696);
-			td2.className = "measure svelte-vhmrc0";
-			add_location(td2, file$j, 133, 8, 3748);
-			td3.className = "svelte-vhmrc0";
-			add_location(td3, file$j, 134, 8, 3805);
-			tr.className = "svelte-vhmrc0";
-			add_location(tr, file$j, 130, 6, 3632);
+			div1 = element("div");
+			t7 = space();
+			td4 = element("td");
+			table = element("table");
+
+			for (var i = 0; i < each_blocks.length; i += 1) {
+				each_blocks[i].c();
+			}
+
+			t8 = space();
+			td0.className = "name svelte-fvd36u";
+			add_location(td0, file$j, 204, 8, 6349);
+			td1.className = "label svelte-fvd36u";
+			add_location(td1, file$j, 205, 8, 6399);
+			td2.className = "measure svelte-fvd36u";
+			add_location(td2, file$j, 206, 8, 6451);
+			div0.id = div0_id_value = "vis" + ctx.v.variableName;
+			add_location(div0, file$j, 208, 10, 6560);
+			div1.id = div1_id_value = "vis2" + ctx.v.variableName;
+			add_location(div1, file$j, 209, 10, 6604);
+			set_style(td3, "text-align", "right");
+			set_style(td3, "width", "40%");
+			td3.className = "svelte-fvd36u";
+			add_location(td3, file$j, 207, 8, 6508);
+			table.className = "svelte-fvd36u";
+			add_location(table, file$j, 212, 10, 6678);
+			td4.className = "svelte-fvd36u";
+			add_location(td4, file$j, 211, 8, 6662);
+			tr.className = "svelte-fvd36u";
+			add_location(tr, file$j, 203, 6, 6335);
 		},
 
 		m: function mount(target, anchor) {
@@ -6112,7 +6488,18 @@ function create_each_block$5(ctx) {
 			append(td2, t4);
 			append(tr, t5);
 			append(tr, td3);
-			append(tr, t6);
+			append(td3, div0);
+			append(td3, t6);
+			append(td3, div1);
+			append(tr, t7);
+			append(tr, td4);
+			append(td4, table);
+
+			for (var i = 0; i < each_blocks.length; i += 1) {
+				each_blocks[i].m(table, null);
+			}
+
+			append(tr, t8);
 		},
 
 		p: function update(changed, ctx) {
@@ -6127,18 +6514,49 @@ function create_each_block$5(ctx) {
 			if ((changed.variables) && t4_value !== (t4_value = ucFirst$1(ctx.v.measure))) {
 				set_data(t4, t4_value);
 			}
+
+			if ((changed.variables) && div0_id_value !== (div0_id_value = "vis" + ctx.v.variableName)) {
+				div0.id = div0_id_value;
+			}
+
+			if ((changed.variables) && div1_id_value !== (div1_id_value = "vis2" + ctx.v.variableName)) {
+				div1.id = div1_id_value;
+			}
+
+			if (changed.stats || changed.variables) {
+				each_value_1 = ctx.stats;
+
+				for (var i = 0; i < each_value_1.length; i += 1) {
+					const child_ctx = get_each_context_1$2(ctx, each_value_1, i);
+
+					if (each_blocks[i]) {
+						each_blocks[i].p(changed, child_ctx);
+					} else {
+						each_blocks[i] = create_each_block_1$2(child_ctx);
+						each_blocks[i].c();
+						each_blocks[i].m(table, null);
+					}
+				}
+
+				for (; i < each_blocks.length; i += 1) {
+					each_blocks[i].d(1);
+				}
+				each_blocks.length = each_value_1.length;
+			}
 		},
 
 		d: function destroy(detaching) {
 			if (detaching) {
 				detach(tr);
 			}
+
+			destroy_each(each_blocks, detaching);
 		}
 	};
 }
 
 function create_fragment$j(ctx) {
-	var div, table, tr, th0, t1, th1, t3, th2, t5, th3, t7;
+	var div, t0, table, tr, th0, t2, th1, t4, th2, t6, th3, t8, div_intro;
 
 	var each_value = ctx.variables;
 
@@ -6151,38 +6569,42 @@ function create_fragment$j(ctx) {
 	return {
 		c: function create() {
 			div = element("div");
+			t0 = text("(It's ugly, will be fixed soon...)\r\n  ");
 			table = element("table");
 			tr = element("tr");
 			th0 = element("th");
 			th0.textContent = "Variable Name";
-			t1 = space();
+			t2 = space();
 			th1 = element("th");
 			th1.textContent = "Label";
-			t3 = space();
+			t4 = space();
 			th2 = element("th");
 			th2.textContent = "Measure";
-			t5 = space();
+			t6 = space();
 			th3 = element("th");
 			th3.textContent = "Statistics";
-			t7 = space();
+			t8 = space();
 
 			for (var i = 0; i < each_blocks.length; i += 1) {
 				each_blocks[i].c();
 			}
-			th0.className = "svelte-vhmrc0";
-			add_location(th0, file$j, 124, 6, 3490);
-			th1.className = "svelte-vhmrc0";
-			add_location(th1, file$j, 125, 6, 3520);
-			th2.className = "svelte-vhmrc0";
-			add_location(th2, file$j, 126, 6, 3542);
-			th3.className = "svelte-vhmrc0";
-			add_location(th3, file$j, 127, 6, 3566);
-			tr.className = "svelte-vhmrc0";
-			add_location(tr, file$j, 123, 4, 3478);
-			table.className = "svelte-vhmrc0";
-			add_location(table, file$j, 122, 2, 3465);
-			div.className = "container svelte-vhmrc0";
-			add_location(div, file$j, 121, 0, 3438);
+			th0.className = "svelte-fvd36u";
+			add_location(th0, file$j, 197, 6, 6146);
+			th1.className = "svelte-fvd36u";
+			add_location(th1, file$j, 198, 6, 6176);
+			th2.className = "svelte-fvd36u";
+			add_location(th2, file$j, 199, 6, 6198);
+			th3.colSpan = "2";
+			set_style(th3, "padding-left", "17%");
+			set_style(th3, "width", "80%");
+			th3.className = "svelte-fvd36u";
+			add_location(th3, file$j, 200, 6, 6222);
+			tr.className = "svelte-fvd36u";
+			add_location(tr, file$j, 196, 4, 6134);
+			table.className = "svelte-fvd36u";
+			add_location(table, file$j, 195, 2, 6121);
+			div.className = "container svelte-fvd36u";
+			add_location(div, file$j, 193, 0, 6028);
 		},
 
 		l: function claim(nodes) {
@@ -6191,16 +6613,17 @@ function create_fragment$j(ctx) {
 
 		m: function mount(target, anchor) {
 			insert(target, div, anchor);
+			append(div, t0);
 			append(div, table);
 			append(table, tr);
 			append(tr, th0);
-			append(tr, t1);
+			append(tr, t2);
 			append(tr, th1);
-			append(tr, t3);
+			append(tr, t4);
 			append(tr, th2);
-			append(tr, t5);
+			append(tr, t6);
 			append(tr, th3);
-			append(table, t7);
+			append(table, t8);
 
 			for (var i = 0; i < each_blocks.length; i += 1) {
 				each_blocks[i].m(table, null);
@@ -6208,7 +6631,7 @@ function create_fragment$j(ctx) {
 		},
 
 		p: function update(changed, ctx) {
-			if (changed.ucFirst || changed.variables) {
+			if (changed.stats || changed.variables || changed.ucFirst) {
 				each_value = ctx.variables;
 
 				for (var i = 0; i < each_value.length; i += 1) {
@@ -6230,7 +6653,15 @@ function create_fragment$j(ctx) {
 			}
 		},
 
-		i: noop,
+		i: function intro(local) {
+			if (!div_intro) {
+				add_render_callback(() => {
+					div_intro = create_in_transition(div, fade, { duration: 400 });
+					div_intro.start();
+				});
+			}
+		},
+
 		o: noop,
 
 		d: function destroy(detaching) {
@@ -6249,20 +6680,22 @@ function ucFirst$1(string) {
 
 function instance$g($$self, $$props, $$invalidate) {
 	
-
+  const trunc = (t, n = 20) => {
+    return t.substr(0, n - 1) + (t.length > n ? "..." : "");
+  };
   let { studyId = 0, studyName = "" } = $$props;
   let variables = [];
   const varMap = [];
   const varResults = [];
   const varStats = [];
   const varOptions = [];
+  let stats = [];
   const tx = db.transaction(["Studies", "StudyVariables", "TaskResults"]);
-
   let res = tx.objectStore("Studies").getAll();
   res.onsuccess = e => {
     const studies = e.target.result;
     $$invalidate('studyId', studyId = studies[0]._id);
-    getStudyVariables(studyId);
+    if (studyId) getStudyVariables(studyId);
   };
   const getStudyVariables = studyId => {
     const res = tx
@@ -6273,6 +6706,7 @@ function instance$g($$self, $$props, $$invalidate) {
       $$invalidate('variables', variables = e.target.result);
       for (const variable of variables) {
         varMap[variable.variableName] = variable.measure;        varResults[variable.variableName] = [];        varStats[variable.variableName] = {};        if (variable.measure === "nominal") {
+          // get text choices of categorical/nominal question types
           varOptions[variable.variableName] = variable.dataformat.textChoices;        }
       }
       getTaskResults(studyId);
@@ -6300,11 +6734,16 @@ function instance$g($$self, $$props, $$invalidate) {
               v[k] = ++v[k] || 1;
               return v;
             }, {});
-            varStats[varName].mode = simpleStatistics_min.modeFast(data);            varStats[varName].options = [];            for (const key in counts) {
-              for (const { text, value } of varOptions[varName]) {
+            const mode = simpleStatistics_min.modeFast(data);
+            varStats[varName].mode = mode;            varStats[varName].count = data.length;            varStats[varName].choices = [];            // get all labels of options of TextChoice questions and add info on how many times they were answered
+            for (const key in counts) {
+              for (const { valueLabel, value, text } of varOptions[varName]) {
+                if (value == mode) {
+                  varStats[varName].modeLabel = trunc(valueLabel || text);                }
+                //do not exactly match since values are always of type string
                 if (value == key) {
-                  varStats[varName].options.push({
-                    label: text,
+                  varStats[varName].choices.push({
+                    label: trunc(valueLabel || text), //FIXME: importformat is currently not consistent
                     count: counts[key]
                   });
                 }
@@ -6312,13 +6751,70 @@ function instance$g($$self, $$props, $$invalidate) {
             }
             break;
           case "scale":
-            varStats[varName].mode = simpleStatistics_min.modeFast(data);            varStats[varName].min = simpleStatistics_min.min(data);            varStats[varName].max = simpleStatistics_min.max(data);            varStats[varName].median = simpleStatistics_min.median(data);            varStats[varName].mean = +simpleStatistics_min.mean(data).toFixed(4);            varStats[varName].sd = +simpleStatistics_min.standardDeviation(data).toFixed(4);            break;
+            varStats[varName].mode = simpleStatistics_min.modeFast(data);            varStats[varName].count = data.length;            varStats[varName].min = simpleStatistics_min.min(data);            varStats[varName].max = simpleStatistics_min.max(data);            varStats[varName].median = simpleStatistics_min.median(data);            varStats[varName].mean = +simpleStatistics_min.mean(data).toFixed(4);            varStats[varName].sd = +simpleStatistics_min.standardDeviation(data).toFixed(4);            break;
 
           default:
             break;
         }
       }
-      console.log(varStats);
+      for (const varName in varStats) {
+        const statistics = varStats[varName];
+        $$invalidate('stats', stats = [...stats, { varName, statistics }]);
+        if (varMap[varName] == "nominal") {
+          const spec = {
+            description: `Count of ${varName} choices`,
+            data: {
+              values: statistics.choices
+            },
+            mark: "bar",
+            encoding: {
+              y: { field: "label", type: "nominal", axis: { title: null } },
+              x: {
+                field: "count",
+                type: "quantitative",
+                axis: { title: "Count of records" }
+              }
+            }
+          };
+          vegaEmbed(`#vis${varName}`, spec);
+        } else if (varMap[varName] == "scale") {
+          console.log(varResults[varName]);
+          const spec = {
+            description: `Ditribution of ${varName}`,
+            data: {
+              values: varResults[varName]
+            },
+            mark: "tick",
+            encoding: {
+              x: {
+                field: "data",
+                type: "quantitative",
+                axis: { title: varName }
+              }
+            }
+          };
+          vegaEmbed(`#vis${varName}`, spec);
+          const spec2 = {
+            description: `Ditribution of ${varName}`,
+            data: {
+              values: varResults[varName]
+            },
+            mark: "bar",
+            encoding: {
+              x: {
+                bin: true,
+                field: "data",
+                type: "quantitative"
+              },
+              y: {
+                aggregate: "count",
+                type: "quantitative"
+              }
+            }
+          };
+          vegaEmbed(`#vis2${varName}`, spec2);
+        }
+      }
     };
   };
 
@@ -6332,7 +6828,7 @@ function instance$g($$self, $$props, $$invalidate) {
 		if ('studyName' in $$props) $$invalidate('studyName', studyName = $$props.studyName);
 	};
 
-	return { studyId, studyName, variables };
+	return { studyId, studyName, variables, stats };
 }
 
 class Descriptives extends SvelteComponentDev {
@@ -6397,7 +6893,7 @@ function create_if_block_3(ctx) {
 }
 
 // (87:33) 
-function create_if_block_2$1(ctx) {
+function create_if_block_2$2(ctx) {
 	var current;
 
 	var userview = new Userview({ $$inline: true });
@@ -6431,7 +6927,7 @@ function create_if_block_2$1(ctx) {
 }
 
 // (85:33) 
-function create_if_block_1$2(ctx) {
+function create_if_block_1$3(ctx) {
 	var current;
 
 	var overview = new Overview({ $$inline: true });
@@ -6465,7 +6961,7 @@ function create_if_block_1$2(ctx) {
 }
 
 // (83:4) {#if $activeUITab === 0}
-function create_if_block$4(ctx) {
+function create_if_block$5(ctx) {
 	var current;
 
 	var studies = new StudyList({ $$inline: true });
@@ -6508,9 +7004,9 @@ function create_fragment$k(ctx) {
 	var undoredo = new UndoRedo({ $$inline: true });
 
 	var if_block_creators = [
-		create_if_block$4,
-		create_if_block_1$2,
-		create_if_block_2$1,
+		create_if_block$5,
+		create_if_block_1$3,
+		create_if_block_2$2,
 		create_if_block_3
 	];
 
