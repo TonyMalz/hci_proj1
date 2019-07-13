@@ -1,10 +1,10 @@
 <script>
   import { db } from "../modules/indexeddb.js";
-  import { studyStore } from "../modules/store.js";
+  import { studyStore, variableStore } from "../modules/store.js";
+
   import { onMount } from "svelte";
   onMount(() => {
     const el = document.getElementById("studyImport");
-
     el.onchange = () => {
       for (const file of el.files) {
         //console.log(file);
@@ -23,7 +23,7 @@
             console.log("parsing json file: ", file.name);
             let jsn = JSON.parse(text);
             console.log("finished parsing file");
-            console.log(jsn);
+            // console.log(jsn);
 
             // --------------- import study into database
             // if it is not an array it only contains data of one study
@@ -32,15 +32,15 @@
             }
 
             // import data of each study
-            for (let exportData of jsn) {
-              // console.log("import study: ", exportData);
+            for (const importData of jsn) {
+              // console.log("import study: ", importData);
               // sanity checks:
-              if (!exportData.hasOwnProperty("dataSchema")) {
+              if (!importData.hasOwnProperty("dataSchema")) {
                 console.error("missing prop: dataSchema");
                 return;
               }
 
-              const study = exportData.dataSchema;
+              const study = importData.dataSchema;
               if (!study.hasOwnProperty("_id")) {
                 console.error("missing prop: _id");
                 return;
@@ -60,14 +60,14 @@
                 return;
               }
 
-              let tx = db.transaction(
+              const tx = db.transaction(
                 ["Studies", "StudyVariables", "StudyTasks"],
                 "readwrite"
               );
-              let store = tx.objectStore("Studies");
+              const store = tx.objectStore("Studies");
 
               study.__created = new Date();
-              let result = store.add(study);
+              const result = store.add(study);
               result.onerror = event => {
                 // ConstraintError occurs when an object with the same id already exists
                 if (result.error.name == "ConstraintError") {
@@ -79,28 +79,34 @@
                     console.log("replace study");
                     event.preventDefault(); // don't abort the transaction
                     event.stopPropagation();
-                    event.target.source.put(study); //source holds objectStore for this event
+                    event.target.source.put(study); //source -> objectStore for this event
                     result.onsuccess();
                   } else {
                     console.log("don't replace study");
                   }
                 }
               };
-              result.onsuccess = () => {
-                store = tx.objectStore("StudyVariables");
-                const store2 = tx.objectStore("StudyTasks");
 
-                const stId = study._id;
+              // if study data were successfully created: store used tasks
+              result.onsuccess = () => {
+                const taskStore = tx.objectStore("StudyTasks");
+                const studyId = study._id;
                 for (const task of study.tasks) {
                   const taskData = {
-                    studyId: stId,
+                    studyId: studyId,
                     taskId: task._id,
                     taskName: task.taskName,
                     personalData: JSON.parse(task.personalData) // cast string "false" to boolean false
                   };
-
                   //Update StudyTasks
-                  store2.put(taskData);
+                  taskStore.put(taskData);
+                }
+
+                // generate StudyVariables
+                const studyVars = new Map();
+                // Step 1: get variable definition of each task
+                for (const task of study.tasks) {
+                  // map specific questionnaire types to statistical types
                   const typeMapping = new Map([
                     ["Numeric", "scale"],
                     ["TextChoice", "nominal"],
@@ -108,33 +114,64 @@
                     ["ContinuousScale", "scale"],
                     ["Text", "qualitative"]
                   ]);
-
-                  //Update StudyVariables
                   for (const step of task.steps) {
                     for (const stepItem of step.stepItems) {
                       stepItem.__created = new Date();
-                      stepItem.studyId = stId;
+                      stepItem.studyId = studyId;
                       stepItem.measure = typeMapping.get(
                         stepItem.dataformat.type
                       );
-                      store.put(stepItem);
+                      stepItem.results = []; // used to hold all task results for this variable
+                      studyVars.set(
+                        `${studyId}|${stepItem.variableName}`,
+                        stepItem
+                      );
                     }
                   }
                 }
+                // Step 2: check if there are any results in this import that contain these variables
+                if (
+                  importData.hasOwnProperty("taskResults") &&
+                  importData.taskResults instanceof Array
+                ) {
+                  for (const taskResult of importData.taskResults) {
+                    for (const step of taskResult.stepResults) {
+                      for (const stepItem of step.stepItemResults) {
+                        const key = `${studyId}|${stepItem.variableName}`;
+                        const variable = studyVars.get(key);
+                        if (variable) {
+                          variable.results.push({
+                            value: stepItem.value,
+                            date: stepItem.startDate,
+                            uid: taskResult.userId
+                          });
+                          studyVars.set(key, variable);
+                        }
+                      }
+                    }
+                  }
+                }
+                // console.log(studyVars);
+                // Step 3: save variables in db
+                const studyVariables = tx.objectStore("StudyVariables");
+                for (const variable of studyVars.values()) {
+                  studyVariables.put(variable);
+                }
+                // notify variable store
+                variableStore.set([...$variableStore, ...studyVars.values()]);
 
-                // notify study store
-                const res = tx.objectStore("Studies").getAll();
-                //FIXME: don't overwrite, just replace/add study in store?
-                res.onsuccess = e => studyStore.set(e.target.result);
+                // notify study store (it's faster this way)
+                tx.objectStore("Studies").getAll().onsuccess = e =>
+                  studyStore.set(e.target.result);
               };
 
               // ---------- Import task results
-              // check if there are any questionnaire results in the export file
+              // check if there are any questionnaire/task results in the import file
               if (
-                exportData.hasOwnProperty("taskResults") &&
-                exportData.taskResults instanceof Array
+                importData.hasOwnProperty("taskResults") &&
+                importData.taskResults instanceof Array
               ) {
-                let tx = db.transaction(
+                const tx = db.transaction(
                   [
                     "Users",
                     "Demographics",
@@ -145,19 +182,18 @@
                   "readwrite"
                 );
 
-                // importing questionnaire results
-                for (const result of exportData.taskResults) {
+                // importing questionnaire/task results
+                for (const taskResult of importData.taskResults) {
                   // TODO: check if props exist
-                  const { studyId, taskId, userId } = result;
-
+                  const { studyId, taskId, userId } = taskResult;
                   //find task to which these results belong
                   const res = tx.objectStore("StudyTasks").get(taskId);
                   res.onsuccess = e => {
                     const taskInfo = e.target.result;
                     if (taskInfo.personalData === true) {
-                      // import data for demographics
+                      // also import personal data into store Demographics
                       const store = tx.objectStore("Demographics");
-                      for (const step of result.stepResults) {
+                      for (const step of taskResult.stepResults) {
                         for (const stepItem of step.stepItemResults) {
                           const data = {
                             userId: userId,
@@ -170,14 +206,24 @@
                         }
                       }
                     }
+
+                    // import results
                     const store = tx.objectStore("TaskResults");
-                    for (const step of result.stepResults) {
+                    for (const step of taskResult.stepResults) {
                       for (const stepItem of step.stepItemResults) {
+                        const {
+                          value: resultValue,
+                          variableName: resultVariable,
+                          startDate: resultDate
+                        } = stepItem;
                         const data = {
                           studyId: studyId,
                           userId: userId,
                           taskId: taskId,
-                          stepItem,
+                          resultVariable,
+                          resultValue,
+                          resultDate,
+                          stepItem, // also store original data from import file
                           __created: new Date()
                         };
                         store.add(data);
@@ -185,20 +231,18 @@
                     }
                   };
 
-                  // update users table
-                  let store = tx.objectStore("Users");
+                  // update user table
+                  const store = tx.objectStore("Users");
                   const user = {
-                    userId: result.userId,
+                    userId: taskResult.userId,
                     studyId: studyId,
                     __created: new Date()
                   };
                   store.put(user);
 
                   // add response info
-                  tx.objectStore("StudyResponses").put(result);
+                  tx.objectStore("StudyResponses").put(taskResult);
                 } // for each taskResult
-
-                // DONE
               } // end of task result import
               //alert(`Study results for "${study.studyName}" were imported`);
             }

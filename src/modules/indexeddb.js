@@ -47,8 +47,8 @@ request.onupgradeneeded = (e) => {
     store.createIndex("taskId", "taskId", { unique: false })
     store.createIndex("userId", "userId", { unique: false })
     store.createIndex("studyId", "studyId", { unique: false })
-    store.createIndex("variableName", "variableName", { unique: false })
-    store.createIndex("startDate", "startDate", { unique: false })
+    store.createIndex("resultVariable", "resultVariable", { unique: false })
+    store.createIndex("resultDate", "resultDate", { unique: false })
 
     // holds all details on study responses
     store = db.createObjectStore("StudyResponses", { keyPath: ["userId", "studyId", "startDate"] })

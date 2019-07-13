@@ -2,11 +2,19 @@
   import { db } from "../modules/indexeddb.js";
   import stat from "../modules/simple-statistics.min.js";
   import { fade } from "svelte/transition";
+  import VarInfo from "../components/VariableInfo.svelte";
   const trunc = (t, n = 20) => {
     return t.substr(0, n - 1) + (t.length > n ? "..." : "");
   };
+
+  const vegaOptions = {
+    renderer: "svg",
+    mode: "vega-lite",
+    actions: { export: true, source: false, editor: false, compiled: false },
+    downloadFileName: "graph_sensQvis"
+  };
+
   export let studyId = 0;
-  export let studyName = "";
   let variables = [];
   const varMap = [];
   const varResults = [];
@@ -107,15 +115,24 @@
             },
             mark: "bar",
             encoding: {
-              y: { field: "label", type: "nominal", axis: { title: null } },
+              y: {
+                field: "label",
+                type: "nominal",
+                axis: {
+                  title: null,
+                  domain: false,
+                  ticks: false,
+                  labelPadding: 5
+                }
+              },
               x: {
                 field: "count",
                 type: "quantitative",
-                axis: { title: "Count of records" }
+                axis: { title: "Count of Records", domain: false }
               }
             }
           };
-          vegaEmbed(`#vis${varName}`, spec);
+          vegaEmbed(`#vis${varName}`, spec, vegaOptions);
         } else if (varMap[varName] == "scale") {
           console.log(varResults[varName]);
           const spec = {
@@ -128,11 +145,11 @@
               x: {
                 field: "data",
                 type: "quantitative",
-                axis: { title: varName }
+                axis: { title: varName, domain: false }
               }
             }
           };
-          vegaEmbed(`#vis${varName}`, spec);
+          vegaEmbed(`#vis${varName}`, spec, vegaOptions);
           const spec2 = {
             description: `Ditribution of ${varName}`,
             data: {
@@ -143,15 +160,22 @@
               x: {
                 bin: true,
                 field: "data",
-                type: "quantitative"
+                type: "quantitative",
+                axis: { domain: false }
               },
               y: {
                 aggregate: "count",
-                type: "quantitative"
+                type: "quantitative",
+                axis: {
+                  domain: false,
+                  ticks: false,
+                  labelPadding: 5,
+                  titlePadding: 10
+                }
               }
             }
           };
-          vegaEmbed(`#vis2${varName}`, spec2);
+          vegaEmbed(`#vis2${varName}`, spec2, vegaOptions);
         }
       }
     };
@@ -166,7 +190,6 @@
   .container {
     position: relative;
     height: 100%;
-    overflow-y: auto;
   }
   table {
     width: 100%;
@@ -192,6 +215,8 @@
 </style>
 
 <div class="container" in:fade={{ duration: 400 }}>
+  <!-- <VarInfo /> -->
+  <!-- {#if false} -->
   (It's ugly, will be fixed soon...)
   <table>
     <tr>
@@ -202,9 +227,9 @@
     </tr>
     {#each variables as v}
       <tr>
-        <td class="name"> {v.variableName} </td>
-        <td class="label"> {v.variableLabel} </td>
-        <td class="measure"> {ucFirst(v.measure)} </td>
+        <td class="name">{v.variableName}</td>
+        <td class="label">{v.variableLabel}</td>
+        <td class="measure">{ucFirst(v.measure)}</td>
         <td style="text-align:right;width:40%;">
           <div id="vis{v.variableName}" />
           <div id="vis2{v.variableName}" />
@@ -217,7 +242,7 @@
                   <tr>
                     <td>count</td>
                     <td>
-                       {statistics.count}
+                      {statistics.count}
                       <!-- (
                       {#each statistics.choices as choice}
                         {choice.label}={choice.count},
@@ -232,11 +257,11 @@
                 {:else if v.measure == 'scale'}
                   <tr>
                     <td>count</td>
-                    <td>{statistics.count} </td>
+                    <td>{statistics.count}</td>
                   </tr>
                   <tr>
                     <td>min - max</td>
-                    <td>{statistics.min} - {statistics.max} </td>
+                    <td>{statistics.min} - {statistics.max}</td>
                   </tr>
                   <tr>
                     <td>mode</td>
@@ -262,4 +287,5 @@
       </tr>
     {/each}
   </table>
+  <!-- {/if} -->
 </div>
