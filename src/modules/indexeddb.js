@@ -1,4 +1,4 @@
-import { studyStore } from './store.js'
+import { studyStore, variableStore } from './store.js'
 
 export const dbName = "senseQ"
 const dbVersion = 1
@@ -82,9 +82,12 @@ request.onsuccess = (e) => {
     // }
 
     // get current studies
-    const res = db.transaction("Studies").objectStore("Studies").getAll()
-    res.onsuccess = (e) => {
+    db.transaction("Studies").objectStore("Studies").getAll().onsuccess = (e) => {
         studyStore.set(e.target.result);
+    }
+
+    db.transaction("StudyVariables").objectStore("StudyVariables").getAll().onsuccess = e => {
+        variableStore.set(e.target.result)
     }
 }
 

@@ -1,20 +1,8 @@
 <script>
   import { db } from "../modules/indexeddb.js";
-
+  import { variableStore } from "../modules/store.js";
   export let studyId = 0;
   export let studyName = "";
-  let variables = [];
-
-  if (studyId) {
-    const res = db
-      .transaction("StudyVariables")
-      .objectStore("StudyVariables")
-      .index("studyId")
-      .getAll(studyId);
-    res.onsuccess = e => {
-      variables = e.target.result;
-    };
-  }
 
   function ucFirst(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -58,11 +46,11 @@
       <th>Label</th>
       <th>Measure</th>
     </tr>
-    {#each variables as v}
+    {#each $variableStore.filter(v => v.studyId == studyId) as v}
       <tr>
-        <td class="name"> {v.variableName} </td>
-        <td class="label"> {v.variableLabel} </td>
-        <td class="measure"> {ucFirst(v.measure)} </td>
+        <td class="name">{v.variableName}</td>
+        <td class="label">{v.variableLabel}</td>
+        <td class="measure">{ucFirst(v.measure)}</td>
       </tr>
     {/each}
   </table>

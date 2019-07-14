@@ -4,6 +4,7 @@
   import { db } from "../modules/indexeddb.js";
   import { studyStore } from "../modules/store.js";
   import { createEventDispatcher } from "svelte";
+  import { variableStore } from "../modules/store.js";
 
   export let _id,
     studyName,
@@ -28,8 +29,6 @@
 
   let responses = 0;
   let userCount = 0;
-
-  let variableCount = 0;
 
   //calc last day of study
   let days =
@@ -56,16 +55,6 @@
   res.onsuccess = e => {
     const count = e.target.result;
     userCount = count;
-  };
-
-  res = db
-    .transaction("StudyVariables")
-    .objectStore("StudyVariables")
-    .index("studyId")
-    .count(_id);
-  res.onsuccess = e => {
-    const count = e.target.result;
-    variableCount = count;
   };
 
   function deleteStudy() {
@@ -108,10 +97,11 @@
       deleteByIndex(store);
     });
 
-    // notify study store
-    const res = tx.objectStore("Studies").getAll();
-    //FIXME: don't overwrite, just replace/add study in store?
-    res.onsuccess = e => studyStore.set(e.target.result);
+    // notify stores
+    tx.objectStore("Studies").getAll().onsuccess = e =>
+      studyStore.set(e.target.result);
+    tx.objectStore("StudyVariables").getAll().onsuccess = e =>
+      variableStore.set(e.target.result);
   }
 </script>
 
@@ -185,14 +175,16 @@
     <span class="vars" on:click={showResponses}>Responses: {responses}</span>
     <br />
     <span class="vars" on:click={showVariables}>
-      Variables: {variableCount}
+      {#await $variableStore.filter(v => v.studyId == _id).length then variableCount}
+        Variables: {variableCount}
+      {/await}
     </span>
   </div>
   <div class="date">
     <span>Start:</span>
-     {formatDate(new Date(earliestBeginOfDataGathering))}
+    {formatDate(new Date(earliestBeginOfDataGathering))}
     <span>End:</span>
-     {formatDate(endDate)}
+    {formatDate(endDate)}
   </div>
-  <div class="created">imported: {formatDate(__created)} </div>
+  <div class="created">imported: {formatDate(__created)}</div>
 </div>

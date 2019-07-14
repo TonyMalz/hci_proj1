@@ -8,6 +8,9 @@ function assign(tar, src) {
         tar[k] = src[k];
     return tar;
 }
+function is_promise(value) {
+    return value && typeof value === 'object' && typeof value.then === 'function';
+}
 function add_location(element, file, line, column, char) {
     element.__svelte_meta = {
         loc: { file, line, column, char }
@@ -531,6 +534,62 @@ function create_bidirectional_transition(node, fn, params, intro) {
             running_program = pending_program = null;
         }
     };
+}
+
+function handle_promise(promise, info) {
+    const token = info.token = {};
+    function update(type, index, key, value) {
+        if (info.token !== token)
+            return;
+        info.resolved = key && { [key]: value };
+        const child_ctx = assign(assign({}, info.ctx), info.resolved);
+        const block = type && (info.current = type)(child_ctx);
+        if (info.block) {
+            if (info.blocks) {
+                info.blocks.forEach((block, i) => {
+                    if (i !== index && block) {
+                        group_outros();
+                        on_outro(() => {
+                            block.d(1);
+                            info.blocks[i] = null;
+                        });
+                        block.o(1);
+                        check_outros();
+                    }
+                });
+            }
+            else {
+                info.block.d(1);
+            }
+            block.c();
+            if (block.i)
+                block.i(1);
+            block.m(info.mount(), info.anchor);
+            flush();
+        }
+        info.block = block;
+        if (info.blocks)
+            info.blocks[index] = block;
+    }
+    if (is_promise(promise)) {
+        promise.then(value => {
+            update(info.then, 1, info.value, value);
+        }, error => {
+            update(info.catch, 2, info.error, error);
+        });
+        // if we previously had a then/catch block, destroy it
+        if (info.current !== info.pending) {
+            update(info.pending, 0);
+            return true;
+        }
+    }
+    else {
+        if (info.current !== info.then) {
+            update(info.then, 1, info.value, promise);
+            return true;
+        }
+        info.resolved = { [info.value]: promise };
+    }
 }
 
 function destroy_block(block, lookup) {
@@ -3671,9 +3730,12 @@ request.onsuccess = (e) => {
     // }
 
     // get current studies
-    const res = db.transaction("Studies").objectStore("Studies").getAll();
-    res.onsuccess = (e) => {
+    db.transaction("Studies").objectStore("Studies").getAll().onsuccess = (e) => {
         studyStore.set(e.target.result);
+    };
+
+    db.transaction("StudyVariables").objectStore("StudyVariables").getAll().onsuccess = e => {
+        variableStore.set(e.target.result);
     };
 };
 
@@ -4044,8 +4106,70 @@ function formatDate(date) {
 
 const file$e = "src\\components\\StudyCard.svelte";
 
+// (1:0) <script>    import { formatDate }
+function create_catch_block(ctx) {
+	return {
+		c: noop,
+		m: noop,
+		p: noop,
+		d: noop
+	};
+}
+
+// (178:85)           Variables: {variableCount}
+function create_then_block(ctx) {
+	var t0, t1_value = ctx.variableCount, t1;
+
+	return {
+		c: function create() {
+			t0 = text("Variables: ");
+			t1 = text(t1_value);
+		},
+
+		m: function mount(target, anchor) {
+			insert(target, t0, anchor);
+			insert(target, t1, anchor);
+		},
+
+		p: function update(changed, ctx) {
+			if ((changed.$variableStore) && t1_value !== (t1_value = ctx.variableCount)) {
+				set_data(t1, t1_value);
+			}
+		},
+
+		d: function destroy(detaching) {
+			if (detaching) {
+				detach(t0);
+				detach(t1);
+			}
+		}
+	};
+}
+
+// (1:0) <script>    import { formatDate }
+function create_pending_block(ctx) {
+	return {
+		c: noop,
+		m: noop,
+		p: noop,
+		d: noop
+	};
+}
+
 function create_fragment$e(ctx) {
-	var div4, div0, svg, path, t0, h4, t1, t2, div1, span0, t3, t4, t5, span1, t6, t7, t8, br, t9, span2, t10, t11, t12, div2, span3, t14, t15_value = formatDate(new ctx.Date(ctx.earliestBeginOfDataGathering)), t15, t16, span4, t18, t19_value = formatDate(ctx.endDate), t19, t20, div3, t21, t22_value = formatDate(ctx.__created), t22, dispose;
+	var div4, div0, svg, path, t0, h4, t1, t2, div1, span0, t3, t4, t5, span1, t6, t7, t8, br, t9, span2, promise, t10, div2, span3, t12, t13_value = formatDate(new ctx.Date(ctx.earliestBeginOfDataGathering)), t13, t14, span4, t16, t17_value = formatDate(ctx.endDate), t17, t18, div3, t19, t20_value = formatDate(ctx.__created), t20, dispose;
+
+	let info = {
+		ctx,
+		current: null,
+		pending: create_pending_block,
+		then: create_then_block,
+		catch: create_catch_block,
+		value: 'variableCount',
+		error: 'null'
+	};
+
+	handle_promise(promise = ctx.$variableStore.filter(ctx.func).length, info);
 
 	return {
 		c: function create() {
@@ -4069,53 +4193,54 @@ function create_fragment$e(ctx) {
 			br = element("br");
 			t9 = space();
 			span2 = element("span");
-			t10 = text("Variables: ");
-			t11 = text(ctx.variableCount);
-			t12 = space();
+
+			info.block.c();
+
+			t10 = space();
 			div2 = element("div");
 			span3 = element("span");
 			span3.textContent = "Start:";
+			t12 = space();
+			t13 = text(t13_value);
 			t14 = space();
-			t15 = text(t15_value);
-			t16 = space();
 			span4 = element("span");
 			span4.textContent = "End:";
+			t16 = space();
+			t17 = text(t17_value);
 			t18 = space();
-			t19 = text(t19_value);
-			t20 = space();
 			div3 = element("div");
-			t21 = text("imported: ");
-			t22 = text(t22_value);
+			t19 = text("imported: ");
+			t20 = text(t20_value);
 			attr(path, "fill", "#777");
 			attr(path, "d", "M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59\r\n        20,12C20,16.41 16.41,20 12,20M12,2C6.47,2 2,6.47 2,12C2,17.53 6.47,22\r\n        12,22C17.53,22 22,17.53 22,12C22,6.47 17.53,2\r\n        12,2M14.59,8L12,10.59L9.41,8L8,9.41L10.59,12L8,14.59L9.41,16L12,13.41L14.59,16L16,14.59L13.41,12L16,9.41L14.59,8Z");
-			add_location(path, file$e, 173, 6, 3976);
+			add_location(path, file$e, 163, 6, 3804);
 			set_style(svg, "width", "24px");
 			set_style(svg, "height", "24px");
 			attr(svg, "viewBox", "0 0 24 24");
-			add_location(svg, file$e, 172, 4, 3911);
+			add_location(svg, file$e, 162, 4, 3739);
 			div0.className = "delete svelte-cjkha5";
-			add_location(div0, file$e, 171, 2, 3862);
+			add_location(div0, file$e, 161, 2, 3690);
 			h4.className = "svelte-cjkha5";
-			add_location(h4, file$e, 181, 2, 4364);
+			add_location(h4, file$e, 171, 2, 4192);
 			span0.className = "vars svelte-cjkha5";
-			add_location(span0, file$e, 183, 4, 4416);
+			add_location(span0, file$e, 173, 4, 4244);
 			span1.className = "vars svelte-cjkha5";
-			add_location(span1, file$e, 184, 4, 4487);
-			add_location(br, file$e, 185, 4, 4566);
+			add_location(span1, file$e, 174, 4, 4315);
+			add_location(br, file$e, 175, 4, 4394);
 			span2.className = "vars svelte-cjkha5";
-			add_location(span2, file$e, 186, 4, 4578);
+			add_location(span2, file$e, 176, 4, 4406);
 			div1.className = "mainInfo svelte-cjkha5";
-			add_location(div1, file$e, 182, 2, 4388);
+			add_location(div1, file$e, 172, 2, 4216);
 			span3.className = "svelte-cjkha5";
-			add_location(span3, file$e, 191, 4, 4707);
+			add_location(span3, file$e, 183, 4, 4640);
 			span4.className = "svelte-cjkha5";
-			add_location(span4, file$e, 193, 4, 4791);
+			add_location(span4, file$e, 185, 4, 4723);
 			div2.className = "date svelte-cjkha5";
-			add_location(div2, file$e, 190, 2, 4683);
+			add_location(div2, file$e, 182, 2, 4616);
 			div3.className = "created svelte-cjkha5";
-			add_location(div3, file$e, 196, 2, 4850);
+			add_location(div3, file$e, 188, 2, 4781);
 			div4.className = "card svelte-cjkha5";
-			add_location(div4, file$e, 170, 0, 3840);
+			add_location(div4, file$e, 160, 0, 3668);
 
 			dispose = [
 				listen(div0, "click", ctx.deleteStudy),
@@ -4150,24 +4275,28 @@ function create_fragment$e(ctx) {
 			append(div1, br);
 			append(div1, t9);
 			append(div1, span2);
-			append(span2, t10);
-			append(span2, t11);
-			append(div4, t12);
+
+			info.block.m(span2, info.anchor = null);
+			info.mount = () => span2;
+			info.anchor = null;
+
+			append(div4, t10);
 			append(div4, div2);
 			append(div2, span3);
+			append(div2, t12);
+			append(div2, t13);
 			append(div2, t14);
-			append(div2, t15);
-			append(div2, t16);
 			append(div2, span4);
-			append(div2, t18);
-			append(div2, t19);
-			append(div4, t20);
+			append(div2, t16);
+			append(div2, t17);
+			append(div4, t18);
 			append(div4, div3);
-			append(div3, t21);
-			append(div3, t22);
+			append(div3, t19);
+			append(div3, t20);
 		},
 
-		p: function update(changed, ctx) {
+		p: function update(changed, new_ctx) {
+			ctx = new_ctx;
 			if (changed.studyName) {
 				set_data(t1, ctx.studyName);
 			}
@@ -4180,16 +4309,18 @@ function create_fragment$e(ctx) {
 				set_data(t7, ctx.responses);
 			}
 
-			if (changed.variableCount) {
-				set_data(t11, ctx.variableCount);
+			info.ctx = ctx;
+
+			if (('$variableStore' in changed) && promise !== (promise = ctx.$variableStore.filter(ctx.func).length) && handle_promise(promise, info)) ; else {
+				info.block.p(changed, assign(assign({}, ctx), info.resolved));
 			}
 
-			if ((changed.earliestBeginOfDataGathering) && t15_value !== (t15_value = formatDate(new ctx.Date(ctx.earliestBeginOfDataGathering)))) {
-				set_data(t15, t15_value);
+			if ((changed.earliestBeginOfDataGathering) && t13_value !== (t13_value = formatDate(new ctx.Date(ctx.earliestBeginOfDataGathering)))) {
+				set_data(t13, t13_value);
 			}
 
-			if ((changed.__created) && t22_value !== (t22_value = formatDate(ctx.__created))) {
-				set_data(t22, t22_value);
+			if ((changed.__created) && t20_value !== (t20_value = formatDate(ctx.__created))) {
+				set_data(t20, t20_value);
 			}
 		},
 
@@ -4201,12 +4332,20 @@ function create_fragment$e(ctx) {
 				detach(div4);
 			}
 
+			info.block.d();
+			info = null;
+
 			run_all(dispose);
 		}
 	};
 }
 
 function instance$b($$self, $$props, $$invalidate) {
+	let $variableStore;
+
+	validate_store(variableStore, 'variableStore');
+	subscribe($$self, variableStore, $$value => { $variableStore = $$value; $$invalidate('$variableStore', $variableStore); });
+
 	
 
   let { _id, studyName, description, tasks, __created, minimumStudyDurationPerPerson, maximumStudyDurationPerPerson, earliestBeginOfDataGathering, latestBeginOfDataGathering } = $$props;
@@ -4224,8 +4363,6 @@ function instance$b($$self, $$props, $$invalidate) {
 
   let responses = 0;
   let userCount = 0;
-
-  let variableCount = 0;
 
   //calc last day of study
   let days =
@@ -4251,15 +4388,6 @@ function instance$b($$self, $$props, $$invalidate) {
   res.onsuccess = e => {
     const count = e.target.result;
     $$invalidate('userCount', userCount = count);
-  };
-  res = db
-    .transaction("StudyVariables")
-    .objectStore("StudyVariables")
-    .index("studyId")
-    .count(_id);
-  res.onsuccess = e => {
-    const count = e.target.result;
-    $$invalidate('variableCount', variableCount = count);
   };
   function deleteStudy() {
     if (!confirm("Do you really want to delete this study?")) return;
@@ -4301,16 +4429,21 @@ function instance$b($$self, $$props, $$invalidate) {
       deleteByIndex(store);
     });
 
-    // notify study store
-    const res = tx.objectStore("Studies").getAll();
-    //FIXME: don't overwrite, just replace/add study in store?
-    res.onsuccess = e => studyStore.set(e.target.result);
+    // notify stores
+    tx.objectStore("Studies").getAll().onsuccess = e =>
+      studyStore.set(e.target.result);
+    tx.objectStore("StudyVariables").getAll().onsuccess = e =>
+      variableStore.set(e.target.result);
   }
 
 	const writable_props = ['_id', 'studyName', 'description', 'tasks', '__created', 'minimumStudyDurationPerPerson', 'maximumStudyDurationPerPerson', 'earliestBeginOfDataGathering', 'latestBeginOfDataGathering'];
 	Object.keys($$props).forEach(key => {
 		if (!writable_props.includes(key) && !key.startsWith('$$')) console.warn(`<StudyCard> was created with unknown prop '${key}'`);
 	});
+
+	function func(v) {
+		return v.studyId == _id;
+	}
 
 	$$self.$set = $$props => {
 		if ('_id' in $$props) $$invalidate('_id', _id = $$props._id);
@@ -4339,10 +4472,11 @@ function instance$b($$self, $$props, $$invalidate) {
 		showResponses,
 		responses,
 		userCount,
-		variableCount,
 		endDate,
 		deleteStudy,
-		Date
+		Date,
+		$variableStore,
+		func
 	};
 }
 
@@ -4465,7 +4599,7 @@ function get_each_context$1(ctx, list, i) {
 	return child_ctx;
 }
 
-// (61:4) {#each variables as v}
+// (49:4) {#each $variableStore.filter(v => v.studyId == studyId) as v}
 function create_each_block$1(ctx) {
 	var tr, td0, t0_value = ctx.v.variableName, t0, t1, td1, t2_value = ctx.v.variableLabel, t2, t3, td2, t4_value = ucFirst(ctx.v.measure), t4, t5;
 
@@ -4482,13 +4616,13 @@ function create_each_block$1(ctx) {
 			t4 = text(t4_value);
 			t5 = space();
 			td0.className = "name svelte-vhmrc0";
-			add_location(td0, file$f, 62, 8, 1154);
+			add_location(td0, file$f, 50, 8, 981);
 			td1.className = "label svelte-vhmrc0";
-			add_location(td1, file$f, 63, 8, 1204);
+			add_location(td1, file$f, 51, 8, 1029);
 			td2.className = "measure svelte-vhmrc0";
-			add_location(td2, file$f, 64, 8, 1256);
+			add_location(td2, file$f, 52, 8, 1079);
 			tr.className = "svelte-vhmrc0";
-			add_location(tr, file$f, 61, 6, 1140);
+			add_location(tr, file$f, 49, 6, 967);
 		},
 
 		m: function mount(target, anchor) {
@@ -4505,15 +4639,15 @@ function create_each_block$1(ctx) {
 		},
 
 		p: function update(changed, ctx) {
-			if ((changed.variables) && t0_value !== (t0_value = ctx.v.variableName)) {
+			if ((changed.$variableStore) && t0_value !== (t0_value = ctx.v.variableName)) {
 				set_data(t0, t0_value);
 			}
 
-			if ((changed.variables) && t2_value !== (t2_value = ctx.v.variableLabel)) {
+			if ((changed.$variableStore) && t2_value !== (t2_value = ctx.v.variableLabel)) {
 				set_data(t2, t2_value);
 			}
 
-			if ((changed.variables) && t4_value !== (t4_value = ucFirst(ctx.v.measure))) {
+			if ((changed.$variableStore) && t4_value !== (t4_value = ucFirst(ctx.v.measure))) {
 				set_data(t4, t4_value);
 			}
 		},
@@ -4529,7 +4663,7 @@ function create_each_block$1(ctx) {
 function create_fragment$f(ctx) {
 	var div, p, t0, strong, t1, t2, table, tr, th0, t4, th1, t6, th2, t8;
 
-	var each_value = ctx.variables;
+	var each_value = ctx.$variableStore.filter(ctx.func);
 
 	var each_blocks = [];
 
@@ -4560,20 +4694,20 @@ function create_fragment$f(ctx) {
 			for (var i = 0; i < each_blocks.length; i += 1) {
 				each_blocks[i].c();
 			}
-			add_location(strong, file$f, 52, 4, 969);
-			add_location(p, file$f, 50, 2, 942);
+			add_location(strong, file$f, 40, 4, 757);
+			add_location(p, file$f, 38, 2, 730);
 			th0.className = "svelte-vhmrc0";
-			add_location(th0, file$f, 56, 6, 1034);
+			add_location(th0, file$f, 44, 6, 822);
 			th1.className = "svelte-vhmrc0";
-			add_location(th1, file$f, 57, 6, 1055);
+			add_location(th1, file$f, 45, 6, 843);
 			th2.className = "svelte-vhmrc0";
-			add_location(th2, file$f, 58, 6, 1077);
+			add_location(th2, file$f, 46, 6, 865);
 			tr.className = "svelte-vhmrc0";
-			add_location(tr, file$f, 55, 4, 1022);
+			add_location(tr, file$f, 43, 4, 810);
 			table.className = "svelte-vhmrc0";
-			add_location(table, file$f, 54, 2, 1009);
+			add_location(table, file$f, 42, 2, 797);
 			div.className = "container svelte-vhmrc0";
-			add_location(div, file$f, 49, 0, 915);
+			add_location(div, file$f, 37, 0, 703);
 		},
 
 		l: function claim(nodes) {
@@ -4606,8 +4740,8 @@ function create_fragment$f(ctx) {
 				set_data(t1, ctx.studyName);
 			}
 
-			if (changed.ucFirst || changed.variables) {
-				each_value = ctx.variables;
+			if (changed.ucFirst || changed.$variableStore) {
+				each_value = ctx.$variableStore.filter(ctx.func);
 
 				for (var i = 0; i < each_value.length; i += 1) {
 					const child_ctx = get_each_context$1(ctx, each_value, i);
@@ -4646,31 +4780,29 @@ function ucFirst(string) {
 }
 
 function instance$c($$self, $$props, $$invalidate) {
-	let { studyId = 0, studyName = "" } = $$props;
-  let variables = [];
+	let $variableStore;
 
-  if (studyId) {
-    const res = db
-      .transaction("StudyVariables")
-      .objectStore("StudyVariables")
-      .index("studyId")
-      .getAll(studyId);
-    res.onsuccess = e => {
-      $$invalidate('variables', variables = e.target.result);
-    };
-  }
+	validate_store(variableStore, 'variableStore');
+	subscribe($$self, variableStore, $$value => { $variableStore = $$value; $$invalidate('$variableStore', $variableStore); });
+
+	
+  let { studyId = 0, studyName = "" } = $$props;
 
 	const writable_props = ['studyId', 'studyName'];
 	Object.keys($$props).forEach(key => {
 		if (!writable_props.includes(key) && !key.startsWith('$$')) console.warn(`<StudyVariables> was created with unknown prop '${key}'`);
 	});
 
+	function func(v) {
+		return v.studyId == studyId;
+	}
+
 	$$self.$set = $$props => {
 		if ('studyId' in $$props) $$invalidate('studyId', studyId = $$props.studyId);
 		if ('studyName' in $$props) $$invalidate('studyName', studyName = $$props.studyName);
 	};
 
-	return { studyId, studyName, variables };
+	return { studyId, studyName, $variableStore, func };
 }
 
 class StudyVariables extends SvelteComponentDev {
@@ -6109,507 +6241,347 @@ var simpleStatistics_min = createCommonjsModule(function (module, exports) {
 //# sourceMappingURL=simple-statistics.min.js.map
 });
 
-/* src\components\VariableInfo.svelte generated by Svelte v3.5.1 */
+/* src\charts\VariableNominalChart.svelte generated by Svelte v3.5.1 */
 
-/* src\pages\Descriptives.svelte generated by Svelte v3.5.1 */
+const file$j = "src\\charts\\VariableNominalChart.svelte";
 
-const file$j = "src\\pages\\Descriptives.svelte";
+function create_fragment$j(ctx) {
+	var div;
 
-function get_each_context_1$2(ctx, list, i) {
-	const child_ctx = Object.create(ctx);
-	child_ctx.varName = list[i].varName;
-	child_ctx.statistics = list[i].statistics;
-	return child_ctx;
+	return {
+		c: function create() {
+			div = element("div");
+			div.id = ctx.chartId;
+			add_location(div, file$j, 51, 0, 1384);
+		},
+
+		l: function claim(nodes) {
+			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+		},
+
+		m: function mount(target, anchor) {
+			insert(target, div, anchor);
+		},
+
+		p: noop,
+		i: noop,
+		o: noop,
+
+		d: function destroy(detaching) {
+			if (detaching) {
+				detach(div);
+			}
+		}
+	};
 }
+
+function instance$g($$self, $$props, $$invalidate) {
+	let { variable } = $$props;
+  const variableName = variable.variableName;
+  const chartId = `vis${variableName}nominal`;
+  const trunc = (t, n = 10) => t.substr(0, n - 1) + (t.length > n ? "..." : "");
+
+  // vega-lite charts
+  const vegaOptions = {
+    renderer: "svg",
+    mode: "vega-lite",
+    actions: { export: true, source: false, editor: false, compiled: false },
+    downloadFileName: `sensQvis_chart_${variableName}_nominal`
+  };
+  let data = variable.results.map(v => v.value);
+  if (variable.dataformat.textChoices) {
+    // map values to labels
+    const answerMap = {};
+    for (const choice of variable.dataformat.textChoices) {
+      answerMap[choice.value] = trunc(choice.valueLabel || choice.text);
+    }
+    data = data.map(v => answerMap[v]);
+  }
+
+  const spec = {
+    description: `Count of ${variableName} results`,
+    data: {
+      values: data
+    },
+    mark: "bar",
+    encoding: {
+      y: {
+        field: "data",
+        type: "nominal",
+        axis: {
+          title: null,
+          domain: false,
+          ticks: false,
+          labelPadding: 5
+        }
+      },
+      x: {
+        aggregate: "count",
+        type: "quantitative",
+        axis: { domain: false }
+      }
+    }
+  };
+  onMount(() => vegaEmbed(`#${chartId}`, spec, vegaOptions));
+
+	const writable_props = ['variable'];
+	Object.keys($$props).forEach(key => {
+		if (!writable_props.includes(key) && !key.startsWith('$$')) console.warn(`<VariableNominalChart> was created with unknown prop '${key}'`);
+	});
+
+	$$self.$set = $$props => {
+		if ('variable' in $$props) $$invalidate('variable', variable = $$props.variable);
+	};
+
+	return { variable, chartId };
+}
+
+class VariableNominalChart extends SvelteComponentDev {
+	constructor(options) {
+		super(options);
+		init(this, options, instance$g, create_fragment$j, safe_not_equal, ["variable"]);
+
+		const { ctx } = this.$$;
+		const props = options.props || {};
+		if (ctx.variable === undefined && !('variable' in props)) {
+			console.warn("<VariableNominalChart> was created without expected prop 'variable'");
+		}
+	}
+
+	get variable() {
+		throw new Error("<VariableNominalChart>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+	}
+
+	set variable(value) {
+		throw new Error("<VariableNominalChart>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+	}
+}
+
+/* src\charts\VariableScaleChart.svelte generated by Svelte v3.5.1 */
+
+const file$k = "src\\charts\\VariableScaleChart.svelte";
+
+function create_fragment$k(ctx) {
+	var div;
+
+	return {
+		c: function create() {
+			div = element("div");
+			div.id = ctx.chartId;
+			add_location(div, file$k, 59, 0, 1427);
+		},
+
+		l: function claim(nodes) {
+			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+		},
+
+		m: function mount(target, anchor) {
+			insert(target, div, anchor);
+		},
+
+		p: noop,
+		i: noop,
+		o: noop,
+
+		d: function destroy(detaching) {
+			if (detaching) {
+				detach(div);
+			}
+		}
+	};
+}
+
+function instance$h($$self, $$props, $$invalidate) {
+	let { variable } = $$props;
+  const variableName = variable.variableName;
+  const chartId = `vis${variableName}scale`;
+
+  // vega-lite charts
+  const vegaOptions = {
+    renderer: "svg",
+    mode: "vega-lite",
+    actions: { export: true, source: false, editor: false, compiled: false },
+    downloadFileName: `sensQvis_chart_${variableName}_scale`
+  };
+  let data = variable.results.map(v => v.value);
+
+  const graph1 = {
+    description: `Ditribution of ${variableName}`,
+    mark: "tick",
+    encoding: {
+      x: {
+        field: "data",
+        type: "quantitative",
+        //scale: { domain: [Math.min(...data), Math.max(...data)] },
+        axis: { title: variableName, domain: false }
+      }
+    }
+  };
+
+  const graph2 = {
+    description: `Binned ditribution of ${variableName}`,
+    mark: "bar",
+    encoding: {
+      x: {
+        bin: true,
+        field: "data",
+        type: "quantitative",
+        axis: { domain: false }
+      },
+      y: {
+        aggregate: "count",
+        type: "quantitative",
+        axis: {
+          domain: false,
+          ticks: false,
+          labelPadding: 5,
+          titlePadding: 10
+        }
+      }
+    }
+  };
+  const spec = {
+    data: {
+      values: data
+    },
+    vconcat: [graph1, graph2]
+  };
+  onMount(() => vegaEmbed(`#${chartId}`, spec, vegaOptions));
+
+	const writable_props = ['variable'];
+	Object.keys($$props).forEach(key => {
+		if (!writable_props.includes(key) && !key.startsWith('$$')) console.warn(`<VariableScaleChart> was created with unknown prop '${key}'`);
+	});
+
+	$$self.$set = $$props => {
+		if ('variable' in $$props) $$invalidate('variable', variable = $$props.variable);
+	};
+
+	return { variable, chartId };
+}
+
+class VariableScaleChart extends SvelteComponentDev {
+	constructor(options) {
+		super(options);
+		init(this, options, instance$h, create_fragment$k, safe_not_equal, ["variable"]);
+
+		const { ctx } = this.$$;
+		const props = options.props || {};
+		if (ctx.variable === undefined && !('variable' in props)) {
+			console.warn("<VariableScaleChart> was created without expected prop 'variable'");
+		}
+	}
+
+	get variable() {
+		throw new Error("<VariableScaleChart>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+	}
+
+	set variable(value) {
+		throw new Error("<VariableScaleChart>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+	}
+}
+
+/* src\components\VariableStats.svelte generated by Svelte v3.5.1 */
+
+const file$l = "src\\components\\VariableStats.svelte";
 
 function get_each_context$5(ctx, list, i) {
 	const child_ctx = Object.create(ctx);
-	child_ctx.v = list[i];
+	child_ctx.choice = list[i];
 	return child_ctx;
 }
 
-// (240:14) {#if varName == v.variableName}
-function create_if_block$4(ctx) {
-	var if_block_anchor;
+// (56:4) {#if variable.measure == 'nominal'}
+function create_if_block_5(ctx) {
+	var current;
 
-	function select_block_type(ctx) {
-		if (ctx.v.measure == 'nominal') return create_if_block_1$2;
-		if (ctx.v.measure == 'scale') return create_if_block_2$1;
-	}
-
-	var current_block_type = select_block_type(ctx);
-	var if_block = current_block_type && current_block_type(ctx);
+	var variablenominalchart = new VariableNominalChart({
+		props: { variable: ctx.variable },
+		$$inline: true
+	});
 
 	return {
 		c: function create() {
-			if (if_block) if_block.c();
-			if_block_anchor = empty();
+			variablenominalchart.$$.fragment.c();
 		},
 
 		m: function mount(target, anchor) {
-			if (if_block) if_block.m(target, anchor);
-			insert(target, if_block_anchor, anchor);
+			mount_component(variablenominalchart, target, anchor);
+			current = true;
 		},
 
 		p: function update(changed, ctx) {
-			if (current_block_type === (current_block_type = select_block_type(ctx)) && if_block) {
-				if_block.p(changed, ctx);
-			} else {
-				if (if_block) if_block.d(1);
-				if_block = current_block_type && current_block_type(ctx);
-				if (if_block) {
-					if_block.c();
-					if_block.m(if_block_anchor.parentNode, if_block_anchor);
-				}
-			}
+			var variablenominalchart_changes = {};
+			if (changed.variable) variablenominalchart_changes.variable = ctx.variable;
+			variablenominalchart.$set(variablenominalchart_changes);
+		},
+
+		i: function intro(local) {
+			if (current) return;
+			variablenominalchart.$$.fragment.i(local);
+
+			current = true;
+		},
+
+		o: function outro(local) {
+			variablenominalchart.$$.fragment.o(local);
+			current = false;
 		},
 
 		d: function destroy(detaching) {
-			if (if_block) if_block.d(detaching);
-
-			if (detaching) {
-				detach(if_block_anchor);
-			}
+			variablenominalchart.$destroy(detaching);
 		}
 	};
 }
 
-// (257:47) 
-function create_if_block_2$1(ctx) {
-	var tr0, td0, t1, td1, t2_value = ctx.statistics.count, t2, t3, tr1, td2, t5, td3, t6_value = ctx.statistics.min, t6, t7, t8_value = ctx.statistics.max, t8, t9, tr2, td4, t11, td5, t12_value = ctx.statistics.mode, t12, t13, tr3, td6, t15, td7, t16_value = ctx.statistics.median, t16, t17, tr4, td8, t19, td9, t20_value = ctx.statistics.mean, t20, t21, tr5, td10, t23, td11, t24_value = ctx.statistics.sd, t24;
+// (59:4) {#if variable.measure == 'scale'}
+function create_if_block_4(ctx) {
+	var current;
+
+	var variablescalechart = new VariableScaleChart({
+		props: { variable: ctx.variable },
+		$$inline: true
+	});
 
 	return {
 		c: function create() {
-			tr0 = element("tr");
-			td0 = element("td");
-			td0.textContent = "count";
-			t1 = space();
-			td1 = element("td");
-			t2 = text(t2_value);
-			t3 = space();
-			tr1 = element("tr");
-			td2 = element("td");
-			td2.textContent = "min - max";
-			t5 = space();
-			td3 = element("td");
-			t6 = text(t6_value);
-			t7 = text(" - ");
-			t8 = text(t8_value);
-			t9 = space();
-			tr2 = element("tr");
-			td4 = element("td");
-			td4.textContent = "mode";
-			t11 = space();
-			td5 = element("td");
-			t12 = text(t12_value);
-			t13 = space();
-			tr3 = element("tr");
-			td6 = element("td");
-			td6.textContent = "median";
-			t15 = space();
-			td7 = element("td");
-			t16 = text(t16_value);
-			t17 = space();
-			tr4 = element("tr");
-			td8 = element("td");
-			td8.textContent = "mean";
-			t19 = space();
-			td9 = element("td");
-			t20 = text(t20_value);
-			t21 = space();
-			tr5 = element("tr");
-			td10 = element("td");
-			td10.textContent = "sd";
-			t23 = space();
-			td11 = element("td");
-			t24 = text(t24_value);
-			td0.className = "svelte-1s6dfs7";
-			add_location(td0, file$j, 258, 20, 8219);
-			td1.className = "svelte-1s6dfs7";
-			add_location(td1, file$j, 259, 20, 8255);
-			tr0.className = "svelte-1s6dfs7";
-			add_location(tr0, file$j, 257, 18, 8193);
-			td2.className = "svelte-1s6dfs7";
-			add_location(td2, file$j, 262, 20, 8353);
-			td3.className = "svelte-1s6dfs7";
-			add_location(td3, file$j, 263, 20, 8393);
-			tr1.className = "svelte-1s6dfs7";
-			add_location(tr1, file$j, 261, 18, 8327);
-			td4.className = "svelte-1s6dfs7";
-			add_location(td4, file$j, 266, 20, 8508);
-			td5.className = "svelte-1s6dfs7";
-			add_location(td5, file$j, 267, 20, 8543);
-			tr2.className = "svelte-1s6dfs7";
-			add_location(tr2, file$j, 265, 18, 8482);
-			td6.className = "svelte-1s6dfs7";
-			add_location(td6, file$j, 270, 20, 8640);
-			td7.className = "svelte-1s6dfs7";
-			add_location(td7, file$j, 271, 20, 8677);
-			tr3.className = "svelte-1s6dfs7";
-			add_location(tr3, file$j, 269, 18, 8614);
-			td8.className = "svelte-1s6dfs7";
-			add_location(td8, file$j, 274, 20, 8776);
-			td9.className = "svelte-1s6dfs7";
-			add_location(td9, file$j, 275, 20, 8811);
-			tr4.className = "svelte-1s6dfs7";
-			add_location(tr4, file$j, 273, 18, 8750);
-			td10.className = "svelte-1s6dfs7";
-			add_location(td10, file$j, 278, 20, 8908);
-			td11.className = "svelte-1s6dfs7";
-			add_location(td11, file$j, 279, 20, 8941);
-			tr5.className = "svelte-1s6dfs7";
-			add_location(tr5, file$j, 277, 18, 8882);
+			variablescalechart.$$.fragment.c();
 		},
 
 		m: function mount(target, anchor) {
-			insert(target, tr0, anchor);
-			append(tr0, td0);
-			append(tr0, t1);
-			append(tr0, td1);
-			append(td1, t2);
-			insert(target, t3, anchor);
-			insert(target, tr1, anchor);
-			append(tr1, td2);
-			append(tr1, t5);
-			append(tr1, td3);
-			append(td3, t6);
-			append(td3, t7);
-			append(td3, t8);
-			insert(target, t9, anchor);
-			insert(target, tr2, anchor);
-			append(tr2, td4);
-			append(tr2, t11);
-			append(tr2, td5);
-			append(td5, t12);
-			insert(target, t13, anchor);
-			insert(target, tr3, anchor);
-			append(tr3, td6);
-			append(tr3, t15);
-			append(tr3, td7);
-			append(td7, t16);
-			insert(target, t17, anchor);
-			insert(target, tr4, anchor);
-			append(tr4, td8);
-			append(tr4, t19);
-			append(tr4, td9);
-			append(td9, t20);
-			insert(target, t21, anchor);
-			insert(target, tr5, anchor);
-			append(tr5, td10);
-			append(tr5, t23);
-			append(tr5, td11);
-			append(td11, t24);
+			mount_component(variablescalechart, target, anchor);
+			current = true;
 		},
 
 		p: function update(changed, ctx) {
-			if ((changed.stats) && t2_value !== (t2_value = ctx.statistics.count)) {
-				set_data(t2, t2_value);
-			}
+			var variablescalechart_changes = {};
+			if (changed.variable) variablescalechart_changes.variable = ctx.variable;
+			variablescalechart.$set(variablescalechart_changes);
+		},
 
-			if ((changed.stats) && t6_value !== (t6_value = ctx.statistics.min)) {
-				set_data(t6, t6_value);
-			}
+		i: function intro(local) {
+			if (current) return;
+			variablescalechart.$$.fragment.i(local);
 
-			if ((changed.stats) && t8_value !== (t8_value = ctx.statistics.max)) {
-				set_data(t8, t8_value);
-			}
+			current = true;
+		},
 
-			if ((changed.stats) && t12_value !== (t12_value = ctx.statistics.mode)) {
-				set_data(t12, t12_value);
-			}
-
-			if ((changed.stats) && t16_value !== (t16_value = ctx.statistics.median)) {
-				set_data(t16, t16_value);
-			}
-
-			if ((changed.stats) && t20_value !== (t20_value = ctx.statistics.mean)) {
-				set_data(t20, t20_value);
-			}
-
-			if ((changed.stats) && t24_value !== (t24_value = ctx.statistics.sd)) {
-				set_data(t24, t24_value);
-			}
+		o: function outro(local) {
+			variablescalechart.$$.fragment.o(local);
+			current = false;
 		},
 
 		d: function destroy(detaching) {
-			if (detaching) {
-				detach(tr0);
-				detach(t3);
-				detach(tr1);
-				detach(t9);
-				detach(tr2);
-				detach(t13);
-				detach(tr3);
-				detach(t17);
-				detach(tr4);
-				detach(t21);
-				detach(tr5);
-			}
+			variablescalechart.$destroy(detaching);
 		}
 	};
 }
 
-// (241:16) {#if v.measure == 'nominal'}
-function create_if_block_1$2(ctx) {
-	var tr0, td0, t1, td1, t2_value = ctx.statistics.count, t2, t3, tr1, td2, t5, td3, t6_value = ctx.statistics.mode, t6, t7, t8_value = ctx.statistics.modeLabel, t8, t9;
+// (67:4) {#if variable.dataformat.hasOwnProperty('textChoices')}
+function create_if_block_3(ctx) {
+	var div, table, thead, tr, th, t_1;
 
-	return {
-		c: function create() {
-			tr0 = element("tr");
-			td0 = element("td");
-			td0.textContent = "count";
-			t1 = space();
-			td1 = element("td");
-			t2 = text(t2_value);
-			t3 = space();
-			tr1 = element("tr");
-			td2 = element("td");
-			td2.textContent = "mode";
-			t5 = space();
-			td3 = element("td");
-			t6 = text(t6_value);
-			t7 = text(" (");
-			t8 = text(t8_value);
-			t9 = text(")");
-			td0.className = "svelte-1s6dfs7";
-			add_location(td0, file$j, 242, 20, 7627);
-			td1.className = "svelte-1s6dfs7";
-			add_location(td1, file$j, 243, 20, 7663);
-			tr0.className = "svelte-1s6dfs7";
-			add_location(tr0, file$j, 241, 18, 7601);
-			td2.className = "svelte-1s6dfs7";
-			add_location(td2, file$j, 253, 20, 8013);
-			td3.className = "svelte-1s6dfs7";
-			add_location(td3, file$j, 254, 20, 8048);
-			tr1.className = "svelte-1s6dfs7";
-			add_location(tr1, file$j, 252, 18, 7987);
-		},
-
-		m: function mount(target, anchor) {
-			insert(target, tr0, anchor);
-			append(tr0, td0);
-			append(tr0, t1);
-			append(tr0, td1);
-			append(td1, t2);
-			insert(target, t3, anchor);
-			insert(target, tr1, anchor);
-			append(tr1, td2);
-			append(tr1, t5);
-			append(tr1, td3);
-			append(td3, t6);
-			append(td3, t7);
-			append(td3, t8);
-			append(td3, t9);
-		},
-
-		p: function update(changed, ctx) {
-			if ((changed.stats) && t2_value !== (t2_value = ctx.statistics.count)) {
-				set_data(t2, t2_value);
-			}
-
-			if ((changed.stats) && t6_value !== (t6_value = ctx.statistics.mode)) {
-				set_data(t6, t6_value);
-			}
-
-			if ((changed.stats) && t8_value !== (t8_value = ctx.statistics.modeLabel)) {
-				set_data(t8, t8_value);
-			}
-		},
-
-		d: function destroy(detaching) {
-			if (detaching) {
-				detach(tr0);
-				detach(t3);
-				detach(tr1);
-			}
-		}
-	};
-}
-
-// (239:12) {#each stats as { varName, statistics }}
-function create_each_block_1$2(ctx) {
-	var if_block_anchor;
-
-	var if_block = (ctx.varName == ctx.v.variableName) && create_if_block$4(ctx);
-
-	return {
-		c: function create() {
-			if (if_block) if_block.c();
-			if_block_anchor = empty();
-		},
-
-		m: function mount(target, anchor) {
-			if (if_block) if_block.m(target, anchor);
-			insert(target, if_block_anchor, anchor);
-		},
-
-		p: function update(changed, ctx) {
-			if (ctx.varName == ctx.v.variableName) {
-				if (if_block) {
-					if_block.p(changed, ctx);
-				} else {
-					if_block = create_if_block$4(ctx);
-					if_block.c();
-					if_block.m(if_block_anchor.parentNode, if_block_anchor);
-				}
-			} else if (if_block) {
-				if_block.d(1);
-				if_block = null;
-			}
-		},
-
-		d: function destroy(detaching) {
-			if (if_block) if_block.d(detaching);
-
-			if (detaching) {
-				detach(if_block_anchor);
-			}
-		}
-	};
-}
-
-// (228:4) {#each variables as v}
-function create_each_block$5(ctx) {
-	var tr, td0, t0_value = ctx.v.variableName, t0, t1, td1, t2_value = ctx.v.variableLabel, t2, t3, td2, t4_value = ucFirst$1(ctx.v.measure), t4, t5, td3, div0, div0_id_value, t6, div1, div1_id_value, t7, td4, table, t8;
-
-	var each_value_1 = ctx.stats;
-
-	var each_blocks = [];
-
-	for (var i = 0; i < each_value_1.length; i += 1) {
-		each_blocks[i] = create_each_block_1$2(get_each_context_1$2(ctx, each_value_1, i));
-	}
-
-	return {
-		c: function create() {
-			tr = element("tr");
-			td0 = element("td");
-			t0 = text(t0_value);
-			t1 = space();
-			td1 = element("td");
-			t2 = text(t2_value);
-			t3 = space();
-			td2 = element("td");
-			t4 = text(t4_value);
-			t5 = space();
-			td3 = element("td");
-			div0 = element("div");
-			t6 = space();
-			div1 = element("div");
-			t7 = space();
-			td4 = element("td");
-			table = element("table");
-
-			for (var i = 0; i < each_blocks.length; i += 1) {
-				each_blocks[i].c();
-			}
-
-			t8 = space();
-			td0.className = "name svelte-1s6dfs7";
-			add_location(td0, file$j, 229, 8, 7104);
-			td1.className = "label svelte-1s6dfs7";
-			add_location(td1, file$j, 230, 8, 7152);
-			td2.className = "measure svelte-1s6dfs7";
-			add_location(td2, file$j, 231, 8, 7202);
-			div0.id = div0_id_value = "vis" + ctx.v.variableName;
-			add_location(div0, file$j, 233, 10, 7309);
-			div1.id = div1_id_value = "vis2" + ctx.v.variableName;
-			add_location(div1, file$j, 234, 10, 7353);
-			set_style(td3, "text-align", "right");
-			set_style(td3, "width", "40%");
-			td3.className = "svelte-1s6dfs7";
-			add_location(td3, file$j, 232, 8, 7257);
-			table.className = "svelte-1s6dfs7";
-			add_location(table, file$j, 237, 10, 7427);
-			td4.className = "svelte-1s6dfs7";
-			add_location(td4, file$j, 236, 8, 7411);
-			tr.className = "svelte-1s6dfs7";
-			add_location(tr, file$j, 228, 6, 7090);
-		},
-
-		m: function mount(target, anchor) {
-			insert(target, tr, anchor);
-			append(tr, td0);
-			append(td0, t0);
-			append(tr, t1);
-			append(tr, td1);
-			append(td1, t2);
-			append(tr, t3);
-			append(tr, td2);
-			append(td2, t4);
-			append(tr, t5);
-			append(tr, td3);
-			append(td3, div0);
-			append(td3, t6);
-			append(td3, div1);
-			append(tr, t7);
-			append(tr, td4);
-			append(td4, table);
-
-			for (var i = 0; i < each_blocks.length; i += 1) {
-				each_blocks[i].m(table, null);
-			}
-
-			append(tr, t8);
-		},
-
-		p: function update(changed, ctx) {
-			if ((changed.variables) && t0_value !== (t0_value = ctx.v.variableName)) {
-				set_data(t0, t0_value);
-			}
-
-			if ((changed.variables) && t2_value !== (t2_value = ctx.v.variableLabel)) {
-				set_data(t2, t2_value);
-			}
-
-			if ((changed.variables) && t4_value !== (t4_value = ucFirst$1(ctx.v.measure))) {
-				set_data(t4, t4_value);
-			}
-
-			if ((changed.variables) && div0_id_value !== (div0_id_value = "vis" + ctx.v.variableName)) {
-				div0.id = div0_id_value;
-			}
-
-			if ((changed.variables) && div1_id_value !== (div1_id_value = "vis2" + ctx.v.variableName)) {
-				div1.id = div1_id_value;
-			}
-
-			if (changed.stats || changed.variables) {
-				each_value_1 = ctx.stats;
-
-				for (var i = 0; i < each_value_1.length; i += 1) {
-					const child_ctx = get_each_context_1$2(ctx, each_value_1, i);
-
-					if (each_blocks[i]) {
-						each_blocks[i].p(changed, child_ctx);
-					} else {
-						each_blocks[i] = create_each_block_1$2(child_ctx);
-						each_blocks[i].c();
-						each_blocks[i].m(table, null);
-					}
-				}
-
-				for (; i < each_blocks.length; i += 1) {
-					each_blocks[i].d(1);
-				}
-				each_blocks.length = each_value_1.length;
-			}
-		},
-
-		d: function destroy(detaching) {
-			if (detaching) {
-				detach(tr);
-			}
-
-			destroy_each(each_blocks, detaching);
-		}
-	};
-}
-
-function create_fragment$j(ctx) {
-	var div, t0, table, tr, th0, t2, th1, t4, th2, t6, th3, t8, div_intro;
-
-	var each_value = ctx.variables;
+	var each_value = ctx.variable.dataformat.textChoices;
 
 	var each_blocks = [];
 
@@ -6620,61 +6592,36 @@ function create_fragment$j(ctx) {
 	return {
 		c: function create() {
 			div = element("div");
-			t0 = text("(It's ugly, will be fixed soon...)\r\n  ");
 			table = element("table");
+			thead = element("thead");
 			tr = element("tr");
-			th0 = element("th");
-			th0.textContent = "Variable Name";
-			t2 = space();
-			th1 = element("th");
-			th1.textContent = "Label";
-			t4 = space();
-			th2 = element("th");
-			th2.textContent = "Measure";
-			t6 = space();
-			th3 = element("th");
-			th3.textContent = "Statistics";
-			t8 = space();
+			th = element("th");
+			th.textContent = "Answer Options";
+			t_1 = space();
 
 			for (var i = 0; i < each_blocks.length; i += 1) {
 				each_blocks[i].c();
 			}
-			th0.className = "svelte-1s6dfs7";
-			add_location(th0, file$j, 222, 6, 6901);
-			th1.className = "svelte-1s6dfs7";
-			add_location(th1, file$j, 223, 6, 6931);
-			th2.className = "svelte-1s6dfs7";
-			add_location(th2, file$j, 224, 6, 6953);
-			th3.colSpan = "2";
-			set_style(th3, "padding-left", "17%");
-			set_style(th3, "width", "80%");
-			th3.className = "svelte-1s6dfs7";
-			add_location(th3, file$j, 225, 6, 6977);
-			tr.className = "svelte-1s6dfs7";
-			add_location(tr, file$j, 221, 4, 6889);
-			table.className = "svelte-1s6dfs7";
-			add_location(table, file$j, 220, 2, 6876);
-			div.className = "container svelte-1s6dfs7";
-			add_location(div, file$j, 216, 0, 6735);
-		},
-
-		l: function claim(nodes) {
-			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+			th.colSpan = "2";
+			th.className = "svelte-uz4ts6";
+			add_location(th, file$l, 71, 14, 1710);
+			tr.className = "svelte-uz4ts6";
+			add_location(tr, file$l, 70, 12, 1690);
+			thead.className = "svelte-uz4ts6";
+			add_location(thead, file$l, 69, 10, 1669);
+			table.className = "svelte-uz4ts6";
+			add_location(table, file$l, 68, 8, 1650);
+			div.className = "choices svelte-uz4ts6";
+			add_location(div, file$l, 67, 6, 1619);
 		},
 
 		m: function mount(target, anchor) {
 			insert(target, div, anchor);
-			append(div, t0);
 			append(div, table);
-			append(table, tr);
-			append(tr, th0);
-			append(tr, t2);
-			append(tr, th1);
-			append(tr, t4);
-			append(tr, th2);
-			append(tr, t6);
-			append(tr, th3);
-			append(table, t8);
+			append(table, thead);
+			append(thead, tr);
+			append(tr, th);
+			append(table, t_1);
 
 			for (var i = 0; i < each_blocks.length; i += 1) {
 				each_blocks[i].m(table, null);
@@ -6682,8 +6629,8 @@ function create_fragment$j(ctx) {
 		},
 
 		p: function update(changed, ctx) {
-			if (changed.stats || changed.variables || changed.ucFirst) {
-				each_value = ctx.variables;
+			if (changed.variable) {
+				each_value = ctx.variable.dataformat.textChoices;
 
 				for (var i = 0; i < each_value.length; i += 1) {
 					const child_ctx = get_each_context$5(ctx, each_value, i);
@@ -6704,17 +6651,6 @@ function create_fragment$j(ctx) {
 			}
 		},
 
-		i: function intro(local) {
-			if (!div_intro) {
-				add_render_callback(() => {
-					div_intro = create_in_transition(div, fade, { duration: 400 });
-					div_intro.start();
-				});
-			}
-		},
-
-		o: noop,
-
 		d: function destroy(detaching) {
 			if (detaching) {
 				detach(div);
@@ -6725,190 +6661,815 @@ function create_fragment$j(ctx) {
 	};
 }
 
-function ucFirst$1(string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
+// (75:10) {#each variable.dataformat.textChoices as choice}
+function create_each_block$5(ctx) {
+	var tr, td, t0, t1_value = ctx.choice.value, t1, t2, t3_value = ctx.choice.valueLabel || ctx.choice.text, t3;
+
+	return {
+		c: function create() {
+			tr = element("tr");
+			td = element("td");
+			t0 = text("(");
+			t1 = text(t1_value);
+			t2 = text(") ");
+			t3 = text(t3_value);
+			td.className = "svelte-uz4ts6";
+			add_location(td, file$l, 76, 14, 1879);
+			tr.className = "svelte-uz4ts6";
+			add_location(tr, file$l, 75, 12, 1859);
+		},
+
+		m: function mount(target, anchor) {
+			insert(target, tr, anchor);
+			append(tr, td);
+			append(td, t0);
+			append(td, t1);
+			append(td, t2);
+			append(td, t3);
+		},
+
+		p: function update(changed, ctx) {
+			if ((changed.variable) && t1_value !== (t1_value = ctx.choice.value)) {
+				set_data(t1, t1_value);
+			}
+
+			if ((changed.variable) && t3_value !== (t3_value = ctx.choice.valueLabel || ctx.choice.text)) {
+				set_data(t3, t3_value);
+			}
+		},
+
+		d: function destroy(detaching) {
+			if (detaching) {
+				detach(tr);
+			}
+		}
+	};
 }
 
-function instance$g($$self, $$props, $$invalidate) {
-	
-  const trunc = (t, n = 20) => {
-    return t.substr(0, n - 1) + (t.length > n ? "..." : "");
-  };
+// (94:8) {#if variable.measure == 'scale' || variable.measure == 'ordinal'}
+function create_if_block_2$1(ctx) {
+	var tr, td0, t1, td1, t2_value = simpleStatistics_min.min(ctx.data), t2, t3, t4_value = simpleStatistics_min.max(ctx.data), t4;
 
-  const vegaOptions = {
-    renderer: "svg",
-    mode: "vega-lite",
-    actions: { export: true, source: false, editor: false, compiled: false },
-    downloadFileName: "graph_sensQvis"
-  };
+	return {
+		c: function create() {
+			tr = element("tr");
+			td0 = element("td");
+			td0.textContent = "Min - Max:";
+			t1 = space();
+			td1 = element("td");
+			t2 = text(t2_value);
+			t3 = text(" - ");
+			t4 = text(t4_value);
+			td0.className = "svelte-uz4ts6";
+			add_location(td0, file$l, 95, 12, 2380);
+			td1.className = "svelte-uz4ts6";
+			add_location(td1, file$l, 96, 12, 2413);
+			tr.className = "svelte-uz4ts6";
+			add_location(tr, file$l, 94, 10, 2362);
+		},
+
+		m: function mount(target, anchor) {
+			insert(target, tr, anchor);
+			append(tr, td0);
+			append(tr, t1);
+			append(tr, td1);
+			append(td1, t2);
+			append(td1, t3);
+			append(td1, t4);
+		},
+
+		p: noop,
+
+		d: function destroy(detaching) {
+			if (detaching) {
+				detach(tr);
+			}
+		}
+	};
+}
+
+// (104:8) {#if variable.measure == 'scale' || variable.measure == 'ordinal'}
+function create_if_block_1$2(ctx) {
+	var tr, td0, t1, td1, t2_value = simpleStatistics_min.median(ctx.data), t2;
+
+	return {
+		c: function create() {
+			tr = element("tr");
+			td0 = element("td");
+			td0.textContent = "Median:";
+			t1 = space();
+			td1 = element("td");
+			t2 = text(t2_value);
+			td0.className = "svelte-uz4ts6";
+			add_location(td0, file$l, 105, 12, 2692);
+			td1.className = "svelte-uz4ts6";
+			add_location(td1, file$l, 106, 12, 2722);
+			tr.className = "svelte-uz4ts6";
+			add_location(tr, file$l, 104, 10, 2674);
+		},
+
+		m: function mount(target, anchor) {
+			insert(target, tr, anchor);
+			append(tr, td0);
+			append(tr, t1);
+			append(tr, td1);
+			append(td1, t2);
+		},
+
+		p: noop,
+
+		d: function destroy(detaching) {
+			if (detaching) {
+				detach(tr);
+			}
+		}
+	};
+}
+
+// (110:8) {#if variable.measure == 'scale'}
+function create_if_block$4(ctx) {
+	var tr, td0, t1, td1, t2_value = simpleStatistics_min.mean(ctx.data).toFixed(4), t2, t3, t4_value = simpleStatistics_min
+                .standardDeviation(ctx.data)
+                .toFixed(4), t4, t5;
+
+	return {
+		c: function create() {
+			tr = element("tr");
+			td0 = element("td");
+			td0.textContent = "Mean:";
+			t1 = space();
+			td1 = element("td");
+			t2 = text(t2_value);
+			t3 = text(" (sd = ");
+			t4 = text(t4_value);
+			t5 = text(")");
+			td0.className = "svelte-uz4ts6";
+			add_location(td0, file$l, 111, 12, 2855);
+			td1.className = "svelte-uz4ts6";
+			add_location(td1, file$l, 112, 12, 2883);
+			tr.className = "svelte-uz4ts6";
+			add_location(tr, file$l, 110, 10, 2837);
+		},
+
+		m: function mount(target, anchor) {
+			insert(target, tr, anchor);
+			append(tr, td0);
+			append(tr, t1);
+			append(tr, td1);
+			append(td1, t2);
+			append(td1, t3);
+			append(td1, t4);
+			append(td1, t5);
+		},
+
+		p: noop,
+
+		d: function destroy(detaching) {
+			if (detaching) {
+				detach(tr);
+			}
+		}
+	};
+}
+
+function create_fragment$l(ctx) {
+	var div6, div0, t0, t1, div5, div1, t2_value = ctx.variable.variableName, t2, t3, div2, t4_value = ctx.variable.variableLabel, t4, t5, div3, t6_value = ctx.uc(ctx.variable.measure), t6, t7, t8, div4, table, thead, tr0, th, t10, tr1, td0, t12, td1, t13_value = ctx.data.length, t13, t14, t15, tr2, td2, t17, td3, t18_value = simpleStatistics_min.modeFast(ctx.data), t18, t19, t20, current;
+
+	var if_block0 = (ctx.variable.measure == 'nominal') && create_if_block_5(ctx);
+
+	var if_block1 = (ctx.variable.measure == 'scale') && create_if_block_4(ctx);
+
+	var if_block2 = (ctx.variable.dataformat.hasOwnProperty('textChoices')) && create_if_block_3(ctx);
+
+	var if_block3 = (ctx.variable.measure == 'scale' || ctx.variable.measure == 'ordinal') && create_if_block_2$1(ctx);
+
+	var if_block4 = (ctx.variable.measure == 'scale' || ctx.variable.measure == 'ordinal') && create_if_block_1$2(ctx);
+
+	var if_block5 = (ctx.variable.measure == 'scale') && create_if_block$4(ctx);
+
+	return {
+		c: function create() {
+			div6 = element("div");
+			div0 = element("div");
+			if (if_block0) if_block0.c();
+			t0 = space();
+			if (if_block1) if_block1.c();
+			t1 = space();
+			div5 = element("div");
+			div1 = element("div");
+			t2 = text(t2_value);
+			t3 = space();
+			div2 = element("div");
+			t4 = text(t4_value);
+			t5 = space();
+			div3 = element("div");
+			t6 = text(t6_value);
+			t7 = space();
+			if (if_block2) if_block2.c();
+			t8 = space();
+			div4 = element("div");
+			table = element("table");
+			thead = element("thead");
+			tr0 = element("tr");
+			th = element("th");
+			th.textContent = "Statistics";
+			t10 = space();
+			tr1 = element("tr");
+			td0 = element("td");
+			td0.textContent = "Count of records:";
+			t12 = space();
+			td1 = element("td");
+			t13 = text(t13_value);
+			t14 = space();
+			if (if_block3) if_block3.c();
+			t15 = space();
+			tr2 = element("tr");
+			td2 = element("td");
+			td2.textContent = "Mode:";
+			t17 = space();
+			td3 = element("td");
+			t18 = text(t18_value);
+			t19 = space();
+			if (if_block4) if_block4.c();
+			t20 = space();
+			if (if_block5) if_block5.c();
+			div0.className = "charts svelte-uz4ts6";
+			add_location(div0, file$l, 54, 2, 1149);
+			div1.className = "name";
+			add_location(div1, file$l, 63, 4, 1393);
+			div2.className = "label";
+			add_location(div2, file$l, 64, 4, 1446);
+			div3.className = "measure";
+			add_location(div3, file$l, 65, 4, 1501);
+			th.colSpan = "2";
+			th.className = "svelte-uz4ts6";
+			add_location(th, file$l, 86, 12, 2107);
+			tr0.className = "svelte-uz4ts6";
+			add_location(tr0, file$l, 85, 10, 2089);
+			thead.className = "svelte-uz4ts6";
+			add_location(thead, file$l, 84, 8, 2070);
+			td0.className = "svelte-uz4ts6";
+			add_location(td0, file$l, 90, 10, 2199);
+			td1.className = "svelte-uz4ts6";
+			add_location(td1, file$l, 91, 10, 2237);
+			tr1.className = "svelte-uz4ts6";
+			add_location(tr1, file$l, 89, 8, 2183);
+			td2.className = "svelte-uz4ts6";
+			add_location(td2, file$l, 100, 10, 2515);
+			td3.className = "svelte-uz4ts6";
+			add_location(td3, file$l, 101, 10, 2541);
+			tr2.className = "svelte-uz4ts6";
+			add_location(tr2, file$l, 99, 8, 2499);
+			table.className = "svelte-uz4ts6";
+			add_location(table, file$l, 83, 6, 2053);
+			div4.className = "stats";
+			add_location(div4, file$l, 82, 4, 2026);
+			div5.className = "text";
+			add_location(div5, file$l, 62, 2, 1369);
+			div6.className = "card svelte-uz4ts6";
+			add_location(div6, file$l, 53, 0, 1127);
+		},
+
+		l: function claim(nodes) {
+			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+		},
+
+		m: function mount(target, anchor) {
+			insert(target, div6, anchor);
+			append(div6, div0);
+			if (if_block0) if_block0.m(div0, null);
+			append(div0, t0);
+			if (if_block1) if_block1.m(div0, null);
+			append(div6, t1);
+			append(div6, div5);
+			append(div5, div1);
+			append(div1, t2);
+			append(div5, t3);
+			append(div5, div2);
+			append(div2, t4);
+			append(div5, t5);
+			append(div5, div3);
+			append(div3, t6);
+			append(div5, t7);
+			if (if_block2) if_block2.m(div5, null);
+			append(div5, t8);
+			append(div5, div4);
+			append(div4, table);
+			append(table, thead);
+			append(thead, tr0);
+			append(tr0, th);
+			append(table, t10);
+			append(table, tr1);
+			append(tr1, td0);
+			append(tr1, t12);
+			append(tr1, td1);
+			append(td1, t13);
+			append(table, t14);
+			if (if_block3) if_block3.m(table, null);
+			append(table, t15);
+			append(table, tr2);
+			append(tr2, td2);
+			append(tr2, t17);
+			append(tr2, td3);
+			append(td3, t18);
+			append(table, t19);
+			if (if_block4) if_block4.m(table, null);
+			append(table, t20);
+			if (if_block5) if_block5.m(table, null);
+			current = true;
+		},
+
+		p: function update(changed, ctx) {
+			if (ctx.variable.measure == 'nominal') {
+				if (if_block0) {
+					if_block0.p(changed, ctx);
+					if_block0.i(1);
+				} else {
+					if_block0 = create_if_block_5(ctx);
+					if_block0.c();
+					if_block0.i(1);
+					if_block0.m(div0, t0);
+				}
+			} else if (if_block0) {
+				group_outros();
+				on_outro(() => {
+					if_block0.d(1);
+					if_block0 = null;
+				});
+
+				if_block0.o(1);
+				check_outros();
+			}
+
+			if (ctx.variable.measure == 'scale') {
+				if (if_block1) {
+					if_block1.p(changed, ctx);
+					if_block1.i(1);
+				} else {
+					if_block1 = create_if_block_4(ctx);
+					if_block1.c();
+					if_block1.i(1);
+					if_block1.m(div0, null);
+				}
+			} else if (if_block1) {
+				group_outros();
+				on_outro(() => {
+					if_block1.d(1);
+					if_block1 = null;
+				});
+
+				if_block1.o(1);
+				check_outros();
+			}
+
+			if ((!current || changed.variable) && t2_value !== (t2_value = ctx.variable.variableName)) {
+				set_data(t2, t2_value);
+			}
+
+			if ((!current || changed.variable) && t4_value !== (t4_value = ctx.variable.variableLabel)) {
+				set_data(t4, t4_value);
+			}
+
+			if ((!current || changed.variable) && t6_value !== (t6_value = ctx.uc(ctx.variable.measure))) {
+				set_data(t6, t6_value);
+			}
+
+			if (ctx.variable.dataformat.hasOwnProperty('textChoices')) {
+				if (if_block2) {
+					if_block2.p(changed, ctx);
+				} else {
+					if_block2 = create_if_block_3(ctx);
+					if_block2.c();
+					if_block2.m(div5, t8);
+				}
+			} else if (if_block2) {
+				if_block2.d(1);
+				if_block2 = null;
+			}
+
+			if (ctx.variable.measure == 'scale' || ctx.variable.measure == 'ordinal') {
+				if (if_block3) {
+					if_block3.p(changed, ctx);
+				} else {
+					if_block3 = create_if_block_2$1(ctx);
+					if_block3.c();
+					if_block3.m(table, t15);
+				}
+			} else if (if_block3) {
+				if_block3.d(1);
+				if_block3 = null;
+			}
+
+			if (ctx.variable.measure == 'scale' || ctx.variable.measure == 'ordinal') {
+				if (if_block4) {
+					if_block4.p(changed, ctx);
+				} else {
+					if_block4 = create_if_block_1$2(ctx);
+					if_block4.c();
+					if_block4.m(table, t20);
+				}
+			} else if (if_block4) {
+				if_block4.d(1);
+				if_block4 = null;
+			}
+
+			if (ctx.variable.measure == 'scale') {
+				if (if_block5) {
+					if_block5.p(changed, ctx);
+				} else {
+					if_block5 = create_if_block$4(ctx);
+					if_block5.c();
+					if_block5.m(table, null);
+				}
+			} else if (if_block5) {
+				if_block5.d(1);
+				if_block5 = null;
+			}
+		},
+
+		i: function intro(local) {
+			if (current) return;
+			if (if_block0) if_block0.i();
+			if (if_block1) if_block1.i();
+			current = true;
+		},
+
+		o: function outro(local) {
+			if (if_block0) if_block0.o();
+			if (if_block1) if_block1.o();
+			current = false;
+		},
+
+		d: function destroy(detaching) {
+			if (detaching) {
+				detach(div6);
+			}
+
+			if (if_block0) if_block0.d();
+			if (if_block1) if_block1.d();
+			if (if_block2) if_block2.d();
+			if (if_block3) if_block3.d();
+			if (if_block4) if_block4.d();
+			if (if_block5) if_block5.d();
+		}
+	};
+}
+
+function instance$i($$self, $$props, $$invalidate) {
+	
+
+  let { variable = {} } = $$props;
+  // helper functions
+  const uc = str => str.charAt(0).toUpperCase() + str.slice(1);
+
+  // get answer results for this variable
+  const data = variable.results.map(v => v.value);
+
+	const writable_props = ['variable'];
+	Object.keys($$props).forEach(key => {
+		if (!writable_props.includes(key) && !key.startsWith('$$')) console.warn(`<VariableStats> was created with unknown prop '${key}'`);
+	});
+
+	$$self.$set = $$props => {
+		if ('variable' in $$props) $$invalidate('variable', variable = $$props.variable);
+	};
+
+	return { variable, uc, data };
+}
+
+class VariableStats extends SvelteComponentDev {
+	constructor(options) {
+		super(options);
+		init(this, options, instance$i, create_fragment$l, safe_not_equal, ["variable"]);
+	}
+
+	get variable() {
+		throw new Error("<VariableStats>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+	}
+
+	set variable(value) {
+		throw new Error("<VariableStats>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+	}
+}
+
+/* src\pages\Descriptives.svelte generated by Svelte v3.5.1 */
+
+const file$m = "src\\pages\\Descriptives.svelte";
+
+function get_each_context$6(ctx, list, i) {
+	const child_ctx = Object.create(ctx);
+	child_ctx.variable = list[i];
+	return child_ctx;
+}
+
+// (1:0) <script>    import { db }
+function create_catch_block$1(ctx) {
+	return {
+		c: noop,
+		m: noop,
+		p: noop,
+		i: noop,
+		o: noop,
+		d: noop
+	};
+}
+
+// (35:2) {:then studyId}
+function create_then_block$1(ctx) {
+	var each_1_anchor, current;
+
+	function func(...args) {
+		return ctx.func(ctx, ...args);
+	}
+
+	var each_value = ctx.$variableStore.filter(func);
+
+	var each_blocks = [];
+
+	for (var i = 0; i < each_value.length; i += 1) {
+		each_blocks[i] = create_each_block$6(get_each_context$6(ctx, each_value, i));
+	}
+
+	function outro_block(i, detaching, local) {
+		if (each_blocks[i]) {
+			if (detaching) {
+				on_outro(() => {
+					each_blocks[i].d(detaching);
+					each_blocks[i] = null;
+				});
+			}
+
+			each_blocks[i].o(local);
+		}
+	}
+
+	return {
+		c: function create() {
+			for (var i = 0; i < each_blocks.length; i += 1) {
+				each_blocks[i].c();
+			}
+
+			each_1_anchor = empty();
+		},
+
+		m: function mount(target, anchor) {
+			for (var i = 0; i < each_blocks.length; i += 1) {
+				each_blocks[i].m(target, anchor);
+			}
+
+			insert(target, each_1_anchor, anchor);
+			current = true;
+		},
+
+		p: function update(changed, new_ctx) {
+			ctx = new_ctx;
+			if (changed.$variableStore) {
+				each_value = ctx.$variableStore.filter(func);
+
+				for (var i = 0; i < each_value.length; i += 1) {
+					const child_ctx = get_each_context$6(ctx, each_value, i);
+
+					if (each_blocks[i]) {
+						each_blocks[i].p(changed, child_ctx);
+						each_blocks[i].i(1);
+					} else {
+						each_blocks[i] = create_each_block$6(child_ctx);
+						each_blocks[i].c();
+						each_blocks[i].i(1);
+						each_blocks[i].m(each_1_anchor.parentNode, each_1_anchor);
+					}
+				}
+
+				group_outros();
+				for (; i < each_blocks.length; i += 1) outro_block(i, 1, 1);
+				check_outros();
+			}
+		},
+
+		i: function intro(local) {
+			if (current) return;
+			for (var i = 0; i < each_value.length; i += 1) each_blocks[i].i();
+
+			current = true;
+		},
+
+		o: function outro(local) {
+			each_blocks = each_blocks.filter(Boolean);
+			for (let i = 0; i < each_blocks.length; i += 1) outro_block(i, 0, 0);
+
+			current = false;
+		},
+
+		d: function destroy(detaching) {
+			destroy_each(each_blocks, detaching);
+
+			if (detaching) {
+				detach(each_1_anchor);
+			}
+		}
+	};
+}
+
+// (36:4) {#each $variableStore.filter(v => v.studyId === studyId) as variable}
+function create_each_block$6(ctx) {
+	var current;
+
+	var varstats = new VariableStats({
+		props: { variable: ctx.variable },
+		$$inline: true
+	});
+
+	return {
+		c: function create() {
+			varstats.$$.fragment.c();
+		},
+
+		m: function mount(target, anchor) {
+			mount_component(varstats, target, anchor);
+			current = true;
+		},
+
+		p: function update(changed, ctx) {
+			var varstats_changes = {};
+			if (changed.$variableStore) varstats_changes.variable = ctx.variable;
+			varstats.$set(varstats_changes);
+		},
+
+		i: function intro(local) {
+			if (current) return;
+			varstats.$$.fragment.i(local);
+
+			current = true;
+		},
+
+		o: function outro(local) {
+			varstats.$$.fragment.o(local);
+			current = false;
+		},
+
+		d: function destroy(detaching) {
+			varstats.$destroy(detaching);
+		}
+	};
+}
+
+// (31:25)       <div class="spinner">        <img src="loading.svg" alt="loading page" />      </div>    {:then studyId}
+function create_pending_block$1(ctx) {
+	var div, img;
+
+	return {
+		c: function create() {
+			div = element("div");
+			img = element("img");
+			img.src = "loading.svg";
+			img.alt = "loading page";
+			add_location(img, file$m, 32, 6, 872);
+			div.className = "spinner svelte-la1hq8";
+			add_location(div, file$m, 31, 4, 843);
+		},
+
+		m: function mount(target, anchor) {
+			insert(target, div, anchor);
+			append(div, img);
+		},
+
+		p: noop,
+		i: noop,
+		o: noop,
+
+		d: function destroy(detaching) {
+			if (detaching) {
+				detach(div);
+			}
+		}
+	};
+}
+
+function create_fragment$m(ctx) {
+	var div, promise, div_intro, current;
+
+	let info = {
+		ctx,
+		current: null,
+		pending: create_pending_block$1,
+		then: create_then_block$1,
+		catch: create_catch_block$1,
+		value: 'studyId',
+		error: 'null',
+		blocks: Array(3)
+	};
+
+	handle_promise(promise = ctx.studyIdPromise, info);
+
+	return {
+		c: function create() {
+			div = element("div");
+
+			info.block.c();
+			div.className = "container svelte-la1hq8";
+			add_location(div, file$m, 29, 0, 759);
+		},
+
+		l: function claim(nodes) {
+			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+		},
+
+		m: function mount(target, anchor) {
+			insert(target, div, anchor);
+
+			info.block.m(div, info.anchor = null);
+			info.mount = () => div;
+			info.anchor = null;
+
+			current = true;
+		},
+
+		p: function update(changed, new_ctx) {
+			ctx = new_ctx;
+			info.ctx = ctx;
+
+			if (promise !== (promise = ctx.studyIdPromise) && handle_promise(promise, info)) ; else {
+				info.block.p(changed, assign(assign({}, ctx), info.resolved));
+			}
+		},
+
+		i: function intro(local) {
+			if (current) return;
+			info.block.i();
+
+			if (!div_intro) {
+				add_render_callback(() => {
+					div_intro = create_in_transition(div, fade, { duration: 300 });
+					div_intro.start();
+				});
+			}
+
+			current = true;
+		},
+
+		o: function outro(local) {
+			for (let i = 0; i < 3; i += 1) {
+				const block = info.blocks[i];
+				if (block) block.o();
+			}
+
+			current = false;
+		},
+
+		d: function destroy(detaching) {
+			if (detaching) {
+				detach(div);
+			}
+
+			info.block.d();
+			info = null;
+		}
+	};
+}
+
+function instance$j($$self, $$props, $$invalidate) {
+	let $variableStore;
+
+	validate_store(variableStore, 'variableStore');
+	subscribe($$self, variableStore, $$value => { $variableStore = $$value; $$invalidate('$variableStore', $variableStore); });
+
+	
 
   let { studyId = 0 } = $$props;
-  let variables = [];
-  const varMap = [];
-  const varResults = [];
-  const varStats = [];
-  const varOptions = [];
-  let stats = [];
-  const tx = db.transaction(["Studies", "StudyVariables", "TaskResults"]);
-  let res = tx.objectStore("Studies").getAll();
-  res.onsuccess = e => {
-    const studies = e.target.result;
-    $$invalidate('studyId', studyId = studies[0]._id);
-    if (studyId) getStudyVariables(studyId);
-  };
-  const getStudyVariables = studyId => {
-    const res = tx
-      .objectStore("StudyVariables")
-      .index("studyId")
-      .getAll(studyId);
-    res.onsuccess = e => {
-      $$invalidate('variables', variables = e.target.result);
-      for (const variable of variables) {
-        varMap[variable.variableName] = variable.measure;        varResults[variable.variableName] = [];        varStats[variable.variableName] = {};        if (variable.measure === "nominal") {
-          // get text choices of categorical/nominal question types
-          varOptions[variable.variableName] = variable.dataformat.textChoices;        }
-      }
-      getTaskResults(studyId);
+  // FIXME: always selects first study since tab nav does not work dynamically yet
+  const studyIdPromise = new Promise((resolve, rej) => {
+    const tx = db.transaction("Studies");
+    tx.objectStore("Studies").getAll().onsuccess = e => {
+      const studies = e.target.result;
+      resolve(studies[0]._id);
     };
-  };
-
-  const getTaskResults = studyId => {
-    const res = tx
-      .objectStore("TaskResults")
-      .index("studyId")
-      .getAll(studyId);
-    res.onsuccess = e => {
-      const results = e.target.result;
-      for (const result of results) {
-        const varName = result.stepItem.variableName;
-        const value = result.stepItem.value;
-        varResults[varName].push(value);
-      }
-      for (const varName in varResults) {
-        const data = varResults[varName];
-        switch (varMap[varName]) {
-          case "nominal":
-            // get counts of each value in array (value:count)
-            const counts = data.reduce((v, k) => {
-              v[k] = ++v[k] || 1;
-              return v;
-            }, {});
-            const mode = simpleStatistics_min.modeFast(data);
-            varStats[varName].mode = mode;            varStats[varName].count = data.length;            varStats[varName].choices = [];            // get all labels of options of TextChoice questions and add info on how many times they were answered
-            for (const key in counts) {
-              for (const { valueLabel, value, text } of varOptions[varName]) {
-                if (value == mode) {
-                  varStats[varName].modeLabel = trunc(valueLabel || text);                }
-                //do not exactly match since values are always of type string
-                if (value == key) {
-                  varStats[varName].choices.push({
-                    label: trunc(valueLabel || text), //FIXME: importformat is currently not consistent
-                    count: counts[key]
-                  });
-                }
-              }
-            }
-            break;
-          case "scale":
-            varStats[varName].mode = simpleStatistics_min.modeFast(data);            varStats[varName].count = data.length;            varStats[varName].min = simpleStatistics_min.min(data);            varStats[varName].max = simpleStatistics_min.max(data);            varStats[varName].median = simpleStatistics_min.median(data);            varStats[varName].mean = +simpleStatistics_min.mean(data).toFixed(4);            varStats[varName].sd = +simpleStatistics_min.standardDeviation(data).toFixed(4);            break;
-
-          default:
-            break;
-        }
-      }
-      for (const varName in varStats) {
-        const statistics = varStats[varName];
-        $$invalidate('stats', stats = [...stats, { varName, statistics }]);
-        if (varMap[varName] == "nominal") {
-          const spec = {
-            description: `Count of ${varName} choices`,
-            data: {
-              values: statistics.choices
-            },
-            mark: "bar",
-            encoding: {
-              y: {
-                field: "label",
-                type: "nominal",
-                axis: {
-                  title: null,
-                  domain: false,
-                  ticks: false,
-                  labelPadding: 5
-                }
-              },
-              x: {
-                field: "count",
-                type: "quantitative",
-                axis: { title: "Count of Records", domain: false }
-              }
-            }
-          };
-          vegaEmbed(`#vis${varName}`, spec, vegaOptions);
-        } else if (varMap[varName] == "scale") {
-          console.log(varResults[varName]);
-          const spec = {
-            description: `Ditribution of ${varName}`,
-            data: {
-              values: varResults[varName]
-            },
-            mark: "tick",
-            encoding: {
-              x: {
-                field: "data",
-                type: "quantitative",
-                axis: { title: varName, domain: false }
-              }
-            }
-          };
-          vegaEmbed(`#vis${varName}`, spec, vegaOptions);
-          const spec2 = {
-            description: `Ditribution of ${varName}`,
-            data: {
-              values: varResults[varName]
-            },
-            mark: "bar",
-            encoding: {
-              x: {
-                bin: true,
-                field: "data",
-                type: "quantitative",
-                axis: { domain: false }
-              },
-              y: {
-                aggregate: "count",
-                type: "quantitative",
-                axis: {
-                  domain: false,
-                  ticks: false,
-                  labelPadding: 5,
-                  titlePadding: 10
-                }
-              }
-            }
-          };
-          vegaEmbed(`#vis2${varName}`, spec2, vegaOptions);
-        }
-      }
-    };
-  };
+  });
 
 	const writable_props = ['studyId'];
 	Object.keys($$props).forEach(key => {
 		if (!writable_props.includes(key) && !key.startsWith('$$')) console.warn(`<Descriptives> was created with unknown prop '${key}'`);
 	});
 
+	function func({ studyId }, v) {
+		return v.studyId === studyId;
+	}
+
 	$$self.$set = $$props => {
 		if ('studyId' in $$props) $$invalidate('studyId', studyId = $$props.studyId);
 	};
 
-	return { studyId, variables, stats };
+	return {
+		studyId,
+		studyIdPromise,
+		$variableStore,
+		func
+	};
 }
 
 class Descriptives extends SvelteComponentDev {
 	constructor(options) {
 		super(options);
-		init(this, options, instance$g, create_fragment$j, safe_not_equal, ["studyId"]);
+		init(this, options, instance$j, create_fragment$m, safe_not_equal, ["studyId"]);
 	}
 
 	get studyId() {
@@ -6922,10 +7483,10 @@ class Descriptives extends SvelteComponentDev {
 
 /* src\SensQVis.svelte generated by Svelte v3.5.1 */
 
-const file$k = "src\\SensQVis.svelte";
+const file$n = "src\\SensQVis.svelte";
 
 // (89:33) 
-function create_if_block_3(ctx) {
+function create_if_block_3$1(ctx) {
 	var current;
 
 	var descriptives = new Descriptives({ $$inline: true });
@@ -7060,7 +7621,7 @@ function create_if_block$5(ctx) {
 	};
 }
 
-function create_fragment$k(ctx) {
+function create_fragment$n(ctx) {
 	var main, header, t0, nav, div0, t1, div1, t2, section, current_block_type_index, if_block, current;
 
 	var studyinfo = new StudyInfo({ $$inline: true });
@@ -7073,7 +7634,7 @@ function create_fragment$k(ctx) {
 		create_if_block$5,
 		create_if_block_1$3,
 		create_if_block_2$2,
-		create_if_block_3
+		create_if_block_3$1
 	];
 
 	var if_blocks = [];
@@ -7106,17 +7667,17 @@ function create_fragment$k(ctx) {
 			section = element("section");
 			if (if_block) if_block.c();
 			header.className = "svelte-1upxu8k";
-			add_location(header, file$k, 70, 2, 1590);
+			add_location(header, file$n, 70, 2, 1590);
 			div0.className = "tabs svelte-1upxu8k";
-			add_location(div0, file$k, 74, 4, 1645);
+			add_location(div0, file$n, 74, 4, 1645);
 			div1.className = "undoRedo svelte-1upxu8k";
-			add_location(div1, file$k, 77, 4, 1697);
+			add_location(div1, file$n, 77, 4, 1697);
 			nav.className = "svelte-1upxu8k";
-			add_location(nav, file$k, 73, 2, 1634);
+			add_location(nav, file$n, 73, 2, 1634);
 			section.className = "svelte-1upxu8k";
-			add_location(section, file$k, 81, 2, 1765);
+			add_location(section, file$n, 81, 2, 1765);
 			main.className = "svelte-1upxu8k";
-			add_location(main, file$k, 69, 0, 1580);
+			add_location(main, file$n, 69, 0, 1580);
 		},
 
 		l: function claim(nodes) {
@@ -7204,7 +7765,7 @@ function create_fragment$k(ctx) {
 	};
 }
 
-function instance$h($$self, $$props, $$invalidate) {
+function instance$k($$self, $$props, $$invalidate) {
 	let $activeUITab;
 
 	validate_store(activeUITab, 'activeUITab');
@@ -7216,7 +7777,7 @@ function instance$h($$self, $$props, $$invalidate) {
 class SensQVis extends SvelteComponentDev {
 	constructor(options) {
 		super(options);
-		init(this, options, instance$h, create_fragment$k, safe_not_equal, []);
+		init(this, options, instance$k, create_fragment$n, safe_not_equal, []);
 	}
 }
 
