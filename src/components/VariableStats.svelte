@@ -49,6 +49,21 @@
     height: 100%;
     place-items: center;
   }
+
+  .label,
+  .measure {
+    font-weight: 300;
+    font-size: 0.7rem;
+  }
+  .measure {
+    font-style: italic;
+  }
+  h4 {
+    font-size: 0.7rem;
+    font-weight: 600;
+    margin-top: 1rem;
+    margin-bottom: 0;
+  }
 </style>
 
 <div class="card">
@@ -66,12 +81,13 @@
     <div class="measure">{uc(variable.measure)}</div>
     {#if variable.dataformat.hasOwnProperty('textChoices')}
       <div class="choices">
+        <h4>Answer options</h4>
         <table>
-          <thead>
+          <!-- <thead>
             <tr>
               <th colspan="2">Answer Options</th>
             </tr>
-          </thead>
+          </thead> -->
           {#each variable.dataformat.textChoices as choice}
             <tr>
               <td>({choice.value}) {choice.valueLabel || choice.text}</td>
@@ -81,12 +97,13 @@
       </div>
     {/if}
     <div class="stats">
+      <h4>Statistics</h4>
       <table>
-        <thead>
+        <!-- <thead>
           <tr>
             <th colspan="2">Statistics</th>
           </tr>
-        </thead>
+        </thead> -->
         <tr>
           <td>Count of records:</td>
           <td>{data.length}</td>
