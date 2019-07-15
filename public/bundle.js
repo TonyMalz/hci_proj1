@@ -6257,7 +6257,7 @@ function create_fragment$j(ctx) {
 		c: function create() {
 			div = element("div");
 			div.id = ctx.chartId;
-			add_location(div, file$j, 51, 0, 1384);
+			add_location(div, file$j, 52, 0, 1456);
 		},
 
 		l: function claim(nodes) {
@@ -6305,6 +6305,7 @@ function instance$g($$self, $$props, $$invalidate) {
 
   const spec = {
     description: `Count of ${variableName} results`,
+    title: { text: variableName, fontSize: 12 },
     data: {
       values: data
     },
@@ -6323,7 +6324,7 @@ function instance$g($$self, $$props, $$invalidate) {
       x: {
         aggregate: "count",
         type: "quantitative",
-        axis: { domain: false }
+        axis: { domain: false, titleFontWeight: 300 }
       }
     }
   };

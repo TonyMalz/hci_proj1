@@ -24,6 +24,7 @@
 
   const spec = {
     description: `Count of ${variableName} results`,
+    title: { text: variableName, fontSize: 12 },
     data: {
       values: data
     },
@@ -42,7 +43,7 @@
       x: {
         aggregate: "count",
         type: "quantitative",
-        axis: { domain: false }
+        axis: { domain: false, titleFontWeight: 300 }
       }
     }
   };
