@@ -1,4 +1,7 @@
 export function formatDate(date) {
+    if (!(date instanceof Date)) {
+        date = new Date(date)
+    }
     let dayOfMonth = date.getDate();
     let month = date.getMonth() + 1;
     let year = date.getFullYear();
@@ -28,3 +31,5 @@ export function formatDate(date) {
         return `${dayOfMonth}.${month}.'${year} ${hour}:${minutes}`
     }
 }
+
+export const uc = str => str.charAt(0).toUpperCase() + str.slice(1);

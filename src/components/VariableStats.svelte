@@ -2,11 +2,10 @@
   import stat from "../modules/simple-statistics.min";
   import VariableNominalChart from "../charts/VariableNominalChart.svelte";
   import VariableScaleChart from "../charts/VariableScaleChart.svelte";
+  import VariableQualitativeChart from "../charts/VariableQualitativeChart.svelte";
+  import { uc } from "../modules/utils";
 
   export let variable = {};
-  // helper functions
-  const uc = str => str.charAt(0).toUpperCase() + str.slice(1);
-
   // get answer results for this variable
   const data = variable.results.map(v => v.value);
 </script>
@@ -62,6 +61,12 @@
     font-weight: 600;
     margin-top: 1rem;
     margin-bottom: 0;
+  }
+  .answerLog {
+    position: relative;
+    height: 20ch;
+    overflow-y: auto;
+    /* box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.25); */
   }
 </style>
 
@@ -123,9 +128,15 @@
             </td>
           </tr>
         {/if}
-
       </table>
+      {#if variable.measure == 'qualitative'}
+        <h4>Answers given by users</h4>
+        <div class="answerLog">
+          <VariableQualitativeChart {variable} />
+        </div>
+      {/if}
     </div>
+
   </div>
 
 </div>
