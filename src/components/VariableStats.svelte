@@ -94,8 +94,8 @@
       <h4>Statistics</h4>
       <table>
         <tr>
-          <td>Count of records:</td>
-          <td style="width:20ch">{data.length}</td>
+          <td style="width:22ch">Count of records:</td>
+          <td>{data.length}</td>
         </tr>
         {#if variable.measure == 'scale' || variable.measure == 'ordinal'}
           <tr>

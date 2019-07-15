@@ -6892,11 +6892,11 @@ function create_fragment$l(ctx) {
 			add_location(div3, file$l, 79, 4, 1711);
 			h4.className = "svelte-179mqmu";
 			add_location(h4, file$l, 93, 6, 2169);
+			set_style(td0, "width", "22ch");
 			td0.className = "svelte-179mqmu";
 			add_location(td0, file$l, 96, 10, 2229);
-			set_style(td1, "width", "20ch");
 			td1.className = "svelte-179mqmu";
-			add_location(td1, file$l, 97, 10, 2267);
+			add_location(td1, file$l, 97, 10, 2286);
 			tr0.className = "svelte-179mqmu";
 			add_location(tr0, file$l, 95, 8, 2213);
 			td2.className = "svelte-179mqmu";
