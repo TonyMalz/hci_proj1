@@ -39,8 +39,7 @@
     font-weight: 600;
   }
 
-  .choices tr:hover,
-  thead tr:hover {
+  .choices tr:hover {
     background-color: initial;
   }
 
@@ -83,11 +82,6 @@
       <div class="choices">
         <h4>Answer options</h4>
         <table>
-          <!-- <thead>
-            <tr>
-              <th colspan="2">Answer Options</th>
-            </tr>
-          </thead> -->
           {#each variable.dataformat.textChoices as choice}
             <tr>
               <td>({choice.value}) {choice.valueLabel || choice.text}</td>
@@ -99,14 +93,9 @@
     <div class="stats">
       <h4>Statistics</h4>
       <table>
-        <!-- <thead>
-          <tr>
-            <th colspan="2">Statistics</th>
-          </tr>
-        </thead> -->
         <tr>
           <td>Count of records:</td>
-          <td>{data.length}</td>
+          <td style="width:20ch">{data.length}</td>
         </tr>
         {#if variable.measure == 'scale' || variable.measure == 'ordinal'}
           <tr>

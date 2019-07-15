@@ -34,7 +34,7 @@
         bin: true,
         field: "data",
         type: "quantitative",
-        axis: { domain: false }
+        axis: { domain: false, title: `${variableName} (binned)` }
       },
       y: {
         aggregate: "count",
