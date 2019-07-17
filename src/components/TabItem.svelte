@@ -1,7 +1,7 @@
 <script>
   import { createEventDispatcher } from "svelte";
 
-  export let title = "";
+  export let tab;
   let toggle = false;
   function toggleEdit() {
     toggle = !toggle;
@@ -11,7 +11,7 @@
   function update() {
     // console.log("blur");
     toggleEdit();
-    dispatch("notify", title);
+    dispatch("notify", tab);
   }
 </script>
 
@@ -24,7 +24,7 @@
 </style>
 
 {#if toggle}
-  <input type="text" bind:value={title} autofocus on:blur={update} />
+  <input type="text" bind:value={tab.title} autofocus on:blur={update} />
 {:else}
-  <div on:click={toggleEdit}>{title}</div>
+  <div on:click={toggleEdit}>{tab.title}</div>
 {/if}

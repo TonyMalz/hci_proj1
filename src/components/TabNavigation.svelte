@@ -1,0 +1,198 @@
+<script>
+  import Tabitem from "./TabItem.svelte";
+  import { fade, fly, slide } from "svelte/transition";
+  import { flip } from "svelte/animate";
+  import { tabStore, msgStore, activeTabIdx } from "../modules/store.js";
+  import { db } from "../modules/indexeddb.js";
+  import { tick } from "svelte";
+  import { trunc } from "../modules/utils";
+
+  $: handleMsgs($msgStore.filter(v => v.type === "navigation"));
+
+  function handleMsgs(messages) {
+    for (const { action, data: study } of messages) {
+      console.log(action, study);
+      switch (action) {
+        case "openStudyTabs":
+          let tab = $tabStore.filter(
+            v => v.studyId === study._id && v.type === "descriptives"
+          )[0];
+
+          if (!tab) {
+            // tabs don't exist yet
+            const newTabs = [];
+            // add home
+            newTabs.push($tabStore[0]);
+
+            // show and activate 1st study tab, since it's not already shown
+            const studyName = trunc(study.studyName, 25);
+            newTabs.push({
+              title: "Descriptives " + studyName,
+              type: "descriptives",
+              studyId: study._id,
+              id: 1
+            });
+            newTabs.push({
+              title: "Overview " + studyName,
+              type: "overview",
+              studyId: study._id,
+              id: 2
+            });
+            newTabs.push({
+              title: "Details " + studyName,
+              type: "userview",
+              studyId: study._id,
+              id: 3
+            });
+
+            let id = 4;
+            //add the rest of the tabs
+            for (const tab of $tabStore.slice(1)) {
+              tab.id = id++;
+              newTabs.push(tab);
+            }
+            $tabStore = newTabs;
+            updateTabStore(newTabs);
+            // activate newly created second tab
+            $activeTabIdx = 1;
+          }
+
+          break;
+
+        default:
+          break;
+      }
+    }
+  }
+
+  async function updateTabStore(newTabs) {
+    await tick();
+    const store = db.transaction("UITabs", "readwrite").objectStore("UITabs");
+    store.clear();
+    for (const tab of newTabs) {
+      store.put(tab);
+    }
+  }
+
+  function activateTab(tabIdx) {
+    console.log("activate ", tabIdx);
+    $activeTabIdx = tabIdx;
+  }
+
+  let toggleTab = false;
+  function toggle() {
+    toggleTab = !toggleTab;
+  }
+
+  // function addTab() {
+  //   const el = document.getElementById("newTab");
+  //   const text = el.value.trim();
+  //   if (text !== "") {
+  //     currentTabs.push(el.value);
+  //     currentTabs = currentTabs;
+  //     activeTab = currentTabs.length - 1;
+  //   }
+  //   toggle();
+  // }
+
+  function titleChanged(event) {
+    console.log("titlechanged");
+    const tab = event.detail;
+    db.transaction("UITabs", "readwrite")
+      .objectStore("UITabs")
+      .put(tab);
+  }
+
+  function close(idx, tab) {
+    console.log("close", idx, tab);
+    if (idx > 0) {
+      const reducedTabs = $tabStore.filter(v => v.id !== tab.id);
+      let id = 0;
+      for (const tab of reducedTabs) {
+        tab.id = id++;
+      }
+      $tabStore = reducedTabs;
+      updateTabStore(reducedTabs);
+      if ($activeTabIdx > reducedTabs.length - 1) {
+        $activeTabIdx = reducedTabs.length - 1;
+      }
+    }
+  }
+</script>
+
+<style>
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+  li {
+    color: rgba(51, 51, 51, 0.6);
+    background: #f5f5f5;
+    font-size: 0.9rem;
+    display: inline-block;
+    box-shadow: inset 0 -2px 0px 1px white;
+  }
+
+  li div {
+    cursor: pointer;
+    display: inline-block;
+    padding: 0.8em 1em;
+  }
+
+  /* Change the link color to #111 (black) on hover */
+  li:hover {
+    color: inherit;
+    border-top: 1px solid rgb(255, 175, 160);
+  }
+  .active {
+    color: inherit;
+    background: white;
+    font-weight: 400;
+    border-top: 1px solid tomato !important;
+  }
+  .close {
+    /* box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.25); */
+  }
+</style>
+
+<ul>
+  {#each $tabStore as tab, idx}
+    {#if idx !== $activeTabIdx}
+      <li on:click={() => activateTab(idx)}>
+        <Tabitem {tab} />
+        {#if idx !== 0}
+          <div
+            class="close"
+            on:click|stopPropagation|preventDefault={() => close(idx, tab)}>
+            x
+          </div>
+        {/if}
+      </li>
+    {:else}
+      <li class="active">
+        <Tabitem {tab} on:notify={titleChanged} />
+        {#if idx !== 0}
+          <div
+            class="close"
+            on:click|stopPropagation|preventDefault={() => close(idx, tab)}>
+            x
+          </div>
+        {/if}
+      </li>
+    {/if}
+  {/each}
+  <!-- <li>
+    {#if toggleTab}
+      <input
+        in:fade={{ duration: 100 }}
+        id="newTab"
+        type="text"
+        on:blur={addTab}
+        on:keydown={e => (e.code === 'Enter' ? addTab() : null)}
+        autofocus />
+    {:else}
+      <div on:click={toggle}>+</div>
+    {/if}
+  </li> -->
+</ul>

@@ -6,7 +6,7 @@
   import StudyVariables from "../components/StudyVariables.svelte";
   import StudyUsers from "../components/StudyUsers.svelte";
   import StudyResponses from "../components/StudyResponses.svelte";
-  import { studyStore } from "../modules/store.js";
+  import { studyStore, msgStore } from "../modules/store.js";
   import { dbName } from "../modules/indexeddb.js";
 
   function dropDB() {
@@ -41,6 +41,12 @@
       toggleResponses = false;
     }
   }
+  function openTabs(study) {
+    const msg = { type: "navigation", action: "openStudyTabs", data: study };
+    // console.log(msg);
+    $msgStore.push(msg);
+    $msgStore = $msgStore; // make sure store gets updated
+  }
 </script>
 
 <style>
@@ -53,6 +59,7 @@
   .study {
     position: relative;
     height: 15ch;
+    cursor: pointer;
   }
   .debug {
     text-align: center;
@@ -118,7 +125,8 @@
         {...study}
         on:showVariables={showVars}
         on:showResponses={showResponses}
-        on:showUsers={showUsers} />
+        on:showUsers={showUsers}
+        on:showStudy={() => openTabs(study)} />
     </div>
   {/each}
   <div class="study">

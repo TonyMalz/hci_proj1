@@ -1,14 +1,8 @@
 <script>
-  import Tabs from "./components/Tabs.svelte";
+  import TabNavigation from "./components/TabNavigation.svelte";
+  import TabContent from "./components/TabContent.svelte";
   import StudyInfo from "./components/StudyInfo.svelte";
   import UndoRedo from "./components/UndoRedo.svelte";
-  import Userview from "./pages/Userview.svelte";
-  import Overview from "./pages/Overview.svelte";
-  import Studies from "./pages/StudyList.svelte";
-  import Descriptives from "./pages/Descriptives.svelte";
-
-  import { fly } from "svelte/transition";
-  import { activeUITab } from "./modules/store.js";
 </script>
 
 <style>
@@ -73,21 +67,13 @@
   </header>
   <nav>
     <div class="tabs">
-      <Tabs />
+      <TabNavigation />
     </div>
     <div class="undoRedo">
       <UndoRedo />
     </div>
   </nav>
   <section>
-    {#if $activeUITab === 0}
-      <Studies />
-    {:else if $activeUITab === 1}
-      <Overview />
-    {:else if $activeUITab === 2}
-      <Userview />
-    {:else if $activeUITab === 3}
-      <Descriptives />
-    {/if}
+    <TabContent />
   </section>
 </main>

@@ -1,9 +1,9 @@
 <script>
   import { onMount } from "svelte";
+  import { trunc } from "../modules/utils.js";
   export let variable;
   const variableName = variable.variableName;
   const chartId = `vis${variableName}nominal`;
-  const trunc = (t, n = 10) => t.substr(0, n - 1) + (t.length > n ? "..." : "");
 
   // vega-lite charts
   const vegaOptions = {

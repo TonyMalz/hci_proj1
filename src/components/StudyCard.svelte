@@ -27,6 +27,10 @@
     dispatch("showResponses", { studyId: _id, studyName });
   }
 
+  function showStudy() {
+    dispatch("showStudy");
+  }
+
   let responses = 0;
   let userCount = 0;
 
@@ -132,6 +136,10 @@
   }
   h4 {
     margin: 1em;
+    cursor: pointer;
+  }
+  h4:hover {
+    text-decoration-line: underline;
   }
   .delete {
     position: absolute;
@@ -169,7 +177,7 @@
         12,2M14.59,8L12,10.59L9.41,8L8,9.41L10.59,12L8,14.59L9.41,16L12,13.41L14.59,16L16,14.59L13.41,12L16,9.41L14.59,8Z" />
     </svg>
   </div>
-  <h4>{studyName}</h4>
+  <h4 on:click={showStudy}>{studyName}</h4>
   <div class="mainInfo">
     <span class="vars" on:click={showUsers}>Users: {userCount}</span>
     <span class="vars" on:click={showResponses}>Responses: {responses}</span>

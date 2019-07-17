@@ -1,5 +1,5 @@
-import { studyStore, variableStore } from './store.js'
-
+import { studyStore, variableStore, tabStore } from './store.js'
+import { uuid } from "./utils"
 export const dbName = "senseQ"
 const dbVersion = 1
 
@@ -56,6 +56,10 @@ request.onupgradeneeded = (e) => {
     store.createIndex("studyId", "studyId", { unique: false })
     store.createIndex("taskId", "taskId", { unique: false })
 
+    // used to store opened UI Tabs
+    store = db.createObjectStore("UITabs", { keyPath: "id" })
+    // types: home, overview, detailview, descriptives, customview
+    store.put({ title: "Home", type: "home", studyId: null, id: 0 })
 }
 
 request.onerror = (e) => {
@@ -85,9 +89,11 @@ request.onsuccess = (e) => {
     db.transaction("Studies").objectStore("Studies").getAll().onsuccess = (e) => {
         studyStore.set(e.target.result);
     }
-
     db.transaction("StudyVariables").objectStore("StudyVariables").getAll().onsuccess = e => {
         variableStore.set(e.target.result)
+    }
+    db.transaction("UITabs").objectStore("UITabs").getAll().onsuccess = e => {
+        tabStore.set(e.target.result)
     }
 }
 

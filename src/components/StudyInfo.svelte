@@ -1,9 +1,11 @@
 <script>
-  import { activeUITab } from "../modules/store.js";
+  import { tabStore } from "../modules/store.js";
   let name = "Test Study";
   let time = "78%";
   let participants = 27;
   let datasets = 1326;
+
+  $: activeTab = $tabStore.filter(v => v.active === true)[0];
 </script>
 
 <style>
@@ -21,7 +23,7 @@
   }
 </style>
 
-{#if $activeUITab != 0}
+{#if activeTab && activeTab.id != 1}
   <div id="info">
     <div>Study name: {name}</div>
     <div>Total study time elapsed: {time}</div>
