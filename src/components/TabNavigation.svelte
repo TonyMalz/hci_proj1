@@ -14,18 +14,16 @@
       console.log(action, study);
       switch (action) {
         case "openStudyTabs":
-          let tab = $tabStore.filter(
-            v => v.studyId === study._id && v.type === "descriptives"
-          )[0];
-
-          if (!tab) {
-            // tabs don't exist yet
+          //check if tabs for this study already exist
+          let studyTabs = $tabStore.filter(v => v.studyId === study._id);
+          const studyName = trunc(study.studyName, 25);
+          if (studyTabs.length < 1) {
+            console.log("create new tabs", studyTabs);
+            // tabs don't exist yet create new ones
             const newTabs = [];
             // add home
             newTabs.push($tabStore[0]);
-
             // show and activate 1st study tab, since it's not already shown
-            const studyName = trunc(study.studyName, 25);
             newTabs.push({
               title: "Descriptives " + studyName,
               type: "descriptives",
@@ -55,6 +53,61 @@
             updateTabStore(newTabs);
             // activate newly created second tab
             $activeTabIdx = 1;
+          } else if (studyTabs.length == 3) {
+            // activate 1st tab of this study
+            for (const tab of studyTabs) {
+              if (tab.type === "descriptives") {
+                $activeTabIdx = tab.id;
+                return;
+              }
+            }
+          } else {
+            //some tabs of this study are open, add missing ones
+            const addTabs = [];
+            const types = ["descriptives", "overview", "userview"];
+            const currentTypes = studyTabs.map(v => v.type);
+            const missingTypes = types.filter(
+              type => !currentTypes.includes(type)
+            );
+
+            const newTabs = [];
+            let id = 0;
+            // add current tabs
+            for (const currentTab of $tabStore) {
+              currentTab.id = id++;
+              newTabs.push(currentTab);
+            }
+            // add missing types
+            for (const missingType of missingTypes) {
+              switch (missingType) {
+                case "descriptives":
+                  newTabs.push({
+                    title: "Descriptives " + studyName,
+                    type: "descriptives",
+                    studyId: study._id,
+                    id: id++
+                  });
+                  break;
+                case "overview":
+                  newTabs.push({
+                    title: "Overview " + studyName,
+                    type: "overview",
+                    studyId: study._id,
+                    id: id++
+                  });
+                  break;
+                case "userview":
+                  newTabs.push({
+                    title: "Details " + studyName,
+                    type: "userview",
+                    studyId: study._id,
+                    id: id++
+                  });
+                  break;
+              }
+            }
+            $tabStore = newTabs;
+            updateTabStore(newTabs);
           }
 
           break;
@@ -111,11 +164,12 @@
       for (const tab of reducedTabs) {
         tab.id = id++;
       }
-      $tabStore = reducedTabs;
-      updateTabStore(reducedTabs);
+
       if ($activeTabIdx > reducedTabs.length - 1) {
         $activeTabIdx = reducedTabs.length - 1;
       }
+      $tabStore = reducedTabs;
+      updateTabStore(reducedTabs);
     }
   }
 </script>

@@ -1295,7 +1295,7 @@ function get_each_context(ctx, list, i) {
 	return child_ctx;
 }
 
-// (172:4) {:else}
+// (226:4) {:else}
 function create_else_block$1(ctx) {
 	var li, t0, t1, current;
 
@@ -1315,7 +1315,7 @@ function create_else_block$1(ctx) {
 			if (if_block) if_block.c();
 			t1 = space();
 			attr(li, "class", "active svelte-119b9zs");
-			add_location(li, file$1, 172, 6, 4488);
+			add_location(li, file$1, 226, 6, 6547);
 		},
 
 		m: function mount(target, anchor) {
@@ -1368,7 +1368,7 @@ function create_else_block$1(ctx) {
 	};
 }
 
-// (161:4) {#if idx !== $activeTabIdx}
+// (215:4) {#if idx !== $activeTabIdx}
 function create_if_block$1(ctx) {
 	var li, t0, t1, current, dispose;
 
@@ -1391,7 +1391,7 @@ function create_if_block$1(ctx) {
 			if (if_block) if_block.c();
 			t1 = space();
 			attr(li, "class", "svelte-119b9zs");
-			add_location(li, file$1, 161, 6, 4195);
+			add_location(li, file$1, 215, 6, 6254);
 			dispose = listen(li, "click", click_handler_1);
 		},
 
@@ -1447,7 +1447,7 @@ function create_if_block$1(ctx) {
 	};
 }
 
-// (175:8) {#if idx !== 0}
+// (229:8) {#if idx !== 0}
 function create_if_block_2(ctx) {
 	var div, dispose;
 
@@ -1460,7 +1460,7 @@ function create_if_block_2(ctx) {
 			div = element("div");
 			div.textContent = "x";
 			attr(div, "class", "close svelte-119b9zs");
-			add_location(div, file$1, 175, 10, 4596);
+			add_location(div, file$1, 229, 10, 6655);
 			dispose = listen(div, "click", stop_propagation(prevent_default(click_handler_2)));
 		},
 
@@ -1482,7 +1482,7 @@ function create_if_block_2(ctx) {
 	};
 }
 
-// (164:8) {#if idx !== 0}
+// (218:8) {#if idx !== 0}
 function create_if_block_1(ctx) {
 	var div, dispose;
 
@@ -1495,7 +1495,7 @@ function create_if_block_1(ctx) {
 			div = element("div");
 			div.textContent = "x";
 			attr(div, "class", "close svelte-119b9zs");
-			add_location(div, file$1, 164, 10, 4297);
+			add_location(div, file$1, 218, 10, 6356);
 			dispose = listen(div, "click", stop_propagation(prevent_default(click_handler)));
 		},
 
@@ -1517,7 +1517,7 @@ function create_if_block_1(ctx) {
 	};
 }
 
-// (160:2) {#each $tabStore as tab, idx}
+// (214:2) {#each $tabStore as tab, idx}
 function create_each_block(ctx) {
 	var current_block_type_index, if_block, if_block_anchor, current;
 
@@ -1614,7 +1614,7 @@ function create_fragment$1(ctx) {
 				each_blocks[i].c();
 			}
 			attr(ul, "class", "svelte-119b9zs");
-			add_location(ul, file$1, 158, 0, 4117);
+			add_location(ul, file$1, 212, 0, 6176);
 		},
 
 		l: function claim(nodes) {
@@ -1713,18 +1713,16 @@ function instance$1($$self, $$props, $$invalidate) {
       console.log(action, study);
       switch (action) {
         case "openStudyTabs":
-          let tab = $tabStore.filter(
-            v => v.studyId === study._id && v.type === "descriptives"
-          )[0];
-
-          if (!tab) {
-            // tabs don't exist yet
+          //check if tabs for this study already exist
+          let studyTabs = $tabStore.filter(v => v.studyId === study._id);
+          const studyName = trunc(study.studyName, 25);
+          if (studyTabs.length < 1) {
+            console.log("create new tabs", studyTabs);
+            // tabs don't exist yet create new ones
             const newTabs = [];
             // add home
             newTabs.push($tabStore[0]);
-
             // show and activate 1st study tab, since it's not already shown
-            const studyName = trunc(study.studyName, 25);
             newTabs.push({
               title: "Descriptives " + studyName,
               type: "descriptives",
@@ -1754,6 +1752,59 @@ function instance$1($$self, $$props, $$invalidate) {
             updateTabStore(newTabs);
             // activate newly created second tab
             $activeTabIdx = 1; activeTabIdx.set($activeTabIdx);
+          } else if (studyTabs.length == 3) {
+            // activate 1st tab of this study
+            for (const tab of studyTabs) {
+              if (tab.type === "descriptives") {
+                $activeTabIdx = tab.id; activeTabIdx.set($activeTabIdx);
+                return;
+              }
+            }
+          } else {
+            const types = ["descriptives", "overview", "userview"];
+            const currentTypes = studyTabs.map(v => v.type);
+            const missingTypes = types.filter(
+              type => !currentTypes.includes(type)
+            );
+
+            const newTabs = [];
+            let id = 0;
+            // add current tabs
+            for (const currentTab of $tabStore) {
+              currentTab.id = id++;
+              newTabs.push(currentTab);
+            }
+            // add missing types
+            for (const missingType of missingTypes) {
+              switch (missingType) {
+                case "descriptives":
+                  newTabs.push({
+                    title: "Descriptives " + studyName,
+                    type: "descriptives",
+                    studyId: study._id,
+                    id: id++
+                  });
+                  break;
+                case "overview":
+                  newTabs.push({
+                    title: "Overview " + studyName,
+                    type: "overview",
+                    studyId: study._id,
+                    id: id++
+                  });
+                  break;
+                case "userview":
+                  newTabs.push({
+                    title: "Details " + studyName,
+                    type: "userview",
+                    studyId: study._id,
+                    id: id++
+                  });
+                  break;
+              }
+            }
+            $tabStore = newTabs; tabStore.set($tabStore);
+            updateTabStore(newTabs);
           }
 
           break;
@@ -1777,11 +1828,12 @@ function instance$1($$self, $$props, $$invalidate) {
       for (const tab of reducedTabs) {
         tab.id = id++;
       }
-      $tabStore = reducedTabs; tabStore.set($tabStore);
-      updateTabStore(reducedTabs);
+
       if ($activeTabIdx > reducedTabs.length - 1) {
         $activeTabIdx = reducedTabs.length - 1; activeTabIdx.set($activeTabIdx);
       }
+      $tabStore = reducedTabs; tabStore.set($tabStore);
+      updateTabStore(reducedTabs);
     }
   }
 
@@ -3984,7 +4036,7 @@ function create_catch_block(ctx) {
 	};
 }
 
-// (186:85)           Variables: {variableCount}
+// (192:85)           Variables: {variableCount}
 function create_then_block(ctx) {
 	var t0, t1_value = ctx.variableCount, t1;
 
@@ -4082,38 +4134,38 @@ function create_fragment$c(ctx) {
 			t20 = text(t20_value);
 			attr(path, "fill", "#777");
 			attr(path, "d", "M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59\r\n        20,12C20,16.41 16.41,20 12,20M12,2C6.47,2 2,6.47 2,12C2,17.53 6.47,22\r\n        12,22C17.53,22 22,17.53 22,12C22,6.47 17.53,2\r\n        12,2M14.59,8L12,10.59L9.41,8L8,9.41L10.59,12L8,14.59L9.41,16L12,13.41L14.59,16L16,14.59L13.41,12L16,9.41L14.59,8Z");
-			add_location(path, file$c, 171, 6, 3944);
+			add_location(path, file$c, 177, 6, 4130);
 			set_style(svg, "width", "24px");
 			set_style(svg, "height", "24px");
 			attr(svg, "viewBox", "0 0 24 24");
-			add_location(svg, file$c, 170, 4, 3879);
+			add_location(svg, file$c, 176, 4, 4065);
 			attr(div0, "class", "delete svelte-15frdq5");
-			add_location(div0, file$c, 169, 2, 3830);
+			add_location(div0, file$c, 175, 2, 4016);
 			attr(h4, "class", "svelte-15frdq5");
-			add_location(h4, file$c, 179, 2, 4332);
+			add_location(h4, file$c, 185, 2, 4518);
 			attr(span0, "class", "vars svelte-15frdq5");
-			add_location(span0, file$c, 181, 4, 4405);
+			add_location(span0, file$c, 187, 4, 4607);
 			attr(span1, "class", "vars svelte-15frdq5");
-			add_location(span1, file$c, 182, 4, 4476);
-			add_location(br, file$c, 183, 4, 4555);
+			add_location(span1, file$c, 188, 4, 4678);
+			add_location(br, file$c, 189, 4, 4757);
 			attr(span2, "class", "vars svelte-15frdq5");
-			add_location(span2, file$c, 184, 4, 4567);
+			add_location(span2, file$c, 190, 4, 4769);
 			attr(div1, "class", "mainInfo svelte-15frdq5");
-			add_location(div1, file$c, 180, 2, 4377);
+			add_location(div1, file$c, 186, 2, 4579);
 			attr(span3, "class", "svelte-15frdq5");
-			add_location(span3, file$c, 191, 4, 4801);
+			add_location(span3, file$c, 197, 4, 5003);
 			attr(span4, "class", "svelte-15frdq5");
-			add_location(span4, file$c, 193, 4, 4884);
+			add_location(span4, file$c, 199, 4, 5086);
 			attr(div2, "class", "date svelte-15frdq5");
-			add_location(div2, file$c, 190, 2, 4777);
+			add_location(div2, file$c, 196, 2, 4979);
 			attr(div3, "class", "created svelte-15frdq5");
-			add_location(div3, file$c, 196, 2, 4942);
+			add_location(div3, file$c, 202, 2, 5144);
 			attr(div4, "class", "card svelte-15frdq5");
-			add_location(div4, file$c, 168, 0, 3808);
+			add_location(div4, file$c, 174, 0, 3994);
 
 			dispose = [
 				listen(div0, "click", ctx.deleteStudy),
-				listen(h4, "click", ctx.showStudy),
+				listen(h4, "click", stop_propagation(ctx.showStudy)),
 				listen(span0, "click", ctx.showUsers),
 				listen(span1, "click", ctx.showResponses),
 				listen(span2, "click", ctx.showVariables)
@@ -4212,8 +4264,10 @@ function create_fragment$c(ctx) {
 }
 
 function instance$a($$self, $$props, $$invalidate) {
-	let $variableStore;
+	let $msgStore, $variableStore;
 
+	validate_store(msgStore, 'msgStore');
+	subscribe($$self, msgStore, $$value => { $msgStore = $$value; $$invalidate('$msgStore', $msgStore); });
 	validate_store(variableStore, 'variableStore');
 	subscribe($$self, variableStore, $$value => { $variableStore = $$value; $$invalidate('$variableStore', $variableStore); });
 
@@ -4233,7 +4287,13 @@ function instance$a($$self, $$props, $$invalidate) {
   }
 
   function showStudy() {
-    dispatch("showStudy");
+    const msg = {
+      type: "navigation",
+      action: "openStudyTabs",
+      data: { _id, studyName }
+    };
+    $msgStore.push(msg);
+    msgStore.set($msgStore); // make sure store gets updated
   }
 
   let responses = 0;
@@ -5484,7 +5544,7 @@ function get_each_context$4(ctx, list, i) {
 	return child_ctx;
 }
 
-// (97:0) {#if toggleVars}
+// (91:0) {#if toggleVars}
 function create_if_block_2$1(ctx) {
 	var div1, t, div0, div1_transition, current, dispose;
 
@@ -5509,9 +5569,9 @@ function create_if_block_2$1(ctx) {
 			div0 = element("div");
 			div0.textContent = "x close";
 			attr(div0, "class", "close svelte-14xdm4z");
-			add_location(div0, file$g, 99, 4, 2595);
+			add_location(div0, file$g, 93, 4, 2369);
 			attr(div1, "class", "varInfo svelte-14xdm4z");
-			add_location(div1, file$g, 97, 2, 2485);
+			add_location(div1, file$g, 91, 2, 2259);
 			dispose = listen(div0, "click", ctx.click_handler);
 		},
 
@@ -5567,7 +5627,7 @@ function create_if_block_2$1(ctx) {
 	};
 }
 
-// (104:0) {#if toggleUsers}
+// (98:0) {#if toggleUsers}
 function create_if_block_1$1(ctx) {
 	var div1, t, div0, div1_transition, current, dispose;
 
@@ -5589,9 +5649,9 @@ function create_if_block_1$1(ctx) {
 			div0 = element("div");
 			div0.textContent = "x close";
 			attr(div0, "class", "close svelte-14xdm4z");
-			add_location(div0, file$g, 106, 4, 2813);
+			add_location(div0, file$g, 100, 4, 2587);
 			attr(div1, "class", "varInfo svelte-14xdm4z");
-			add_location(div1, file$g, 104, 2, 2707);
+			add_location(div1, file$g, 98, 2, 2481);
 			dispose = listen(div0, "click", ctx.click_handler_1);
 		},
 
@@ -5647,7 +5707,7 @@ function create_if_block_1$1(ctx) {
 	};
 }
 
-// (111:0) {#if toggleResponses}
+// (105:0) {#if toggleResponses}
 function create_if_block$2(ctx) {
 	var div1, t, div0, div1_transition, current, dispose;
 
@@ -5672,9 +5732,9 @@ function create_if_block$2(ctx) {
 			div0 = element("div");
 			div0.textContent = "x close";
 			attr(div0, "class", "close svelte-14xdm4z");
-			add_location(div0, file$g, 113, 4, 3040);
+			add_location(div0, file$g, 107, 4, 2814);
 			attr(div1, "class", "varInfo svelte-14xdm4z");
-			add_location(div1, file$g, 111, 2, 2930);
+			add_location(div1, file$g, 105, 2, 2704);
 			dispose = listen(div0, "click", ctx.click_handler_2);
 		},
 
@@ -5730,17 +5790,13 @@ function create_if_block$2(ctx) {
 	};
 }
 
-// (119:2) {#each $studyStore as study (study._id)}
+// (113:2) {#each $studyStore as study (study._id)}
 function create_each_block$4(key_1, ctx) {
 	var div, div_intro, rect, stop_animation = noop, current;
 
 	var studycard_spread_levels = [
 		ctx.study
 	];
-
-	function showStudy_handler() {
-		return ctx.showStudy_handler(ctx);
-	}
 
 	let studycard_props = {};
 	for (var i = 0; i < studycard_spread_levels.length; i += 1) {
@@ -5750,7 +5806,6 @@ function create_each_block$4(key_1, ctx) {
 	studycard.$on("showVariables", ctx.showVars);
 	studycard.$on("showResponses", ctx.showResponses);
 	studycard.$on("showUsers", ctx.showUsers);
-	studycard.$on("showStudy", showStudy_handler);
 
 	return {
 		key: key_1,
@@ -5761,7 +5816,7 @@ function create_each_block$4(key_1, ctx) {
 			div = element("div");
 			studycard.$$.fragment.c();
 			attr(div, "class", "study svelte-14xdm4z");
-			add_location(div, file$g, 119, 4, 3237);
+			add_location(div, file$g, 113, 4, 3011);
 			this.first = div;
 		},
 
@@ -5771,8 +5826,7 @@ function create_each_block$4(key_1, ctx) {
 			current = true;
 		},
 
-		p: function update(changed, new_ctx) {
-			ctx = new_ctx;
+		p: function update(changed, ctx) {
 			var studycard_changes = changed.$studyStore ? get_spread_update(studycard_spread_levels, [
 				ctx.study
 			]) : {};
@@ -5862,11 +5916,11 @@ function create_fragment$g(ctx) {
 			div2 = element("div");
 			div2.textContent = "Debug: wipe database";
 			attr(div0, "class", "study svelte-14xdm4z");
-			add_location(div0, file$g, 131, 2, 3573);
+			add_location(div0, file$g, 124, 2, 3301);
 			attr(div1, "class", "container svelte-14xdm4z");
-			add_location(div1, file$g, 117, 0, 3136);
+			add_location(div1, file$g, 111, 0, 2910);
 			attr(div2, "class", "debug svelte-14xdm4z");
-			add_location(div2, file$g, 136, 0, 3637);
+			add_location(div2, file$g, 129, 0, 3365);
 
 			dispose = [
 				listen(window_1, "keyup", ctx.closeDetailView),
@@ -6035,10 +6089,8 @@ function dropDB() {
 }
 
 function instance$e($$self, $$props, $$invalidate) {
-	let $msgStore, $studyStore;
+	let $studyStore;
 
-	validate_store(msgStore, 'msgStore');
-	subscribe($$self, msgStore, $$value => { $msgStore = $$value; $$invalidate('$msgStore', $msgStore); });
 	validate_store(studyStore, 'studyStore');
 	subscribe($$self, studyStore, $$value => { $studyStore = $$value; $$invalidate('$studyStore', $studyStore); });
 
@@ -6068,12 +6120,6 @@ function instance$e($$self, $$props, $$invalidate) {
       $$invalidate('toggleResponses', toggleResponses = false);
     }
   }
-  function openTabs(study) {
-    const msg = { type: "navigation", action: "openStudyTabs", data: study };
-    // console.log(msg);
-    $msgStore.push(msg);
-    msgStore.set($msgStore); // make sure store gets updated
-  }
 
 	function click_handler() {
 		const $$result = (toggleVars = false);
@@ -6093,10 +6139,6 @@ function instance$e($$self, $$props, $$invalidate) {
 		return $$result;
 	}
 
-	function showStudy_handler({ study }) {
-		return openTabs(study);
-	}
-
 	return {
 		studyData,
 		toggleVars,
@@ -6106,12 +6148,10 @@ function instance$e($$self, $$props, $$invalidate) {
 		toggleResponses,
 		showResponses,
 		closeDetailView,
-		openTabs,
 		$studyStore,
 		click_handler,
 		click_handler_1,
-		click_handler_2,
-		showStudy_handler
+		click_handler_2
 	};
 }
 
@@ -8115,7 +8155,7 @@ class TabContent extends SvelteComponentDev {
 
 const file$m = "src\\components\\StudyInfo.svelte";
 
-// (33:0) {:else}
+// (62:0) {:else}
 function create_else_block$4(ctx) {
 	var div;
 
@@ -8124,7 +8164,7 @@ function create_else_block$4(ctx) {
 			div = element("div");
 			div.textContent = "SensQVis";
 			attr(div, "class", "appTitle svelte-9957gg");
-			add_location(div, file$m, 33, 2, 749);
+			add_location(div, file$m, 62, 2, 1608);
 		},
 
 		m: function mount(target, anchor) {
@@ -8141,7 +8181,7 @@ function create_else_block$4(ctx) {
 	};
 }
 
-// (26:0) {#if activeTab && activeTab.id != 1}
+// (55:0) {#if $activeTabIdx}
 function create_if_block$5(ctx) {
 	var div4, div0, t0, t1, t2, div1, t3, t4, t5, div2, t6, t7, t8, div3, t9, t10;
 
@@ -8150,26 +8190,26 @@ function create_if_block$5(ctx) {
 			div4 = element("div");
 			div0 = element("div");
 			t0 = text("Study name: ");
-			t1 = text(name);
+			t1 = text(ctx.name);
 			t2 = space();
 			div1 = element("div");
 			t3 = text("Total study time elapsed: ");
 			t4 = text(time);
 			t5 = space();
 			div2 = element("div");
-			t6 = text("Number of active participants: ");
-			t7 = text(participants);
+			t6 = text("Number of participants: ");
+			t7 = text(ctx.participants);
 			t8 = space();
 			div3 = element("div");
 			t9 = text("Datasets collected: ");
-			t10 = text(datasets);
-			add_location(div0, file$m, 27, 4, 539);
-			add_location(div1, file$m, 28, 4, 574);
-			add_location(div2, file$m, 29, 4, 623);
-			add_location(div3, file$m, 30, 4, 685);
+			t10 = text(ctx.datasets);
+			add_location(div0, file$m, 56, 4, 1405);
+			add_location(div1, file$m, 57, 4, 1440);
+			add_location(div2, file$m, 58, 4, 1489);
+			add_location(div3, file$m, 59, 4, 1544);
 			attr(div4, "id", "info");
 			attr(div4, "class", "svelte-9957gg");
-			add_location(div4, file$m, 26, 2, 518);
+			add_location(div4, file$m, 55, 2, 1384);
 		},
 
 		m: function mount(target, anchor) {
@@ -8191,7 +8231,19 @@ function create_if_block$5(ctx) {
 			append(div3, t10);
 		},
 
-		p: noop,
+		p: function update(changed, ctx) {
+			if (changed.name) {
+				set_data(t1, ctx.name);
+			}
+
+			if (changed.participants) {
+				set_data(t7, ctx.participants);
+			}
+
+			if (changed.datasets) {
+				set_data(t10, ctx.datasets);
+			}
+		},
 
 		d: function destroy(detaching) {
 			if (detaching) {
@@ -8205,7 +8257,7 @@ function create_fragment$n(ctx) {
 	var if_block_anchor;
 
 	function select_block_type(ctx) {
-		if (ctx.activeTab && ctx.activeTab.id != 1) return create_if_block$5;
+		if (ctx.$activeTabIdx) return create_if_block$5;
 		return create_else_block$4;
 	}
 
@@ -8253,27 +8305,58 @@ function create_fragment$n(ctx) {
 	};
 }
 
-let name = "Test Study";
-
 let time = "78%";
 
-let participants = 27;
-
-let datasets = 1326;
-
 function instance$l($$self, $$props, $$invalidate) {
-	let $tabStore;
+	let $tabStore, $studyStore, $activeTabIdx;
 
 	validate_store(tabStore, 'tabStore');
 	subscribe($$self, tabStore, $$value => { $tabStore = $$value; $$invalidate('$tabStore', $tabStore); });
+	validate_store(studyStore, 'studyStore');
+	subscribe($$self, studyStore, $$value => { $studyStore = $$value; $$invalidate('$studyStore', $studyStore); });
+	validate_store(activeTabIdx, 'activeTabIdx');
+	subscribe($$self, activeTabIdx, $$value => { $activeTabIdx = $$value; $$invalidate('$activeTabIdx', $activeTabIdx); });
 
-	let activeTab;
+	
 
-	$$self.$$.update = ($$dirty = { $tabStore: 1 }) => {
-		if ($$dirty.$tabStore) { $$invalidate('activeTab', activeTab = $tabStore.filter(v => v.active === true)[0]); }
+  let name = "Test Study";
+  let participants = 27;
+  let datasets = 1326;
+  activeTabIdx.subscribe(idx => {
+    const currentStudyId = $tabStore[idx].studyId;
+    if (currentStudyId) {
+      const currentStudy = $studyStore.filter(v => v._id === currentStudyId)[0];
+      // console.log("info", currentStudy);
+      $$invalidate('name', name = currentStudy.studyName);
+      //FIXME: use stores instead of db
+      let res = db
+        .transaction("StudyResponses")
+        .objectStore("StudyResponses")
+        .index("studyId")
+        .count(currentStudyId);
+      res.onsuccess = e => {
+        const count = e.target.result;
+        $$invalidate('datasets', datasets = count);
+      };
+
+      res = db
+        .transaction("Users")
+        .objectStore("Users")
+        .index("studyId")
+        .count(currentStudyId);
+      res.onsuccess = e => {
+        const count = e.target.result;
+        $$invalidate('participants', participants = count);
+      };
+    }
+  });
+
+	return {
+		name,
+		participants,
+		datasets,
+		$activeTabIdx
 	};
-
-	return { activeTab };
 }
 
 class StudyInfo extends SvelteComponentDev {

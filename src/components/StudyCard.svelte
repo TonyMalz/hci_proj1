@@ -2,7 +2,7 @@
   import { formatDate } from "../modules/utils.js";
   import { fade } from "svelte/transition";
   import { db } from "../modules/indexeddb.js";
-  import { studyStore } from "../modules/store.js";
+  import { studyStore, msgStore } from "../modules/store.js";
   import { createEventDispatcher } from "svelte";
   import { variableStore } from "../modules/store.js";
 
@@ -28,7 +28,13 @@
   }
 
   function showStudy() {
-    dispatch("showStudy");
+    const msg = {
+      type: "navigation",
+      action: "openStudyTabs",
+      data: { _id, studyName }
+    };
+    $msgStore.push(msg);
+    $msgStore = $msgStore; // make sure store gets updated
   }
 
   let responses = 0;
@@ -177,7 +183,7 @@
         12,2M14.59,8L12,10.59L9.41,8L8,9.41L10.59,12L8,14.59L9.41,16L12,13.41L14.59,16L16,14.59L13.41,12L16,9.41L14.59,8Z" />
     </svg>
   </div>
-  <h4 on:click={showStudy}>{studyName}</h4>
+  <h4 on:click|stopPropagation={showStudy}>{studyName}</h4>
   <div class="mainInfo">
     <span class="vars" on:click={showUsers}>Users: {userCount}</span>
     <span class="vars" on:click={showResponses}>Responses: {responses}</span>

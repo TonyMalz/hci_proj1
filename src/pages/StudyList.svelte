@@ -41,12 +41,6 @@
       toggleResponses = false;
     }
   }
-  function openTabs(study) {
-    const msg = { type: "navigation", action: "openStudyTabs", data: study };
-    // console.log(msg);
-    $msgStore.push(msg);
-    $msgStore = $msgStore; // make sure store gets updated
-  }
 </script>
 
 <style>
@@ -125,8 +119,7 @@
         {...study}
         on:showVariables={showVars}
         on:showResponses={showResponses}
-        on:showUsers={showUsers}
-        on:showStudy={() => openTabs(study)} />
+        on:showUsers={showUsers} />
     </div>
   {/each}
   <div class="study">
