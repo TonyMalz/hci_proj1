@@ -26,8 +26,12 @@
     // const resultsByDay = [[], [], [], [], [], [], []]; // array index -> day of week starting at 0 (monday)
     // TODO: enable user selection
     let varName = "";
+    let minVal,
+      maxVal = 0;
     if (numericVariables) {
       const dependentVariable = numericVariables[0];
+      minVal = stat.min(dependentVariable.results.map(v => v.value));
+      maxVal = stat.max(dependentVariable.results.map(v => v.value));
       varName = dependentVariable.variableName;
       for (const result of dependentVariable.results) {
         const resultDate = new Date(result.date);
@@ -157,7 +161,7 @@
           name: varName,
           type: "scatter",
           symbolSize: function(val) {
-            return val[2] * 3;
+            return ((val[2] - minVal) / (maxVal - minVal)) * 24 + 5;
           },
           data: statData,
           animationDelay: function(idx) {

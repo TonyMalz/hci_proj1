@@ -2811,7 +2811,7 @@ function create_fragment$7(ctx) {
 			attr(div, "id", "mainChart");
 			set_style(div, "width", "100%");
 			set_style(div, "height", "100%");
-			add_location(div, file$7, 188, 0, 5056);
+			add_location(div, file$7, 192, 0, 5272);
 		},
 
 		l: function claim(nodes) {
@@ -2865,8 +2865,12 @@ function instance$6($$self, $$props, $$invalidate) {
     // const resultsByDay = [[], [], [], [], [], [], []]; // array index -> day of week starting at 0 (monday)
     // TODO: enable user selection
     let varName = "";
+    let minVal,
+      maxVal = 0;
     if (numericVariables) {
       const dependentVariable = numericVariables[0];
+      minVal = simpleStatistics_min.min(dependentVariable.results.map(v => v.value));
+      maxVal = simpleStatistics_min.max(dependentVariable.results.map(v => v.value));
       varName = dependentVariable.variableName;
       for (const result of dependentVariable.results) {
         const resultDate = new Date(result.date);
@@ -2996,7 +3000,7 @@ function instance$6($$self, $$props, $$invalidate) {
           name: varName,
           type: "scatter",
           symbolSize: function(val) {
-            return val[2] * 3;
+            return ((val[2] - minVal) / (maxVal - minVal)) * 24 + 5;
           },
           data: statData,
           animationDelay: function(idx) {
