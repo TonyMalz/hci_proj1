@@ -12,7 +12,7 @@
   {#each $tabStore as tab, idx}
     {#if idx === $activeTabIdx}
       {#if tab.type === 'overview'}
-        <Overview />
+        <Overview studyId={tab.studyId} />
       {:else if tab.type === 'userview'}
         <Userview />
       {:else if tab.type === 'descriptives'}

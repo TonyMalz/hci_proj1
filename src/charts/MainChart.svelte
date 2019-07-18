@@ -1,11 +1,74 @@
 <script>
   import { onMount } from "svelte";
+  import { variableStore } from "../modules/store";
+  import stat from "../modules/simple-statistics.min";
+
+  export let studyId;
 
   onMount(() => {
     let mainChart = echarts.init(document.getElementById("mainChart"));
+    const numericVariables = $variableStore.filter(
+      v =>
+        v.studyId === studyId &&
+        v.isDemographic === false &&
+        v.measure === "scale"
+    );
+    console.log(numericVariables);
+
+    const resultsByDayAndHour = [
+      new Map(),
+      new Map(),
+      new Map(),
+      new Map(),
+      new Map(),
+      new Map(),
+      new Map()
+    ];
+    const resultsByDay = [[], [], [], [], [], [], []]; // array index -> day of week starting at 0 (monday)
+    let minHour = 0;
+    let maxHour = 0;
+    // TODO: enable user selection
+    const dependentVariable = numericVariables[0];
+    for (const result of dependentVariable.results) {
+      const resultDate = new Date(result.date);
+      const resultDay = resultDate.getDay();
+      const hour = resultDate.getHours();
+      minHour = minHour < hour ? minHour : hour;
+      maxHour = maxHour > hour ? maxHour : hour;
+      resultsByDay[resultDay].push(result.value);
+      const rs = resultsByDayAndHour[resultDay].get(hour) || [];
+      rs.push(result.value);
+      resultsByDayAndHour[resultDay].set(hour, rs);
+    }
+
+    // console.log(resultsByDay);
+    // console.log(resultsByDayAndHour);
+    // console.log(dependentVariable, minHour, maxHour);
+
+    const statData = [];
+    for (const day in resultsByDayAndHour) {
+      for (const [hour, results] of resultsByDayAndHour[day]) {
+        // statData.push({
+        //   x: +day + 1, // start at 1 for monday, cast to int and do not concatenate strings (WTF Javascript?!)
+        //   y: hour,
+        //   mean: stat.mean(results),
+        //   sd: stat.standardDeviation(results),
+        //   responses: results.length
+        // });
+        statData.push([
+          +day + 1, // start at 1 for monday, cast to int and do not concatenate strings (WTF Javascript?!)
+          hour,
+          stat.mean(results),
+          stat.standardDeviation(results),
+          results.length
+        ]);
+      }
+    }
+
+    console.log(statData);
 
     // TODO find alternative for this workaround
-    var hours = [
+    const hours = [
       "08:00",
       "",
       "09:00",
@@ -40,7 +103,7 @@
       "",
       "24:00"
     ];
-    var days = [
+    const days = [
       "",
       "Monday",
       "Tuesday",
@@ -50,7 +113,7 @@
       "Saturday",
       "Sunday"
     ];
-    var data = [
+    const data = [
       [1, 1, 5],
       [1, 3, 3],
       [1, 5, 2],
@@ -166,15 +229,46 @@
     ];
 
     const option = {
+      dataset: {
+        source: statData
+      },
+
+      dataZoom: {
+        type: "inside",
+        yAxisIndex: [0],
+        filterMode: "filter"
+      },
       legend: {
-        data: ["Average availability"],
+        data: [dependentVariable.variableName],
         left: "center"
       },
       tooltip: {
         position: "top",
-        formatter: function(params) {
+        formatter: function(d) {
           // TODO implement function capable of translating params.value[1] into 'XX:00-XX:00'
-          return "Average availability is " + params.value[2];
+          return `<table style="font-size:0.7rem;">
+                  <tr>
+                    <td>Mean</td>
+                    <td style="padding-left:0.5rem;">${d.value[2].toFixed(
+                      4
+                    )}</td>
+                  </tr>
+                  <tr>
+                    <td>SD</td>
+                    <td style="padding-left:0.5rem;">${d.value[3].toFixed(
+                      4
+                    )}</td>
+                  </tr>
+                  <tr>
+                    <td>Responses</td>
+                    <td style="padding-left:0.5rem;">${d.value[4]}</td>
+                  </tr>
+                  <tr>
+                    <td>Timeslot</td>
+                    <td style="padding-left:0.5rem;">[${d.value[1]}:00 - ${+d
+            .value[1] + 1}:00)</td>
+                  </tr>
+                  </table>`;
         }
       },
       grid: {
@@ -190,7 +284,7 @@
         // name: "Day of week",
         data: days,
         splitLine: {
-          show: true,
+          show: false,
           lineStyle: {
             color: "#999",
             type: "dashed"
@@ -201,22 +295,37 @@
         }
       },
       yAxis: {
-        type: "category",
+        splitLine: {
+          show: true,
+          lineStyle: {
+            color: "#ddd",
+            type: "dashed"
+          }
+        },
+        type: "value",
         boundaryGap: false,
+        max: 24,
         name: "Time of day",
-        data: hours,
-        axisLine: {
-          show: true
-        }
+        axisLabel: {
+          formatter: function(value, idx) {
+            let hour = ~~value;
+            let minutes = ~~((value - hour) * 60);
+            hour = hour < 10 ? "0" + hour : hour;
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+
+            return `${hour}:${minutes}`;
+          }
+        },
+        splitNumber: 8
       },
       series: [
         {
-          name: "Average availability",
+          name: dependentVariable.variableName,
           type: "scatter",
           symbolSize: function(val) {
-            return val[2] * 6;
+            return val[2] * 3;
           },
-          data: data,
+          data: statData,
           animationDelay: function(idx) {
             return idx * 5;
           }

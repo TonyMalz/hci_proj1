@@ -118,6 +118,7 @@
                     for (const stepItem of step.stepItems) {
                       stepItem.__created = new Date();
                       stepItem.studyId = studyId;
+                      stepItem.isDemographic = JSON.parse(task.personalData);
                       stepItem.measure = typeMapping.get(
                         stepItem.dataformat.type
                       );

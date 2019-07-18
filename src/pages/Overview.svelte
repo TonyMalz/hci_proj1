@@ -4,6 +4,8 @@
   import Sherlock from "../charts/Sherlock.svelte";
   import Anova from "../charts/Anova.svelte";
   import { fade } from "svelte/transition";
+
+  export let studyId;
 </script>
 
 <style>
@@ -44,7 +46,7 @@
 
 <div class="overview" in:fade={{ duration: 300 }}>
   <div class="mainChart">
-    <MainChart />
+    <MainChart {studyId} />
   </div>
   <div class="mainChartSummary">
     <MainChartSummary />
