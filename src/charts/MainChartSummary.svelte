@@ -1,14 +1,70 @@
 <script>
   import { onMount } from "svelte";
+  import { variableStore } from "../modules/store";
+  import stat from "../modules/simple-statistics.min";
+  export let studyId;
+
   onMount(() => {
     let mainChartSummary = echarts.init(
       document.getElementById("mainChartSummary")
     );
 
+    const numericVariables = $variableStore.filter(
+      v =>
+        v.studyId === studyId &&
+        v.isDemographic === false &&
+        v.measure === "scale"
+    );
+
+    const resultsByHour = new Map();
+    // TODO: enable user selection
+    if (numericVariables) {
+      const dependentVariable = numericVariables[0];
+      for (const result of dependentVariable.results) {
+        const resultDate = new Date(result.date);
+        const hour = resultDate.getHours();
+        const rs = resultsByHour.get(hour) || [];
+        rs.push(result.value);
+        resultsByHour.set(hour, rs);
+      }
+    }
+
+    const data = [];
+    for (let i = 0; i < 24; i++) {
+      const results = resultsByHour.get(i) || [0];
+      data.push([
+        stat.mean(results),
+        i,
+        stat.standardDeviation(results),
+        results.length
+      ]);
+    }
+
     const option = {
       tooltip: {
         trigger: "axis",
-        formatter: "Average availability : <br/>{b}h : {c}"
+        formatter: function(data) {
+          const d = data[0].data;
+          return `<table style="font-size:0.8rem;">
+                  <tr>
+                    <td>Mean</td>
+                    <td style="padding-left:0.5rem;">${d[0].toFixed(4)}</td>
+                  </tr>
+                  <tr>
+                    <td>SD</td>
+                    <td style="padding-left:0.5rem;">${d[2].toFixed(4)}</td>
+                  </tr>
+                  <tr>
+                    <td>Responses</td>
+                    <td style="padding-left:0.5rem;">${d[3]}</td>
+                  </tr>
+                  <tr>
+                    <td>Timeslot</td>
+                    <td style="padding-left:0.5rem;">[${d[1]}:00 - ${+d[1] +
+            1}:00)</td>
+                  </tr>
+                  </table>`;
+        }
       },
       grid: {
         top: 40,
@@ -16,6 +72,11 @@
         bottom: 10,
         right: 50,
         containLabel: true
+      },
+      dataZoom: {
+        type: "inside",
+        yAxisIndex: [0],
+        filterMode: "filter"
       },
       xAxis: {
         type: "value",
@@ -26,41 +87,19 @@
         axisLine: { onZero: true },
         boundaryGap: false,
         name: "Time of day",
-        data: [
-          "08:00",
-          "",
-          "09:00",
-          "",
-          "10:00",
-          "",
-          "11:00",
-          "",
-          "12:00",
-          "",
-          "13:00",
-          "",
-          "14:00",
-          "",
-          "15:00",
-          "",
-          "16:00",
-          "",
-          "17:00",
-          "",
-          "18:00",
-          "",
-          "19:00",
-          "",
-          "20:00",
-          "",
-          "21:00",
-          "",
-          "22:00",
-          "",
-          "23:00",
-          "",
-          "24:00"
-        ]
+        max: 24,
+        axisLabel: {
+          formatter: function(value, idx) {
+            let hour = ~~value;
+            let minutes = ~~((value - hour) * 60);
+            hour = hour < 10 ? "0" + hour : hour;
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            if (idx == 24) {
+              return "24:00";
+            }
+            return `${hour}:${minutes}`;
+          }
+        }
       },
       series: [
         {
@@ -75,41 +114,7 @@
               shadowOffsetY: 10
             }
           },
-          data: [
-            1,
-            2.5,
-            3.8,
-            7,
-            5,
-            4,
-            4,
-            4,
-            4,
-            5,
-            5,
-            5,
-            2,
-            2,
-            2,
-            3.5,
-            3.5,
-            3.5,
-            4,
-            4,
-            4,
-            4.5,
-            3,
-            3,
-            3,
-            3,
-            2.5,
-            2,
-            5,
-            6,
-            4,
-            3.75,
-            2
-          ]
+          data
         }
       ]
     };

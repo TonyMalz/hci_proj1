@@ -49,7 +49,7 @@
     <MainChart {studyId} />
   </div>
   <div class="mainChartSummary">
-    <MainChartSummary />
+    <MainChartSummary {studyId} />
   </div>
   <aside>
     <Sherlock />
