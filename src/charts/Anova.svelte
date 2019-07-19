@@ -4,6 +4,7 @@
   import stat from "../modules/simple-statistics.min";
   export let studyId;
   onMount(() => {
+    let anovaChart = echarts.init(document.getElementById("anovaChart"));
     const numericVariables = $variableStore.filter(
       v =>
         v.studyId === studyId &&
@@ -54,7 +55,6 @@
       }
     }
 
-    let anovaChart = echarts.init(document.getElementById("anovaChart"));
     const categoryData = [
       "Monday",
       "Tuesday",

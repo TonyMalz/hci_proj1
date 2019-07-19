@@ -4,31 +4,37 @@
   import WeekChart from "../charts/WeekChart.svelte";
   import BDAChart from "../charts/BDAChart.svelte";
   import ContextPie from "../charts/ContextPie.svelte";
+
+  export let studyId;
 </script>
 
 <style>
   .userview {
+    position: relative;
     display: grid;
-    height: 100%;
-    grid-template-rows: 55px auto;
+    grid-template-rows: min-content auto;
     grid-gap: 1rem;
   }
   .optionsContainer {
+    position: relative;
+    width: 100%;
     overflow: hidden;
   }
   .widgetContainer {
     display: grid;
+    position: relative;
     grid-template-columns: repeat(auto-fit, minmax(35rem, 1fr));
+    grid-template-rows: min-content;
     grid-gap: 1rem;
   }
 
   .widget {
-    border: 1px solid #ccc;
-    padding: 1em;
-    padding-bottom: 0.5em;
-    border-radius: 4px;
-    min-height: 12rem;
-    max-height: 20rem;
+    position: relative;
+    box-shadow: 0 0 6px 0 rgb(214, 214, 214);
+    border-radius: 0.25rem;
+    padding: 0.5em 1em;
+    width: 100%;
+    height: 24ch;
   }
 </style>
 
@@ -64,7 +70,7 @@
   </div>
   <div class="widgetContainer">
     <div class="widget">
-      <Anova />
+      <Anova {studyId} />
     </div>
     <div class="widget">
       <WeekChart />
@@ -87,7 +93,6 @@
         </svg>
         Add new widget
       </div>
-
     </div>-->
   </div>
 </div>

@@ -1926,6 +1926,7 @@ function instance$2($$self, $$props, $$invalidate) {
 	
   let { studyId } = $$props;
   onMount(() => {
+    let anovaChart = echarts.init(document.getElementById("anovaChart"));
     const numericVariables = $variableStore.filter(
       v =>
         v.studyId === studyId &&
@@ -1974,7 +1975,6 @@ function instance$2($$self, $$props, $$invalidate) {
       }
     }
 
-    let anovaChart = echarts.init(document.getElementById("anovaChart"));
     const categoryData = [
       "Monday",
       "Tuesday",
@@ -2732,7 +2732,10 @@ const file$6 = "src\\pages\\Userview.svelte";
 function create_fragment$6(ctx) {
 	var div6, div0, select, option0, option1, option2, option3, option4, t5, div5, div1, t6, div2, t7, div3, t8, div4, div6_intro, current;
 
-	var anova = new Anova({ $$inline: true });
+	var anova = new Anova({
+		props: { studyId: ctx.studyId },
+		$$inline: true
+	});
 
 	var weekchart = new WeekChart({ $$inline: true });
 
@@ -2770,36 +2773,36 @@ function create_fragment$6(ctx) {
 			contextpie.$$.fragment.c();
 			option0.__value = "1";
 			option0.value = option0.__value;
-			add_location(option0, file$6, 37, 6, 905);
+			add_location(option0, file$6, 43, 6, 1063);
 			option1.__value = "2";
 			option1.value = option1.__value;
-			add_location(option1, file$6, 40, 6, 1006);
+			add_location(option1, file$6, 46, 6, 1164);
 			option2.__value = "3";
 			option2.value = option2.__value;
-			add_location(option2, file$6, 43, 6, 1107);
+			add_location(option2, file$6, 49, 6, 1265);
 			option3.__value = "4";
 			option3.value = option3.__value;
-			add_location(option3, file$6, 44, 6, 1189);
+			add_location(option3, file$6, 50, 6, 1347);
 			option4.__value = "5";
 			option4.value = option4.__value;
-			add_location(option4, file$6, 47, 6, 1290);
+			add_location(option4, file$6, 53, 6, 1448);
 			attr(select, "name", "user");
 			attr(select, "id", "userSelect");
-			add_location(select, file$6, 36, 4, 861);
-			attr(div0, "class", "optionsContainer svelte-1ci0qxq");
-			add_location(div0, file$6, 35, 2, 825);
-			attr(div1, "class", "widget svelte-1ci0qxq");
-			add_location(div1, file$6, 65, 4, 1881);
-			attr(div2, "class", "widget svelte-1ci0qxq");
-			add_location(div2, file$6, 68, 4, 1936);
-			attr(div3, "class", "widget svelte-1ci0qxq");
-			add_location(div3, file$6, 71, 4, 1995);
-			attr(div4, "class", "widget svelte-1ci0qxq");
-			add_location(div4, file$6, 74, 4, 2053);
-			attr(div5, "class", "widgetContainer svelte-1ci0qxq");
-			add_location(div5, file$6, 64, 2, 1846);
-			attr(div6, "class", "userview svelte-1ci0qxq");
-			add_location(div6, file$6, 34, 0, 771);
+			add_location(select, file$6, 42, 4, 1019);
+			attr(div0, "class", "optionsContainer svelte-oe3a3e");
+			add_location(div0, file$6, 41, 2, 983);
+			attr(div1, "class", "widget svelte-oe3a3e");
+			add_location(div1, file$6, 71, 4, 2039);
+			attr(div2, "class", "widget svelte-oe3a3e");
+			add_location(div2, file$6, 74, 4, 2104);
+			attr(div3, "class", "widget svelte-oe3a3e");
+			add_location(div3, file$6, 77, 4, 2163);
+			attr(div4, "class", "widget svelte-oe3a3e");
+			add_location(div4, file$6, 80, 4, 2221);
+			attr(div5, "class", "widgetContainer svelte-oe3a3e");
+			add_location(div5, file$6, 70, 2, 2004);
+			attr(div6, "class", "userview svelte-oe3a3e");
+			add_location(div6, file$6, 40, 0, 929);
 		},
 
 		l: function claim(nodes) {
@@ -2831,7 +2834,11 @@ function create_fragment$6(ctx) {
 			current = true;
 		},
 
-		p: noop,
+		p: function update(changed, ctx) {
+			var anova_changes = {};
+			if (changed.studyId) anova_changes.studyId = ctx.studyId;
+			anova.$set(anova_changes);
+		},
 
 		i: function intro(local) {
 			if (current) return;
@@ -2877,10 +2884,41 @@ function create_fragment$6(ctx) {
 	};
 }
 
+function instance$6($$self, $$props, $$invalidate) {
+	
+
+  let { studyId } = $$props;
+
+	const writable_props = ['studyId'];
+	Object.keys($$props).forEach(key => {
+		if (!writable_props.includes(key) && !key.startsWith('$$')) console.warn(`<Userview> was created with unknown prop '${key}'`);
+	});
+
+	$$self.$set = $$props => {
+		if ('studyId' in $$props) $$invalidate('studyId', studyId = $$props.studyId);
+	};
+
+	return { studyId };
+}
+
 class Userview extends SvelteComponentDev {
 	constructor(options) {
 		super(options);
-		init(this, options, null, create_fragment$6, safe_not_equal, []);
+		init(this, options, instance$6, create_fragment$6, safe_not_equal, ["studyId"]);
+
+		const { ctx } = this.$$;
+		const props = options.props || {};
+		if (ctx.studyId === undefined && !('studyId' in props)) {
+			console.warn("<Userview> was created without expected prop 'studyId'");
+		}
+	}
+
+	get studyId() {
+		throw new Error("<Userview>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+	}
+
+	set studyId(value) {
+		throw new Error("<Userview>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	}
 }
 
@@ -2920,7 +2958,7 @@ function create_fragment$7(ctx) {
 	};
 }
 
-function instance$6($$self, $$props, $$invalidate) {
+function instance$7($$self, $$props, $$invalidate) {
 	let $variableStore;
 
 	validate_store(variableStore, 'variableStore');
@@ -3132,7 +3170,7 @@ function instance$6($$self, $$props, $$invalidate) {
 class MainChart extends SvelteComponentDev {
 	constructor(options) {
 		super(options);
-		init(this, options, instance$6, create_fragment$7, safe_not_equal, ["studyId"]);
+		init(this, options, instance$7, create_fragment$7, safe_not_equal, ["studyId"]);
 
 		const { ctx } = this.$$;
 		const props = options.props || {};
@@ -3186,7 +3224,7 @@ function create_fragment$8(ctx) {
 	};
 }
 
-function instance$7($$self, $$props, $$invalidate) {
+function instance$8($$self, $$props, $$invalidate) {
 	let $variableStore;
 
 	validate_store(variableStore, 'variableStore');
@@ -3342,7 +3380,7 @@ function instance$7($$self, $$props, $$invalidate) {
 class MainChartSummary extends SvelteComponentDev {
 	constructor(options) {
 		super(options);
-		init(this, options, instance$7, create_fragment$8, safe_not_equal, ["studyId"]);
+		init(this, options, instance$8, create_fragment$8, safe_not_equal, ["studyId"]);
 
 		const { ctx } = this.$$;
 		const props = options.props || {};
@@ -3441,7 +3479,7 @@ function create_fragment$9(ctx) {
 	};
 }
 
-function instance$8($$self) {
+function instance$9($$self) {
 	onMount(() => {
     let sherlockChart = echarts.init(document.getElementById("sherlockChart"));
     const dataAll = [
@@ -3679,7 +3717,7 @@ function instance$8($$self) {
 class Sherlock extends SvelteComponentDev {
 	constructor(options) {
 		super(options);
-		init(this, options, instance$8, create_fragment$9, safe_not_equal, []);
+		init(this, options, instance$9, create_fragment$9, safe_not_equal, []);
 	}
 }
 
@@ -3811,7 +3849,7 @@ function create_fragment$a(ctx) {
 	};
 }
 
-function instance$9($$self, $$props, $$invalidate) {
+function instance$a($$self, $$props, $$invalidate) {
 	
 
   let { studyId } = $$props;
@@ -3831,7 +3869,7 @@ function instance$9($$self, $$props, $$invalidate) {
 class Overview extends SvelteComponentDev {
 	constructor(options) {
 		super(options);
-		init(this, options, instance$9, create_fragment$a, safe_not_equal, ["studyId"]);
+		init(this, options, instance$a, create_fragment$a, safe_not_equal, ["studyId"]);
 
 		const { ctx } = this.$$;
 		const props = options.props || {};
@@ -3913,7 +3951,7 @@ function create_fragment$b(ctx) {
 	};
 }
 
-function instance$a($$self, $$props, $$invalidate) {
+function instance$b($$self, $$props, $$invalidate) {
 	let $variableStore;
 
 	validate_store(variableStore, 'variableStore');
@@ -4178,7 +4216,7 @@ function instance$a($$self, $$props, $$invalidate) {
 class StudyImporter extends SvelteComponentDev {
 	constructor(options) {
 		super(options);
-		init(this, options, instance$a, create_fragment$b, safe_not_equal, []);
+		init(this, options, instance$b, create_fragment$b, safe_not_equal, []);
 	}
 }
 
@@ -4423,7 +4461,7 @@ function create_fragment$c(ctx) {
 	};
 }
 
-function instance$b($$self, $$props, $$invalidate) {
+function instance$c($$self, $$props, $$invalidate) {
 	let $msgStore, $variableStore;
 
 	validate_store(msgStore, 'msgStore');
@@ -4579,7 +4617,7 @@ function instance$b($$self, $$props, $$invalidate) {
 class StudyCard extends SvelteComponentDev {
 	constructor(options) {
 		super(options);
-		init(this, options, instance$b, create_fragment$c, safe_not_equal, ["_id", "studyName", "description", "tasks", "__created", "minimumStudyDurationPerPerson", "maximumStudyDurationPerPerson", "earliestBeginOfDataGathering", "latestBeginOfDataGathering"]);
+		init(this, options, instance$c, create_fragment$c, safe_not_equal, ["_id", "studyName", "description", "tasks", "__created", "minimumStudyDurationPerPerson", "maximumStudyDurationPerPerson", "earliestBeginOfDataGathering", "latestBeginOfDataGathering"]);
 
 		const { ctx } = this.$$;
 		const props = options.props || {};
@@ -4875,7 +4913,7 @@ function ucFirst(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-function instance$c($$self, $$props, $$invalidate) {
+function instance$d($$self, $$props, $$invalidate) {
 	let $variableStore;
 
 	validate_store(variableStore, 'variableStore');
@@ -4904,7 +4942,7 @@ function instance$c($$self, $$props, $$invalidate) {
 class StudyVariables extends SvelteComponentDev {
 	constructor(options) {
 		super(options);
-		init(this, options, instance$c, create_fragment$d, safe_not_equal, ["studyId", "studyName"]);
+		init(this, options, instance$d, create_fragment$d, safe_not_equal, ["studyId", "studyName"]);
 	}
 
 	get studyId() {
@@ -5187,7 +5225,7 @@ function create_fragment$e(ctx) {
 	};
 }
 
-function instance$d($$self, $$props, $$invalidate) {
+function instance$e($$self, $$props, $$invalidate) {
 	let { studyId = 0, studyName = "" } = $$props;
   let users = [];
   const userMap = new Map();
@@ -5231,7 +5269,7 @@ function instance$d($$self, $$props, $$invalidate) {
 class StudyUsers extends SvelteComponentDev {
 	constructor(options) {
 		super(options);
-		init(this, options, instance$d, create_fragment$e, safe_not_equal, ["studyId", "studyName"]);
+		init(this, options, instance$e, create_fragment$e, safe_not_equal, ["studyId", "studyName"]);
 	}
 
 	get studyId() {
@@ -5638,7 +5676,7 @@ function create_fragment$f(ctx) {
 	};
 }
 
-function instance$e($$self, $$props, $$invalidate) {
+function instance$f($$self, $$props, $$invalidate) {
 	
 
   let { studyId = 0, studyName = "" } = $$props;
@@ -5673,7 +5711,7 @@ function instance$e($$self, $$props, $$invalidate) {
 class StudyResponses extends SvelteComponentDev {
 	constructor(options) {
 		super(options);
-		init(this, options, instance$e, create_fragment$f, safe_not_equal, ["studyId", "studyName"]);
+		init(this, options, instance$f, create_fragment$f, safe_not_equal, ["studyId", "studyName"]);
 	}
 
 	get studyId() {
@@ -6248,7 +6286,7 @@ function dropDB() {
   location.reload(true);
 }
 
-function instance$f($$self, $$props, $$invalidate) {
+function instance$g($$self, $$props, $$invalidate) {
 	let $studyStore;
 
 	validate_store(studyStore, 'studyStore');
@@ -6318,7 +6356,7 @@ function instance$f($$self, $$props, $$invalidate) {
 class StudyList extends SvelteComponentDev {
 	constructor(options) {
 		super(options);
-		init(this, options, instance$f, create_fragment$g, safe_not_equal, []);
+		init(this, options, instance$g, create_fragment$g, safe_not_equal, []);
 	}
 }
 
@@ -6356,7 +6394,7 @@ function create_fragment$h(ctx) {
 	};
 }
 
-function instance$g($$self, $$props, $$invalidate) {
+function instance$h($$self, $$props, $$invalidate) {
 	
   let { variable } = $$props;
   const variableName = variable.variableName;
@@ -6421,7 +6459,7 @@ function instance$g($$self, $$props, $$invalidate) {
 class VariableNominalChart extends SvelteComponentDev {
 	constructor(options) {
 		super(options);
-		init(this, options, instance$g, create_fragment$h, safe_not_equal, ["variable"]);
+		init(this, options, instance$h, create_fragment$h, safe_not_equal, ["variable"]);
 
 		const { ctx } = this.$$;
 		const props = options.props || {};
@@ -6473,7 +6511,7 @@ function create_fragment$i(ctx) {
 	};
 }
 
-function instance$h($$self, $$props, $$invalidate) {
+function instance$i($$self, $$props, $$invalidate) {
 	let { variable } = $$props;
   const variableName = variable.variableName;
   const chartId = `vis${variableName}scale`;
@@ -6545,7 +6583,7 @@ function instance$h($$self, $$props, $$invalidate) {
 class VariableScaleChart extends SvelteComponentDev {
 	constructor(options) {
 		super(options);
-		init(this, options, instance$h, create_fragment$i, safe_not_equal, ["variable"]);
+		init(this, options, instance$i, create_fragment$i, safe_not_equal, ["variable"]);
 
 		const { ctx } = this.$$;
 		const props = options.props || {};
@@ -6750,7 +6788,7 @@ function create_fragment$j(ctx) {
 	};
 }
 
-function instance$i($$self, $$props, $$invalidate) {
+function instance$j($$self, $$props, $$invalidate) {
 	let { variable = {} } = $$props;
   let data = variable.results.map(v => v.value);
 
@@ -6769,7 +6807,7 @@ function instance$i($$self, $$props, $$invalidate) {
 class VariableQualitativeChart extends SvelteComponentDev {
 	constructor(options) {
 		super(options);
-		init(this, options, instance$i, create_fragment$j, safe_not_equal, ["variable"]);
+		init(this, options, instance$j, create_fragment$j, safe_not_equal, ["variable"]);
 	}
 
 	get variable() {
@@ -7481,7 +7519,7 @@ function create_fragment$k(ctx) {
 	};
 }
 
-function instance$j($$self, $$props, $$invalidate) {
+function instance$k($$self, $$props, $$invalidate) {
 	
 
   let { variable = {} } = $$props;
@@ -7503,7 +7541,7 @@ function instance$j($$self, $$props, $$invalidate) {
 class VariableStats extends SvelteComponentDev {
 	constructor(options) {
 		super(options);
-		init(this, options, instance$j, create_fragment$k, safe_not_equal, ["variable"]);
+		init(this, options, instance$k, create_fragment$k, safe_not_equal, ["variable"]);
 	}
 
 	get variable() {
@@ -7779,7 +7817,7 @@ function create_fragment$l(ctx) {
 	};
 }
 
-function instance$k($$self, $$props, $$invalidate) {
+function instance$l($$self, $$props, $$invalidate) {
 	let $variableStore;
 
 	validate_store(variableStore, 'variableStore');
@@ -7808,7 +7846,7 @@ function instance$k($$self, $$props, $$invalidate) {
 class Descriptives extends SvelteComponentDev {
 	constructor(options) {
 		super(options);
-		init(this, options, instance$k, create_fragment$l, safe_not_equal, ["studyId"]);
+		init(this, options, instance$l, create_fragment$l, safe_not_equal, ["studyId"]);
 	}
 
 	get studyId() {
@@ -8296,7 +8334,7 @@ function create_fragment$m(ctx) {
 	};
 }
 
-function instance$l($$self, $$props, $$invalidate) {
+function instance$m($$self, $$props, $$invalidate) {
 	let $activeTabIdx, $tabStore;
 
 	validate_store(activeTabIdx, 'activeTabIdx');
@@ -8310,7 +8348,7 @@ function instance$l($$self, $$props, $$invalidate) {
 class TabContent extends SvelteComponentDev {
 	constructor(options) {
 		super(options);
-		init(this, options, instance$l, create_fragment$m, safe_not_equal, []);
+		init(this, options, instance$m, create_fragment$m, safe_not_equal, []);
 	}
 }
 
@@ -8470,7 +8508,7 @@ function create_fragment$n(ctx) {
 
 let time = "78%";
 
-function instance$m($$self, $$props, $$invalidate) {
+function instance$n($$self, $$props, $$invalidate) {
 	let $tabStore, $studyStore, $activeTabIdx;
 
 	validate_store(tabStore, 'tabStore');
@@ -8525,7 +8563,7 @@ function instance$m($$self, $$props, $$invalidate) {
 class StudyInfo extends SvelteComponentDev {
 	constructor(options) {
 		super(options);
-		init(this, options, instance$m, create_fragment$n, safe_not_equal, []);
+		init(this, options, instance$n, create_fragment$n, safe_not_equal, []);
 	}
 }
 
