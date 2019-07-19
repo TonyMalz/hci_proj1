@@ -55,6 +55,6 @@
     <Sherlock />
   </aside>
   <div class="anova">
-    <Anova />
+    <Anova {studyId} />
   </div>
 </div>

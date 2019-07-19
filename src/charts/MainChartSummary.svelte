@@ -18,7 +18,7 @@
 
     const resultsByHour = new Map();
     // TODO: enable user selection
-    if (numericVariables) {
+    if (numericVariables && numericVariables.length) {
       const dependentVariable = numericVariables[0];
       for (const result of dependentVariable.results) {
         const resultDate = new Date(result.date);

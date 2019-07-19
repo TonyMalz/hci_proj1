@@ -28,7 +28,7 @@
     let varName = "";
     let minVal,
       maxVal = 0;
-    if (numericVariables) {
+    if (numericVariables && numericVariables.length) {
       const dependentVariable = numericVariables[0];
       minVal = stat.min(dependentVariable.results.map(v => v.value));
       maxVal = stat.max(dependentVariable.results.map(v => v.value));
@@ -87,6 +87,14 @@
         formatter: function(d) {
           return `<table style="font-size:0.8rem;">
                   <tr>
+                    <td colspan=2>${days[d.value[0]]}</td>
+                  </tr>
+                  <tr>
+                    <td>Timeslot</td>
+                    <td style="padding-left:0.5rem;">[${d.value[1]}:00 - ${+d
+            .value[1] + 1}:00)</td>
+                  </tr>
+                  <tr>
                     <td>Mean</td>
                     <td style="padding-left:0.5rem;">${d.value[2].toFixed(
                       4
@@ -101,11 +109,6 @@
                   <tr>
                     <td>Responses</td>
                     <td style="padding-left:0.5rem;">${d.value[4]}</td>
-                  </tr>
-                  <tr>
-                    <td>Timeslot</td>
-                    <td style="padding-left:0.5rem;">[${d.value[1]}:00 - ${+d
-            .value[1] + 1}:00)</td>
                   </tr>
                   </table>`;
         }

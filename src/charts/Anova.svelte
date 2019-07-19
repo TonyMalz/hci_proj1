@@ -1,6 +1,59 @@
 <script>
   import { onMount } from "svelte";
+  import { variableStore } from "../modules/store";
+  import stat from "../modules/simple-statistics.min";
+  export let studyId;
   onMount(() => {
+    const numericVariables = $variableStore.filter(
+      v =>
+        v.studyId === studyId &&
+        v.isDemographic === false &&
+        v.measure === "scale"
+    );
+
+    const resultsByDay = [[], [], [], [], [], [], []]; // array index -> day of week starting at 0 (monday)
+    // TODO: enable user selection
+    let varName = "";
+    let minVal,
+      maxVal = 0;
+    if (numericVariables && numericVariables.length) {
+      const dependentVariable = numericVariables[0];
+      varName = dependentVariable.variableName;
+      for (const result of dependentVariable.results) {
+        const resultDate = new Date(result.date);
+        const resultDay = resultDate.getDay();
+
+        resultsByDay[resultDay].push(result.value);
+      }
+    }
+
+    const statData = [];
+    const errorData = [];
+    const alpha = 0.05;
+    for (let day = 0; day < 7; ++day) {
+      const results = resultsByDay[day];
+      if (results && results.length) {
+        const mean = stat.mean(results);
+        const sd = stat.standardDeviation(results);
+        const n = results.length;
+        statData.push(mean);
+        if (n < 2) {
+          errorData.push([day, 0, 0, n, 0]);
+          continue;
+        }
+        errorData.push([
+          day,
+          ...mctad.confidenceIntervalOnTheMean(mean, sd, n, alpha),
+          n,
+          sd
+        ]);
+        // console.log(mean, mctad.confidenceIntervalOnTheMean(mean, sd, n, 0.05));
+      } else {
+        statData.push(0);
+        errorData.push([day, 0, 0, 0, 0]);
+      }
+    }
+
     let anovaChart = echarts.init(document.getElementById("anovaChart"));
     const categoryData = [
       "Monday",
@@ -11,19 +64,6 @@
       "Saturday",
       "Sunday"
     ];
-    const errorData = [];
-    const barData = [];
-    const dataCount = 7;
-    for (var i = 0; i < dataCount; i++) {
-      var val = Math.random() * 7;
-      //categoryData.push("Day" + (i + 1));
-      errorData.push([
-        i,
-        echarts.number.round(Math.max(0, val - Math.random() * 3)),
-        echarts.number.round(val + Math.random() * 3)
-      ]);
-      barData.push(echarts.number.round(val, 2));
-    }
 
     function renderItem(params, api) {
       var xValue = api.value(0);
@@ -31,8 +71,9 @@
       var lowPoint = api.coord([xValue, api.value(2)]);
       var halfWidth = api.size([1, 0])[0] * 0.05;
       var style = api.style({
-        stroke: "#777",
-        fill: null
+        stroke: "#aaa",
+        fill: null,
+        type: "dashed"
       });
 
       return {
@@ -77,6 +118,30 @@
         trigger: "axis",
         axisPointer: {
           type: "shadow"
+        },
+        formatter: function(data) {
+          const mean = data[0].data;
+          const [_, left, right, n, sd] = data[1].data;
+          return `<table style="font-size:0.8rem;">
+                  <tr>
+                    <td>Mean</td>
+                    <td style="padding-left:0.5rem;">${mean.toFixed(4)}</td>
+                  </tr>
+                  <tr>
+                    <td>SD</td>
+                    <td style="padding-left:0.5rem;">${sd.toFixed(4)}</td>
+                  </tr>
+                  <tr>
+                    <td>CI</td>
+                    <td style="padding-left:0.5rem;">[${left.toFixed(
+                      4
+                    )} ; ${right.toFixed(4)}]</td>
+                  </tr>
+                  <tr>
+                    <td>Records</td>
+                    <td style="padding-left:0.5rem;">${n}</td>
+                  </tr>
+                  </table>`;
         }
       },
       grid: {
@@ -85,34 +150,30 @@
         right: 0,
         bottom: 25
       },
-      // dataZoom: [
-      //   {
-      //     type: "slider",
-      //     start: 1,
-      //     end: 40
-      //   },
-      //   {
-      //     type: "inside",
-      //     start: 1,
-      //     end: 30
-      //   }
-      // ],
       xAxis: {
         data: categoryData
       },
       yAxis: {
         axisLabel: {
           showMaxLabel: false
+        },
+        splitLine: {
+          show: true,
+          lineStyle: {
+            color: "#ddd",
+            type: "dashed"
+          }
         }
       },
       series: [
         {
           type: "bar",
           name: "Availability",
-          data: barData,
+          data: statData,
           itemStyle: {
             normal: {
-              color: "#61a0a7"
+              // color: "#61a0a7"
+              color: "steelblue"
             }
           }
         },

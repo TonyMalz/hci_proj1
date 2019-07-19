@@ -14,7 +14,7 @@
       {#if tab.type === 'overview'}
         <Overview studyId={tab.studyId} />
       {:else if tab.type === 'userview'}
-        <Userview />
+        <Userview studyId={tab.studyId} />
       {:else if tab.type === 'descriptives'}
         <Descriptives studyId={tab.studyId} />
       {/if}
