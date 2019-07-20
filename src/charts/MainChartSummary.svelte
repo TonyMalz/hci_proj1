@@ -3,30 +3,39 @@
   import { variableStore } from "../modules/store";
   import stat from "../modules/simple-statistics.min";
   export let studyId;
+  export let dependentVariable;
+  let mainChartSummary;
+  let old = "";
+  $: if (dependentVariable !== old) {
+    console.log(dependentVariable);
+    old = dependentVariable;
+    if (dependentVariable) {
+      updateChart(dependentVariable);
+    }
+  }
 
-  onMount(() => {
-    let mainChartSummary = echarts.init(
-      document.getElementById("mainChartSummary")
-    );
-
-    const numericVariables = $variableStore.filter(
-      v =>
-        v.studyId === studyId &&
-        v.isDemographic === false &&
-        v.measure === "scale"
-    );
-
+  function updateChart(variable) {
+    if (!mainChartSummary) return;
+    mainChartSummary.showLoading();
+    const data = getStatData(variable);
+    mainChartSummary.hideLoading();
+    mainChartSummary.setOption({
+      series: [
+        {
+          data: data
+        }
+      ]
+    });
+  }
+  function getStatData(dependentVariable) {
+    if (!dependentVariable) return [];
     const resultsByHour = new Map();
-    // TODO: enable user selection
-    if (numericVariables && numericVariables.length) {
-      const dependentVariable = numericVariables[0];
-      for (const result of dependentVariable.results) {
-        const resultDate = new Date(result.date);
-        const hour = resultDate.getHours();
-        const rs = resultsByHour.get(hour) || [];
-        rs.push(result.value);
-        resultsByHour.set(hour, rs);
-      }
+    for (const result of dependentVariable.results) {
+      const resultDate = new Date(result.date);
+      const hour = resultDate.getHours();
+      const rs = resultsByHour.get(hour) || [];
+      rs.push(result.value);
+      resultsByHour.set(hour, rs);
     }
 
     const data = [];
@@ -39,7 +48,45 @@
         results.length
       ]);
     }
+    return data;
+  }
 
+  onMount(() => {
+    mainChartSummary = echarts.init(
+      document.getElementById("mainChartSummary")
+    );
+
+    // const numericVariables = $variableStore.filter(
+    //   v =>
+    //     v.studyId === studyId &&
+    //     v.isDemographic === false &&
+    //     v.measure === "scale"
+    // );
+
+    // const resultsByHour = new Map();
+    // // TODO: enable user selection
+    // if (numericVariables && numericVariables.length) {
+    //   const dependentVariable = numericVariables[0];
+    //   for (const result of dependentVariable.results) {
+    //     const resultDate = new Date(result.date);
+    //     const hour = resultDate.getHours();
+    //     const rs = resultsByHour.get(hour) || [];
+    //     rs.push(result.value);
+    //     resultsByHour.set(hour, rs);
+    //   }
+    // }
+
+    // const data = [];
+    // for (let i = 0; i < 24; i++) {
+    //   const results = resultsByHour.get(i) || [0];
+    //   data.push([
+    //     stat.mean(results),
+    //     i,
+    //     stat.standardDeviation(results),
+    //     results.length
+    //   ]);
+    // }
+    const data = getStatData(dependentVariable);
     const option = {
       tooltip: {
         trigger: "axis",
@@ -99,11 +146,12 @@
             }
             return `${hour}:${minutes}`;
           }
-        }
+        },
+        splitNumber: 8
       },
       series: [
         {
-          name: "Average availability",
+          // name: "Average availability",
           type: "line",
           smooth: false, // disable interpolation
           lineStyle: {

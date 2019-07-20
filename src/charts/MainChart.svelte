@@ -1,19 +1,42 @@
 <script>
   import { onMount } from "svelte";
   import { variableStore } from "../modules/store";
+  import MainChartSummary from "./MainChartSummary.svelte";
   import stat from "../modules/simple-statistics.min";
 
   export let studyId;
 
-  onMount(() => {
-    let mainChart = echarts.init(document.getElementById("mainChart"));
-    const numericVariables = $variableStore.filter(
-      v =>
-        v.studyId === studyId &&
-        v.isDemographic === false &&
-        v.measure === "scale"
-    );
+  let mainChart;
+  let dvs = [];
+  let minVal,
+    maxVal = 0;
+  let dependentVariable;
 
+  function selectHandler() {
+    updateChart(dependentVariable);
+  }
+
+  function updateChart(variable) {
+    if (!mainChart) return;
+    mainChart.showLoading();
+    const data = getStatData(variable);
+    mainChart.hideLoading();
+    mainChart.setOption({
+      legend: {
+        show: true,
+        data: [dependentVariable.variableName],
+        left: "center"
+      },
+      series: [
+        {
+          name: dependentVariable.variableName,
+          data: data
+        }
+      ]
+    });
+  }
+
+  function getStatData(dependentVariable) {
     const resultsByDayAndHour = [
       new Map(),
       new Map(),
@@ -23,25 +46,16 @@
       new Map(),
       new Map()
     ];
-    // const resultsByDay = [[], [], [], [], [], [], []]; // array index -> day of week starting at 0 (monday)
-    // TODO: enable user selection
-    let varName = "";
-    let minVal,
-      maxVal = 0;
-    if (numericVariables && numericVariables.length) {
-      const dependentVariable = numericVariables[0];
-      minVal = stat.min(dependentVariable.results.map(v => v.value));
-      maxVal = stat.max(dependentVariable.results.map(v => v.value));
-      varName = dependentVariable.variableName;
-      for (const result of dependentVariable.results) {
-        const resultDate = new Date(result.date);
-        const resultDay = resultDate.getDay();
-        const hour = resultDate.getHours();
-        // resultsByDay[resultDay].push(result.value);
-        const rs = resultsByDayAndHour[resultDay].get(hour) || [];
-        rs.push(result.value);
-        resultsByDayAndHour[resultDay].set(hour, rs);
-      }
+    minVal = stat.min(dependentVariable.results.map(v => v.value));
+    maxVal = stat.max(dependentVariable.results.map(v => v.value));
+    dependentVariable.variableName = dependentVariable.variableLabel;
+    for (const result of dependentVariable.results) {
+      const resultDate = new Date(result.date);
+      const resultDay = resultDate.getDay();
+      const hour = resultDate.getHours();
+      const rs = resultsByDayAndHour[resultDay].get(hour) || [];
+      rs.push(result.value);
+      resultsByDayAndHour[resultDay].set(hour, rs);
     }
 
     const statData = [];
@@ -56,6 +70,23 @@
         ]);
       }
     }
+    return statData;
+  }
+
+  onMount(() => {
+    mainChart = echarts.init(document.getElementById("mainChart"));
+    const numericVariables = $variableStore.filter(
+      v =>
+        v.studyId === studyId &&
+        v.isDemographic === false &&
+        v.measure === "scale"
+    );
+    dvs = numericVariables;
+    let statData = [];
+    if (numericVariables && numericVariables.length) {
+      dependentVariable = numericVariables[0];
+      statData = getStatData(dependentVariable);
+    }
 
     const days = [
       "",
@@ -69,17 +100,14 @@
     ];
 
     const option = {
-      dataset: {
-        source: statData
-      },
-
       dataZoom: {
         type: "inside",
         yAxisIndex: [0],
         filterMode: "filter"
       },
       legend: {
-        data: [varName],
+        show: true,
+        data: [dependentVariable.variableName],
         left: "center"
       },
       tooltip: {
@@ -161,7 +189,7 @@
       },
       series: [
         {
-          name: varName,
+          name: dependentVariable.variableName,
           type: "scatter",
           symbolSize: function(val) {
             return ((val[2] - minVal) / (maxVal - minVal)) * 24 + 5;
@@ -193,4 +221,42 @@
   });
 </script>
 
-<div id="mainChart" style="width:100%; height:100%" />
+<style>
+  .container {
+    position: relative;
+    display: grid;
+    grid-template-rows: min-content auto;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    grid-gap: 1rem;
+  }
+  .filter {
+    font-size: 0.8rem;
+    padding: 0;
+  }
+  .charts {
+    display: grid;
+    grid-template-columns: 2fr minmax(120px, 0.5fr);
+  }
+</style>
+
+<div class="container">
+  <div class="filter">
+    Variable:
+    <select
+      name="dv"
+      id="dv"
+      bind:value={dependentVariable}
+      on:change={selectHandler}>
+      {#each dvs as dv}
+        <option value={dv}>{dv.variableName}</option>
+      {/each}
+    </select>
+  </div>
+  <div class="charts">
+    <div id="mainChart" style="width:100%; height:100%" />
+    <MainChartSummary {studyId} {dependentVariable} />
+  </div>
+</div>

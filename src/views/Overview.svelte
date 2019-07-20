@@ -1,6 +1,5 @@
 <script>
   import MainChart from "../charts/MainChart.svelte";
-  import MainChartSummary from "../charts/MainChartSummary.svelte";
   import Sherlock from "../charts/Sherlock.svelte";
   import Anova from "../charts/Anova.svelte";
   import { fade } from "svelte/transition";
@@ -13,16 +12,11 @@
     height: 100%;
     display: grid;
     grid-template:
-      "main-chart main-chart-summary ai-charts"
-      "anova anova ai-charts";
-    grid-template-columns: 2fr minmax(120px, 0.5fr) 1fr;
-    grid-template-rows: 2fr 1fr;
+      "main-chart ai-charts"
+      "anova ai-charts";
+    grid-template-columns: 3fr 1fr;
+    grid-template-rows: 2.1fr 0.9fr;
     grid-gap: 1em;
-  }
-  .mainChartSummary {
-    /* width: 150px; */
-    height: 100%;
-    grid-area: main-chart-summary;
   }
   .mainChart {
     height: 100%;
@@ -30,7 +24,6 @@
   }
   .anova {
     grid-area: anova;
-    /* border: 1px dashed gray; */
     width: 100%;
     height: 100%;
   }
@@ -47,9 +40,6 @@
 <div class="overview" in:fade={{ duration: 300 }}>
   <div class="mainChart">
     <MainChart {studyId} />
-  </div>
-  <div class="mainChartSummary">
-    <MainChartSummary {studyId} />
   </div>
   <aside>
     <Sherlock />
