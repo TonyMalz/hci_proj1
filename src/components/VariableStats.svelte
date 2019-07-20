@@ -128,6 +128,15 @@
             </td>
           </tr>
         {/if}
+        {#if variable.measure == 'qualitative'}
+          <tr>
+            <td>Text length:</td>
+            <td>
+              {stat.min(data.map(v => v.length))} (min) | {stat.mean(data.map(v => v.length))}
+              (avg) | {stat.max(data.map(v => v.length))} (max)
+            </td>
+          </tr>
+        {/if}
       </table>
       {#if variable.measure == 'qualitative'}
         <h4>Answers given by users</h4>

@@ -7134,7 +7134,7 @@ function get_each_context$7(ctx, list, i) {
 }
 
 // (75:4) {#if variable.measure == 'nominal'}
-function create_if_block_6(ctx) {
+function create_if_block_7(ctx) {
 	var current;
 
 	var variablenominalchart = new VariableNominalChart({
@@ -7177,7 +7177,7 @@ function create_if_block_6(ctx) {
 }
 
 // (78:4) {#if variable.measure == 'scale'}
-function create_if_block_5(ctx) {
+function create_if_block_6(ctx) {
 	var current;
 
 	var variablescalechart = new VariableScaleChart({
@@ -7220,7 +7220,7 @@ function create_if_block_5(ctx) {
 }
 
 // (86:4) {#if variable.dataformat.hasOwnProperty('textChoices')}
-function create_if_block_4(ctx) {
+function create_if_block_5(ctx) {
 	var div, h4, t_1, table;
 
 	var each_value = ctx.variable.dataformat.textChoices;
@@ -7342,7 +7342,7 @@ function create_each_block$7(ctx) {
 }
 
 // (105:8) {#if variable.measure == 'scale' || variable.measure == 'ordinal'}
-function create_if_block_3(ctx) {
+function create_if_block_4(ctx) {
 	var tr, td0, t1, td1, t2_value = simpleStatistics_min.min(ctx.data), t2, t3, t4_value = simpleStatistics_min.max(ctx.data), t4;
 
 	return {
@@ -7392,7 +7392,7 @@ function create_if_block_3(ctx) {
 }
 
 // (115:8) {#if variable.measure == 'scale' || variable.measure == 'ordinal'}
-function create_if_block_2$2(ctx) {
+function create_if_block_3(ctx) {
 	var tr, td0, t1, td1, t2_value = simpleStatistics_min.median(ctx.data), t2;
 
 	return {
@@ -7434,7 +7434,7 @@ function create_if_block_2$2(ctx) {
 }
 
 // (121:8) {#if variable.measure == 'scale'}
-function create_if_block_1$2(ctx) {
+function create_if_block_2$2(ctx) {
 	var tr, td0, t1, td1, t2_value = simpleStatistics_min.mean(ctx.data).toFixed(4), t2, t3, t4_value = simpleStatistics_min
                 .standardDeviation(ctx.data)
                 .toFixed(4), t4, t5;
@@ -7489,7 +7489,67 @@ function create_if_block_1$2(ctx) {
 	};
 }
 
-// (132:6) {#if variable.measure == 'qualitative'}
+// (131:8) {#if variable.measure == 'qualitative'}
+function create_if_block_1$2(ctx) {
+	var tr, td0, t1, td1, t2_value = simpleStatistics_min.min(ctx.data.map(func)), t2, t3, t4_value = simpleStatistics_min.mean(ctx.data.map(func_1)), t4, t5, t6_value = simpleStatistics_min.max(ctx.data.map(func_2)), t6, t7;
+
+	return {
+		c: function create() {
+			tr = element("tr");
+			td0 = element("td");
+			td0.textContent = "Text length:";
+			t1 = space();
+			td1 = element("td");
+			t2 = text(t2_value);
+			t3 = text(" (min) | ");
+			t4 = text(t4_value);
+			t5 = text("\r\n              (avg) | ");
+			t6 = text(t6_value);
+			t7 = text(" (max)");
+			attr(td0, "class", "svelte-tvbkqn");
+			add_location(td0, file$k, 132, 12, 3377);
+			attr(td1, "class", "svelte-tvbkqn");
+			add_location(td1, file$k, 133, 12, 3412);
+			attr(tr, "class", "svelte-tvbkqn");
+			add_location(tr, file$k, 131, 10, 3359);
+		},
+
+		m: function mount(target, anchor) {
+			insert(target, tr, anchor);
+			append(tr, td0);
+			append(tr, t1);
+			append(tr, td1);
+			append(td1, t2);
+			append(td1, t3);
+			append(td1, t4);
+			append(td1, t5);
+			append(td1, t6);
+			append(td1, t7);
+		},
+
+		p: function update(changed, ctx) {
+			if ((changed.data) && t2_value !== (t2_value = simpleStatistics_min.min(ctx.data.map(func)))) {
+				set_data(t2, t2_value);
+			}
+
+			if ((changed.data) && t4_value !== (t4_value = simpleStatistics_min.mean(ctx.data.map(func_1)))) {
+				set_data(t4, t4_value);
+			}
+
+			if ((changed.data) && t6_value !== (t6_value = simpleStatistics_min.max(ctx.data.map(func_2)))) {
+				set_data(t6, t6_value);
+			}
+		},
+
+		d: function destroy(detaching) {
+			if (detaching) {
+				detach(tr);
+			}
+		}
+	};
+}
+
+// (141:6) {#if variable.measure == 'qualitative'}
 function create_if_block$3(ctx) {
 	var h4, t_1, div, current;
 
@@ -7506,9 +7566,9 @@ function create_if_block$3(ctx) {
 			div = element("div");
 			variablequalitativechart.$$.fragment.c();
 			attr(h4, "class", "svelte-tvbkqn");
-			add_location(h4, file$k, 132, 8, 3371);
+			add_location(h4, file$k, 141, 8, 3701);
 			attr(div, "class", "answerLog svelte-tvbkqn");
-			add_location(div, file$k, 133, 8, 3412);
+			add_location(div, file$k, 142, 8, 3742);
 		},
 
 		m: function mount(target, anchor) {
@@ -7550,21 +7610,23 @@ function create_if_block$3(ctx) {
 }
 
 function create_fragment$k(ctx) {
-	var div6, div0, t0, t1, div5, div1, t2_value = ctx.variable.variableName, t2, t3, div2, t4_value = ctx.variable.variableLabel, t4, t5, div3, t6_value = uc(ctx.variable.measure), t6, t7, t8, div4, h4, t10, table, tr0, td0, t12, td1, t13_value = ctx.data.length, t13, t14, t15, tr1, td2, t17, td3, t18_value = simpleStatistics_min.modeFast(ctx.data), t18, t19, t20, t21, current;
+	var div6, div0, t0, t1, div5, div1, t2_value = ctx.variable.variableName, t2, t3, div2, t4_value = ctx.variable.variableLabel, t4, t5, div3, t6_value = uc(ctx.variable.measure), t6, t7, t8, div4, h4, t10, table, tr0, td0, t12, td1, t13_value = ctx.data.length, t13, t14, t15, tr1, td2, t17, td3, t18_value = simpleStatistics_min.modeFast(ctx.data), t18, t19, t20, t21, t22, current;
 
-	var if_block0 = (ctx.variable.measure == 'nominal') && create_if_block_6(ctx);
+	var if_block0 = (ctx.variable.measure == 'nominal') && create_if_block_7(ctx);
 
-	var if_block1 = (ctx.variable.measure == 'scale') && create_if_block_5(ctx);
+	var if_block1 = (ctx.variable.measure == 'scale') && create_if_block_6(ctx);
 
-	var if_block2 = (ctx.variable.dataformat.hasOwnProperty('textChoices')) && create_if_block_4(ctx);
+	var if_block2 = (ctx.variable.dataformat.hasOwnProperty('textChoices')) && create_if_block_5(ctx);
 
-	var if_block3 = (ctx.variable.measure == 'scale' || ctx.variable.measure == 'ordinal') && create_if_block_3(ctx);
+	var if_block3 = (ctx.variable.measure == 'scale' || ctx.variable.measure == 'ordinal') && create_if_block_4(ctx);
 
-	var if_block4 = (ctx.variable.measure == 'scale' || ctx.variable.measure == 'ordinal') && create_if_block_2$2(ctx);
+	var if_block4 = (ctx.variable.measure == 'scale' || ctx.variable.measure == 'ordinal') && create_if_block_3(ctx);
 
-	var if_block5 = (ctx.variable.measure == 'scale') && create_if_block_1$2(ctx);
+	var if_block5 = (ctx.variable.measure == 'scale') && create_if_block_2$2(ctx);
 
-	var if_block6 = (ctx.variable.measure == 'qualitative') && create_if_block$3(ctx);
+	var if_block6 = (ctx.variable.measure == 'qualitative') && create_if_block_1$2(ctx);
+
+	var if_block7 = (ctx.variable.measure == 'qualitative') && create_if_block$3(ctx);
 
 	return {
 		c: function create() {
@@ -7612,6 +7674,8 @@ function create_fragment$k(ctx) {
 			if (if_block5) if_block5.c();
 			t21 = space();
 			if (if_block6) if_block6.c();
+			t22 = space();
+			if (if_block7) if_block7.c();
 			attr(div0, "class", "charts svelte-tvbkqn");
 			add_location(div0, file$k, 73, 2, 1541);
 			attr(div1, "class", "name");
@@ -7689,8 +7753,10 @@ function create_fragment$k(ctx) {
 			if (if_block4) if_block4.m(table, null);
 			append(table, t20);
 			if (if_block5) if_block5.m(table, null);
-			append(div4, t21);
-			if (if_block6) if_block6.m(div4, null);
+			append(table, t21);
+			if (if_block6) if_block6.m(table, null);
+			append(div4, t22);
+			if (if_block7) if_block7.m(div4, null);
 			current = true;
 		},
 
@@ -7700,7 +7766,7 @@ function create_fragment$k(ctx) {
 					if_block0.p(changed, ctx);
 					transition_in(if_block0, 1);
 				} else {
-					if_block0 = create_if_block_6(ctx);
+					if_block0 = create_if_block_7(ctx);
 					if_block0.c();
 					transition_in(if_block0, 1);
 					if_block0.m(div0, t0);
@@ -7718,7 +7784,7 @@ function create_fragment$k(ctx) {
 					if_block1.p(changed, ctx);
 					transition_in(if_block1, 1);
 				} else {
-					if_block1 = create_if_block_5(ctx);
+					if_block1 = create_if_block_6(ctx);
 					if_block1.c();
 					transition_in(if_block1, 1);
 					if_block1.m(div0, null);
@@ -7747,7 +7813,7 @@ function create_fragment$k(ctx) {
 				if (if_block2) {
 					if_block2.p(changed, ctx);
 				} else {
-					if_block2 = create_if_block_4(ctx);
+					if_block2 = create_if_block_5(ctx);
 					if_block2.c();
 					if_block2.m(div5, t8);
 				}
@@ -7764,7 +7830,7 @@ function create_fragment$k(ctx) {
 				if (if_block3) {
 					if_block3.p(changed, ctx);
 				} else {
-					if_block3 = create_if_block_3(ctx);
+					if_block3 = create_if_block_4(ctx);
 					if_block3.c();
 					if_block3.m(table, t15);
 				}
@@ -7781,7 +7847,7 @@ function create_fragment$k(ctx) {
 				if (if_block4) {
 					if_block4.p(changed, ctx);
 				} else {
-					if_block4 = create_if_block_2$2(ctx);
+					if_block4 = create_if_block_3(ctx);
 					if_block4.c();
 					if_block4.m(table, t20);
 				}
@@ -7794,9 +7860,9 @@ function create_fragment$k(ctx) {
 				if (if_block5) {
 					if_block5.p(changed, ctx);
 				} else {
-					if_block5 = create_if_block_1$2(ctx);
+					if_block5 = create_if_block_2$2(ctx);
 					if_block5.c();
-					if_block5.m(table, null);
+					if_block5.m(table, t21);
 				}
 			} else if (if_block5) {
 				if_block5.d(1);
@@ -7806,17 +7872,30 @@ function create_fragment$k(ctx) {
 			if (ctx.variable.measure == 'qualitative') {
 				if (if_block6) {
 					if_block6.p(changed, ctx);
-					transition_in(if_block6, 1);
 				} else {
-					if_block6 = create_if_block$3(ctx);
+					if_block6 = create_if_block_1$2(ctx);
 					if_block6.c();
-					transition_in(if_block6, 1);
-					if_block6.m(div4, null);
+					if_block6.m(table, null);
 				}
 			} else if (if_block6) {
+				if_block6.d(1);
+				if_block6 = null;
+			}
+
+			if (ctx.variable.measure == 'qualitative') {
+				if (if_block7) {
+					if_block7.p(changed, ctx);
+					transition_in(if_block7, 1);
+				} else {
+					if_block7 = create_if_block$3(ctx);
+					if_block7.c();
+					transition_in(if_block7, 1);
+					if_block7.m(div4, null);
+				}
+			} else if (if_block7) {
 				group_outros();
-				transition_out(if_block6, 1, 1, () => {
-					if_block6 = null;
+				transition_out(if_block7, 1, 1, () => {
+					if_block7 = null;
 				});
 				check_outros();
 			}
@@ -7826,14 +7905,14 @@ function create_fragment$k(ctx) {
 			if (current) return;
 			transition_in(if_block0);
 			transition_in(if_block1);
-			transition_in(if_block6);
+			transition_in(if_block7);
 			current = true;
 		},
 
 		o: function outro(local) {
 			transition_out(if_block0);
 			transition_out(if_block1);
-			transition_out(if_block6);
+			transition_out(if_block7);
 			current = false;
 		},
 
@@ -7849,8 +7928,21 @@ function create_fragment$k(ctx) {
 			if (if_block4) if_block4.d();
 			if (if_block5) if_block5.d();
 			if (if_block6) if_block6.d();
+			if (if_block7) if_block7.d();
 		}
 	};
+}
+
+function func(v) {
+	return v.length;
+}
+
+function func_1(v) {
+	return v.length;
+}
+
+function func_2(v) {
+	return v.length;
 }
 
 function instance$k($$self, $$props, $$invalidate) {
