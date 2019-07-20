@@ -68,6 +68,10 @@
     overflow-y: auto;
     /* box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.25); */
   }
+  .sep {
+    color: rgb(214, 214, 214);
+    padding: 0 0.5em;
+  }
 </style>
 
 <div class="card">
@@ -132,8 +136,11 @@
           <tr>
             <td>Text length:</td>
             <td>
-              {stat.min(data.map(v => v.length))} (min) | {stat.mean(data.map(v => v.length))}
-              (avg) | {stat.max(data.map(v => v.length))} (max)
+              {stat.min(data.map(v => v.length))} (min)
+              <span class="sep">|</span>
+              {stat.mean(data.map(v => v.length))} (avg)
+              <span class="sep">|</span>
+              {stat.max(data.map(v => v.length))} (max)
             </td>
           </tr>
         {/if}

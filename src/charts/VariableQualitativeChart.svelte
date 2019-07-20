@@ -1,5 +1,5 @@
 <script>
-  import { formatDate } from "../modules/utils";
+  import { formatDate, trunc } from "../modules/utils";
   export let variable = {};
   let data = variable.results.map(v => v.value);
 </script>
@@ -28,7 +28,7 @@
   {#each variable.results as result}
     <tr>
       <td>{result.value}</td>
-      <td>{result.uid}</td>
+      <td>{trunc(result.uid)}</td>
       <td>{formatDate(result.date)}</td>
     </tr>
     <!-- content here -->

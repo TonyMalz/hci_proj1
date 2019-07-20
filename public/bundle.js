@@ -6938,7 +6938,7 @@ function create_else_block$2(ctx) {
 
 // (28:2) {#each variable.results as result}
 function create_each_block$6(ctx) {
-	var tr, td0, t0_value = ctx.result.value, t0, t1, td1, t2_value = ctx.result.uid, t2, t3, td2, t4_value = formatDate(ctx.result.date), t4, t5;
+	var tr, td0, t0_value = ctx.result.value, t0, t1, td1, t2_value = trunc(ctx.result.uid), t2, t3, td2, t4_value = formatDate(ctx.result.date), t4, t5;
 
 	return {
 		c: function create() {
@@ -6953,13 +6953,13 @@ function create_each_block$6(ctx) {
 			t4 = text(t4_value);
 			t5 = space();
 			attr(td0, "class", "svelte-1ud5ptb");
-			add_location(td0, file$j, 29, 6, 538);
+			add_location(td0, file$j, 29, 6, 545);
 			attr(td1, "class", "svelte-1ud5ptb");
-			add_location(td1, file$j, 30, 6, 569);
+			add_location(td1, file$j, 30, 6, 576);
 			attr(td2, "class", "svelte-1ud5ptb");
-			add_location(td2, file$j, 31, 6, 598);
+			add_location(td2, file$j, 31, 6, 612);
 			attr(tr, "class", "svelte-1ud5ptb");
-			add_location(tr, file$j, 28, 4, 526);
+			add_location(tr, file$j, 28, 4, 533);
 		},
 
 		m: function mount(target, anchor) {
@@ -6980,7 +6980,7 @@ function create_each_block$6(ctx) {
 				set_data(t0, t0_value);
 			}
 
-			if ((changed.variable) && t2_value !== (t2_value = ctx.result.uid)) {
+			if ((changed.variable) && t2_value !== (t2_value = trunc(ctx.result.uid))) {
 				set_data(t2, t2_value);
 			}
 
@@ -7024,7 +7024,7 @@ function create_fragment$j(ctx) {
 				each_blocks[i].c();
 			}
 			attr(table, "class", "svelte-1ud5ptb");
-			add_location(table, file$j, 26, 0, 475);
+			add_location(table, file$j, 26, 0, 482);
 		},
 
 		l: function claim(nodes) {
@@ -7044,7 +7044,7 @@ function create_fragment$j(ctx) {
 		},
 
 		p: function update(changed, ctx) {
-			if (changed.formatDate || changed.variable) {
+			if (changed.formatDate || changed.variable || changed.trunc) {
 				each_value = ctx.variable.results;
 
 				for (var i = 0; i < each_value.length; i += 1) {
@@ -7133,7 +7133,7 @@ function get_each_context$7(ctx, list, i) {
 	return child_ctx;
 }
 
-// (75:4) {#if variable.measure == 'nominal'}
+// (79:4) {#if variable.measure == 'nominal'}
 function create_if_block_7(ctx) {
 	var current;
 
@@ -7176,7 +7176,7 @@ function create_if_block_7(ctx) {
 	};
 }
 
-// (78:4) {#if variable.measure == 'scale'}
+// (82:4) {#if variable.measure == 'scale'}
 function create_if_block_6(ctx) {
 	var current;
 
@@ -7219,7 +7219,7 @@ function create_if_block_6(ctx) {
 	};
 }
 
-// (86:4) {#if variable.dataformat.hasOwnProperty('textChoices')}
+// (90:4) {#if variable.dataformat.hasOwnProperty('textChoices')}
 function create_if_block_5(ctx) {
 	var div, h4, t_1, table;
 
@@ -7242,12 +7242,12 @@ function create_if_block_5(ctx) {
 			for (var i = 0; i < each_blocks.length; i += 1) {
 				each_blocks[i].c();
 			}
-			attr(h4, "class", "svelte-tvbkqn");
-			add_location(h4, file$k, 87, 8, 2042);
-			attr(table, "class", "svelte-tvbkqn");
-			add_location(table, file$k, 88, 8, 2075);
-			attr(div, "class", "choices svelte-tvbkqn");
-			add_location(div, file$k, 86, 6, 2011);
+			attr(h4, "class", "svelte-ezn8e1");
+			add_location(h4, file$k, 91, 8, 2112);
+			attr(table, "class", "svelte-ezn8e1");
+			add_location(table, file$k, 92, 8, 2145);
+			attr(div, "class", "choices svelte-ezn8e1");
+			add_location(div, file$k, 90, 6, 2081);
 		},
 
 		m: function mount(target, anchor) {
@@ -7294,7 +7294,7 @@ function create_if_block_5(ctx) {
 	};
 }
 
-// (90:10) {#each variable.dataformat.textChoices as choice}
+// (94:10) {#each variable.dataformat.textChoices as choice}
 function create_each_block$7(ctx) {
 	var tr, td, t0, t1_value = ctx.choice.value, t1, t2, t3_value = ctx.choice.valueLabel || ctx.choice.text, t3, t4;
 
@@ -7307,10 +7307,10 @@ function create_each_block$7(ctx) {
 			t2 = text(") ");
 			t3 = text(t3_value);
 			t4 = space();
-			attr(td, "class", "svelte-tvbkqn");
-			add_location(td, file$k, 91, 14, 2177);
-			attr(tr, "class", "svelte-tvbkqn");
-			add_location(tr, file$k, 90, 12, 2157);
+			attr(td, "class", "svelte-ezn8e1");
+			add_location(td, file$k, 95, 14, 2247);
+			attr(tr, "class", "svelte-ezn8e1");
+			add_location(tr, file$k, 94, 12, 2227);
 		},
 
 		m: function mount(target, anchor) {
@@ -7341,7 +7341,7 @@ function create_each_block$7(ctx) {
 	};
 }
 
-// (105:8) {#if variable.measure == 'scale' || variable.measure == 'ordinal'}
+// (109:8) {#if variable.measure == 'scale' || variable.measure == 'ordinal'}
 function create_if_block_4(ctx) {
 	var tr, td0, t1, td1, t2_value = simpleStatistics_min.min(ctx.data), t2, t3, t4_value = simpleStatistics_min.max(ctx.data), t4;
 
@@ -7355,12 +7355,12 @@ function create_if_block_4(ctx) {
 			t2 = text(t2_value);
 			t3 = text(" - ");
 			t4 = text(t4_value);
-			attr(td0, "class", "svelte-tvbkqn");
-			add_location(td0, file$k, 106, 12, 2611);
-			attr(td1, "class", "svelte-tvbkqn");
-			add_location(td1, file$k, 107, 12, 2644);
-			attr(tr, "class", "svelte-tvbkqn");
-			add_location(tr, file$k, 105, 10, 2593);
+			attr(td0, "class", "svelte-ezn8e1");
+			add_location(td0, file$k, 110, 12, 2681);
+			attr(td1, "class", "svelte-ezn8e1");
+			add_location(td1, file$k, 111, 12, 2714);
+			attr(tr, "class", "svelte-ezn8e1");
+			add_location(tr, file$k, 109, 10, 2663);
 		},
 
 		m: function mount(target, anchor) {
@@ -7391,7 +7391,7 @@ function create_if_block_4(ctx) {
 	};
 }
 
-// (115:8) {#if variable.measure == 'scale' || variable.measure == 'ordinal'}
+// (119:8) {#if variable.measure == 'scale' || variable.measure == 'ordinal'}
 function create_if_block_3(ctx) {
 	var tr, td0, t1, td1, t2_value = simpleStatistics_min.median(ctx.data), t2;
 
@@ -7403,12 +7403,12 @@ function create_if_block_3(ctx) {
 			t1 = space();
 			td1 = element("td");
 			t2 = text(t2_value);
-			attr(td0, "class", "svelte-tvbkqn");
-			add_location(td0, file$k, 116, 12, 2923);
-			attr(td1, "class", "svelte-tvbkqn");
-			add_location(td1, file$k, 117, 12, 2953);
-			attr(tr, "class", "svelte-tvbkqn");
-			add_location(tr, file$k, 115, 10, 2905);
+			attr(td0, "class", "svelte-ezn8e1");
+			add_location(td0, file$k, 120, 12, 2993);
+			attr(td1, "class", "svelte-ezn8e1");
+			add_location(td1, file$k, 121, 12, 3023);
+			attr(tr, "class", "svelte-ezn8e1");
+			add_location(tr, file$k, 119, 10, 2975);
 		},
 
 		m: function mount(target, anchor) {
@@ -7433,7 +7433,7 @@ function create_if_block_3(ctx) {
 	};
 }
 
-// (121:8) {#if variable.measure == 'scale'}
+// (125:8) {#if variable.measure == 'scale'}
 function create_if_block_2$2(ctx) {
 	var tr, td0, t1, td1, t2_value = simpleStatistics_min.mean(ctx.data).toFixed(4), t2, t3, t4_value = simpleStatistics_min
                 .standardDeviation(ctx.data)
@@ -7450,12 +7450,12 @@ function create_if_block_2$2(ctx) {
 			t3 = text(" (sd = ");
 			t4 = text(t4_value);
 			t5 = text(")");
-			attr(td0, "class", "svelte-tvbkqn");
-			add_location(td0, file$k, 122, 12, 3086);
-			attr(td1, "class", "svelte-tvbkqn");
-			add_location(td1, file$k, 123, 12, 3114);
-			attr(tr, "class", "svelte-tvbkqn");
-			add_location(tr, file$k, 121, 10, 3068);
+			attr(td0, "class", "svelte-ezn8e1");
+			add_location(td0, file$k, 126, 12, 3156);
+			attr(td1, "class", "svelte-ezn8e1");
+			add_location(td1, file$k, 127, 12, 3184);
+			attr(tr, "class", "svelte-ezn8e1");
+			add_location(tr, file$k, 125, 10, 3138);
 		},
 
 		m: function mount(target, anchor) {
@@ -7489,9 +7489,9 @@ function create_if_block_2$2(ctx) {
 	};
 }
 
-// (131:8) {#if variable.measure == 'qualitative'}
+// (135:8) {#if variable.measure == 'qualitative'}
 function create_if_block_1$2(ctx) {
-	var tr, td0, t1, td1, t2_value = simpleStatistics_min.min(ctx.data.map(func)), t2, t3, t4_value = simpleStatistics_min.mean(ctx.data.map(func_1)), t4, t5, t6_value = simpleStatistics_min.max(ctx.data.map(func_2)), t6, t7;
+	var tr, td0, t1, td1, t2_value = simpleStatistics_min.min(ctx.data.map(func)), t2, t3, span0, t5, t6_value = simpleStatistics_min.mean(ctx.data.map(func_1)), t6, t7, span1, t9, t10_value = simpleStatistics_min.max(ctx.data.map(func_2)), t10, t11;
 
 	return {
 		c: function create() {
@@ -7501,17 +7501,27 @@ function create_if_block_1$2(ctx) {
 			t1 = space();
 			td1 = element("td");
 			t2 = text(t2_value);
-			t3 = text(" (min) | ");
-			t4 = text(t4_value);
-			t5 = text("\r\n              (avg) | ");
+			t3 = text(" (min)\r\n              ");
+			span0 = element("span");
+			span0.textContent = "|";
+			t5 = space();
 			t6 = text(t6_value);
-			t7 = text(" (max)");
-			attr(td0, "class", "svelte-tvbkqn");
-			add_location(td0, file$k, 132, 12, 3377);
-			attr(td1, "class", "svelte-tvbkqn");
-			add_location(td1, file$k, 133, 12, 3412);
-			attr(tr, "class", "svelte-tvbkqn");
-			add_location(tr, file$k, 131, 10, 3359);
+			t7 = text(" (avg)\r\n              ");
+			span1 = element("span");
+			span1.textContent = "|";
+			t9 = space();
+			t10 = text(t10_value);
+			t11 = text(" (max)");
+			attr(td0, "class", "svelte-ezn8e1");
+			add_location(td0, file$k, 136, 12, 3447);
+			attr(span0, "class", "sep svelte-ezn8e1");
+			add_location(span0, file$k, 139, 14, 3559);
+			attr(span1, "class", "sep svelte-ezn8e1");
+			add_location(span1, file$k, 141, 14, 3659);
+			attr(td1, "class", "svelte-ezn8e1");
+			add_location(td1, file$k, 137, 12, 3482);
+			attr(tr, "class", "svelte-ezn8e1");
+			add_location(tr, file$k, 135, 10, 3429);
 		},
 
 		m: function mount(target, anchor) {
@@ -7521,10 +7531,14 @@ function create_if_block_1$2(ctx) {
 			append(tr, td1);
 			append(td1, t2);
 			append(td1, t3);
-			append(td1, t4);
+			append(td1, span0);
 			append(td1, t5);
 			append(td1, t6);
 			append(td1, t7);
+			append(td1, span1);
+			append(td1, t9);
+			append(td1, t10);
+			append(td1, t11);
 		},
 
 		p: function update(changed, ctx) {
@@ -7532,12 +7546,12 @@ function create_if_block_1$2(ctx) {
 				set_data(t2, t2_value);
 			}
 
-			if ((changed.data) && t4_value !== (t4_value = simpleStatistics_min.mean(ctx.data.map(func_1)))) {
-				set_data(t4, t4_value);
+			if ((changed.data) && t6_value !== (t6_value = simpleStatistics_min.mean(ctx.data.map(func_1)))) {
+				set_data(t6, t6_value);
 			}
 
-			if ((changed.data) && t6_value !== (t6_value = simpleStatistics_min.max(ctx.data.map(func_2)))) {
-				set_data(t6, t6_value);
+			if ((changed.data) && t10_value !== (t10_value = simpleStatistics_min.max(ctx.data.map(func_2)))) {
+				set_data(t10, t10_value);
 			}
 		},
 
@@ -7549,7 +7563,7 @@ function create_if_block_1$2(ctx) {
 	};
 }
 
-// (141:6) {#if variable.measure == 'qualitative'}
+// (148:6) {#if variable.measure == 'qualitative'}
 function create_if_block$3(ctx) {
 	var h4, t_1, div, current;
 
@@ -7565,10 +7579,10 @@ function create_if_block$3(ctx) {
 			t_1 = space();
 			div = element("div");
 			variablequalitativechart.$$.fragment.c();
-			attr(h4, "class", "svelte-tvbkqn");
-			add_location(h4, file$k, 141, 8, 3701);
-			attr(div, "class", "answerLog svelte-tvbkqn");
-			add_location(div, file$k, 142, 8, 3742);
+			attr(h4, "class", "svelte-ezn8e1");
+			add_location(h4, file$k, 148, 8, 3866);
+			attr(div, "class", "answerLog svelte-ezn8e1");
+			add_location(div, file$k, 149, 8, 3907);
 		},
 
 		m: function mount(target, anchor) {
@@ -7676,37 +7690,37 @@ function create_fragment$k(ctx) {
 			if (if_block6) if_block6.c();
 			t22 = space();
 			if (if_block7) if_block7.c();
-			attr(div0, "class", "charts svelte-tvbkqn");
-			add_location(div0, file$k, 73, 2, 1541);
+			attr(div0, "class", "charts svelte-ezn8e1");
+			add_location(div0, file$k, 77, 2, 1611);
 			attr(div1, "class", "name");
-			add_location(div1, file$k, 82, 4, 1785);
-			attr(div2, "class", "label svelte-tvbkqn");
-			add_location(div2, file$k, 83, 4, 1838);
-			attr(div3, "class", "measure svelte-tvbkqn");
-			add_location(div3, file$k, 84, 4, 1893);
-			attr(h4, "class", "svelte-tvbkqn");
-			add_location(h4, file$k, 98, 6, 2351);
+			add_location(div1, file$k, 86, 4, 1855);
+			attr(div2, "class", "label svelte-ezn8e1");
+			add_location(div2, file$k, 87, 4, 1908);
+			attr(div3, "class", "measure svelte-ezn8e1");
+			add_location(div3, file$k, 88, 4, 1963);
+			attr(h4, "class", "svelte-ezn8e1");
+			add_location(h4, file$k, 102, 6, 2421);
 			set_style(td0, "width", "22ch");
-			attr(td0, "class", "svelte-tvbkqn");
-			add_location(td0, file$k, 101, 10, 2411);
-			attr(td1, "class", "svelte-tvbkqn");
-			add_location(td1, file$k, 102, 10, 2468);
-			attr(tr0, "class", "svelte-tvbkqn");
-			add_location(tr0, file$k, 100, 8, 2395);
-			attr(td2, "class", "svelte-tvbkqn");
-			add_location(td2, file$k, 111, 10, 2746);
-			attr(td3, "class", "svelte-tvbkqn");
-			add_location(td3, file$k, 112, 10, 2772);
-			attr(tr1, "class", "svelte-tvbkqn");
-			add_location(tr1, file$k, 110, 8, 2730);
-			attr(table, "class", "svelte-tvbkqn");
-			add_location(table, file$k, 99, 6, 2378);
+			attr(td0, "class", "svelte-ezn8e1");
+			add_location(td0, file$k, 105, 10, 2481);
+			attr(td1, "class", "svelte-ezn8e1");
+			add_location(td1, file$k, 106, 10, 2538);
+			attr(tr0, "class", "svelte-ezn8e1");
+			add_location(tr0, file$k, 104, 8, 2465);
+			attr(td2, "class", "svelte-ezn8e1");
+			add_location(td2, file$k, 115, 10, 2816);
+			attr(td3, "class", "svelte-ezn8e1");
+			add_location(td3, file$k, 116, 10, 2842);
+			attr(tr1, "class", "svelte-ezn8e1");
+			add_location(tr1, file$k, 114, 8, 2800);
+			attr(table, "class", "svelte-ezn8e1");
+			add_location(table, file$k, 103, 6, 2448);
 			attr(div4, "class", "stats");
-			add_location(div4, file$k, 97, 4, 2324);
+			add_location(div4, file$k, 101, 4, 2394);
 			attr(div5, "class", "text");
-			add_location(div5, file$k, 81, 2, 1761);
-			attr(div6, "class", "card svelte-tvbkqn");
-			add_location(div6, file$k, 72, 0, 1519);
+			add_location(div5, file$k, 85, 2, 1831);
+			attr(div6, "class", "card svelte-ezn8e1");
+			add_location(div6, file$k, 76, 0, 1589);
 		},
 
 		l: function claim(nodes) {
