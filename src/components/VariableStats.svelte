@@ -7,7 +7,7 @@
 
   export let variable = {};
   // get answer results for this variable
-  const data = variable.results.map(v => v.value);
+  $: data = variable.results.map(v => v.value);
 </script>
 
 <style>

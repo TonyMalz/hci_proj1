@@ -17,11 +17,11 @@
   tr:hover {
     background-color: #f5f5f5;
   }
-  th {
+  /* th {
     padding-top: 1rem;
     text-align: left;
     font-weight: 600;
-  }
+  } */
 </style>
 
 <table>
