@@ -65,7 +65,7 @@
   .answerLog {
     position: relative;
     height: 20ch;
-    overflow-y: auto;
+    overflow: auto;
     /* box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.25); */
   }
   .sep {

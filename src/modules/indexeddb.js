@@ -1,4 +1,4 @@
-import { studyStore, variableStore, tabStore } from './store.js'
+import { studyStore, variableStore, tabStore, responseStore } from './store.js'
 import { uuid } from "./utils"
 export const dbName = "senseQ"
 const dbVersion = 1
@@ -94,6 +94,9 @@ request.onsuccess = (e) => {
     }
     db.transaction("UITabs").objectStore("UITabs").getAll().onsuccess = e => {
         tabStore.set(e.target.result)
+    }
+    db.transaction("StudyResponses").objectStore("StudyResponses").getAll().onsuccess = e => {
+        responseStore.set(e.target.result)
     }
 }
 

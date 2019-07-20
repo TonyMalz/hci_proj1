@@ -144,7 +144,8 @@
                           variable.results.push({
                             value: stepItem.value,
                             date: stepItem.startDate,
-                            uid: taskResult.userId
+                            uid: taskResult.userId,
+                            taskResults: taskResult
                           });
                           studyVars.set(key, variable);
                         }

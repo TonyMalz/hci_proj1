@@ -60,8 +60,8 @@
     </tr>
     {#each responses as response}
       <tr>
-        <td> {response.userId} </td>
-        <td> {response.taskName} </td>
+        <td>{response.userId}</td>
+        <td>{response.taskName}</td>
         <td nowrap>
           Start: {formatDate(new Date(response.startDate))}
           <br />

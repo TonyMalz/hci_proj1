@@ -1,7 +1,7 @@
 <script>
   import { formatDate, trunc } from "../modules/utils";
   export let variable = {};
-  let data = variable.results.map(v => v.value);
+  let details = false;
 </script>
 
 <style>
@@ -17,20 +17,61 @@
   tr:hover {
     background-color: #f5f5f5;
   }
-  /* th {
+  th {
     padding-top: 1rem;
     text-align: left;
     font-weight: 600;
-  } */
+  }
+  thead {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    background: white;
+  }
+  label {
+    font-size: 0.7rem;
+    cursor: pointer;
+  }
+  input {
+    position: absolute;
+    visibility: hidden;
+  }
 </style>
 
+<label for="showmore">
+  <input type="checkbox" id="showmore" bind:checked={details} />
+  <u>show {details ? 'less' : 'more'} data</u>
+</label>
 <table>
-  {#each variable.results as result}
+  <thead>
     <tr>
-      <td>{result.value}</td>
-      <td>{trunc(result.uid)}</td>
-      <td>{formatDate(result.date)}</td>
+      <th>Answer</th>
+
+      {#if details}
+        <th colspan="10">other responses</th>
+      {:else}
+        <th>User</th>
+        <th>Date</th>
+      {/if}
     </tr>
-    <!-- content here -->
+  </thead>
+  {#each variable.results as result}
+    {#if result.value.trim().length}
+      <tr>
+        <td>{result.value}</td>
+        {#if details}
+          {#each result.taskResults.stepResults as step}
+            {#each step.stepItemResults as item}
+              {#if item.variableName !== variable.variableName}
+                <td>{item.value} ({trunc(item.variableName)})</td>
+              {/if}
+            {/each}
+          {/each}
+        {:else}
+          <td>{trunc(result.uid)}</td>
+          <td>{formatDate(result.date)}</td>
+        {/if}
+      </tr>
+    {/if}
   {:else}No answers given yet{/each}
 </table>
