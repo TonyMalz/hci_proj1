@@ -1906,8 +1906,8 @@ function create_fragment$2(ctx) {
 		c: function create() {
 			div = element("div");
 			attr(div, "id", "anovaChart");
-			attr(div, "class", "svelte-1a6ghsc");
-			add_location(div, file$2, 224, 0, 5884);
+			attr(div, "class", "svelte-14eklfi");
+			add_location(div, file$2, 285, 0, 7759);
 		},
 
 		l: function claim(nodes) {
@@ -1930,63 +1930,116 @@ function create_fragment$2(ctx) {
 	};
 }
 
+function getStatData(dependentVariable) {
+  if (!dependentVariable) return [[], []];
+  const resultsByDay = [[], [], [], [], [], [], []]; // array index -> day of week starting at 0 (monday)
+
+  for (const result of dependentVariable.results) {
+    const resultDate = new Date(result.date);
+    const resultDay = resultDate.getDay();
+    resultsByDay[resultDay].push(result.value);
+  }
+
+  const statData = [];
+  const errorData = [];
+  const alpha = 0.05;
+  for (let day = 0; day < 7; ++day) {
+    const results = resultsByDay[day];
+    if (results && results.length) {
+      const mean = simpleStatistics_min.mean(results);
+      const sd = simpleStatistics_min.standardDeviation(results);
+      const n = results.length;
+      statData.push(mean);
+      if (n < 2) {
+        errorData.push([day, 0, 0, n, 0]);
+        continue;
+      }
+      errorData.push([
+        day,
+        ...mctad.confidenceIntervalOnTheMean(mean, sd, n, alpha),
+        n,
+        sd
+      ]);
+      // console.log(mean, mctad.confidenceIntervalOnTheMean(mean, sd, n, 0.05));
+    } else {
+      statData.push(0);
+      errorData.push([day, 0, 0, 0, 0]);
+    }
+  }
+  return [statData, errorData];
+}
+
 function instance$2($$self, $$props, $$invalidate) {
-	let $variableStore;
-
-	validate_store(variableStore, 'variableStore');
-	subscribe($$self, variableStore, $$value => { $variableStore = $$value; $$invalidate('$variableStore', $variableStore); });
-
 	
-  let { studyId } = $$props;
-  onMount(() => {
-    let anovaChart = echarts.init(document.getElementById("anovaChart"));
-    const numericVariables = $variableStore.filter(
-      v =>
-        v.studyId === studyId &&
-        v.isDemographic === false &&
-        v.measure === "scale"
-    );
+  let { studyId, dependentVariable } = $$props;
+  let anovaChart;
+  let old = "";
 
-    const resultsByDay = [[], [], [], [], [], [], []]; // array index -> day of week starting at 0 (monday)
-    // TODO: enable user selection
-    let varName = "";
-    if (numericVariables && numericVariables.length) {
-      const dependentVariable = numericVariables[0];
-      varName = dependentVariable.variableName;
-      for (const result of dependentVariable.results) {
-        const resultDate = new Date(result.date);
-        const resultDay = resultDate.getDay();
-
-        resultsByDay[resultDay].push(result.value);
-      }
-    }
-
-    const statData = [];
-    const errorData = [];
-    const alpha = 0.05;
-    for (let day = 0; day < 7; ++day) {
-      const results = resultsByDay[day];
-      if (results && results.length) {
-        const mean = simpleStatistics_min.mean(results);
-        const sd = simpleStatistics_min.standardDeviation(results);
-        const n = results.length;
-        statData.push(mean);
-        if (n < 2) {
-          errorData.push([day, 0, 0, n, 0]);
-          continue;
+  function updateChart(variable) {
+    if (!anovaChart) return;
+    anovaChart.showLoading();
+    const [data, errorData] = getStatData(variable);
+    anovaChart.hideLoading();
+    anovaChart.setOption({
+      series: [
+        {
+          name: "Availability",
+          data: data
+        },
+        {
+          name: "CI",
+          data: errorData
         }
-        errorData.push([
-          day,
-          ...mctad.confidenceIntervalOnTheMean(mean, sd, n, alpha),
-          n,
-          sd
-        ]);
-        // console.log(mean, mctad.confidenceIntervalOnTheMean(mean, sd, n, 0.05));
-      } else {
-        statData.push(0);
-        errorData.push([day, 0, 0, 0, 0]);
-      }
-    }
+      ]
+    });
+  }
+
+  onMount(() => {
+    anovaChart = echarts.init(document.getElementById("anovaChart"));
+    // const numericVariables = $variableStore.filter(
+    //   v =>
+    //     v.studyId === studyId &&
+    //     v.isDemographic === false &&
+    //     v.measure === "scale"
+    // );
+
+    // const resultsByDay = [[], [], [], [], [], [], []]; // array index -> day of week starting at 0 (monday)
+    // // TODO: enable user selection
+    // if (numericVariables && numericVariables.length) {
+    //   const dependentVariable = numericVariables[0];
+    //   for (const result of dependentVariable.results) {
+    //     const resultDate = new Date(result.date);
+    //     const resultDay = resultDate.getDay();
+
+    //     resultsByDay[resultDay].push(result.value);
+    //   }
+    // }
+
+    const [statData, errorData] = getStatData(dependentVariable);
+    // const alpha = 0.05;
+    // for (let day = 0; day < 7; ++day) {
+    //   const results = resultsByDay[day];
+    //   if (results && results.length) {
+    //     const mean = stat.mean(results);
+    //     const sd = stat.standardDeviation(results);
+    //     const n = results.length;
+    //     statData.push(mean);
+    //     if (n < 2) {
+    //       errorData.push([day, 0, 0, n, 0]);
+    //       continue;
+    //     }
+    //     errorData.push([
+    //       day,
+    //       ...mctad.confidenceIntervalOnTheMean(mean, sd, n, alpha),
+    //       n,
+    //       sd
+    //     ]);
+    //     // console.log(mean, mctad.confidenceIntervalOnTheMean(mean, sd, n, 0.05));
+    //   } else {
+    //     statData.push(0);
+    //     errorData.push([day, 0, 0, 0, 0]);
+    //   }
+    // }
 
     const categoryData = [
       "Monday",
@@ -2005,8 +2058,7 @@ function instance$2($$self, $$props, $$invalidate) {
       var halfWidth = api.size([1, 0])[0] * 0.05;
       var style = api.style({
         stroke: "#aaa",
-        fill: null,
-        type: "dashed"
+        fill: null
       });
 
       return {
@@ -2145,27 +2197,40 @@ function instance$2($$self, $$props, $$invalidate) {
     };
   });
 
-	const writable_props = ['studyId'];
+	const writable_props = ['studyId', 'dependentVariable'];
 	Object.keys($$props).forEach(key => {
 		if (!writable_props.includes(key) && !key.startsWith('$$')) console.warn(`<Anova> was created with unknown prop '${key}'`);
 	});
 
 	$$self.$set = $$props => {
 		if ('studyId' in $$props) $$invalidate('studyId', studyId = $$props.studyId);
+		if ('dependentVariable' in $$props) $$invalidate('dependentVariable', dependentVariable = $$props.dependentVariable);
 	};
 
-	return { studyId };
+	$$self.$$.update = ($$dirty = { dependentVariable: 1, old: 1 }) => {
+		if ($$dirty.dependentVariable || $$dirty.old) { if (dependentVariable !== old) {
+        $$invalidate('old', old = dependentVariable);
+        if (dependentVariable) {
+          updateChart(dependentVariable);
+        }
+      } }
+	};
+
+	return { studyId, dependentVariable };
 }
 
 class Anova extends SvelteComponentDev {
 	constructor(options) {
 		super(options);
-		init(this, options, instance$2, create_fragment$2, safe_not_equal, ["studyId"]);
+		init(this, options, instance$2, create_fragment$2, safe_not_equal, ["studyId", "dependentVariable"]);
 
 		const { ctx } = this.$$;
 		const props = options.props || {};
 		if (ctx.studyId === undefined && !('studyId' in props)) {
 			console.warn("<Anova> was created without expected prop 'studyId'");
+		}
+		if (ctx.dependentVariable === undefined && !('dependentVariable' in props)) {
+			console.warn("<Anova> was created without expected prop 'dependentVariable'");
 		}
 	}
 
@@ -2174,6 +2239,14 @@ class Anova extends SvelteComponentDev {
 	}
 
 	set studyId(value) {
+		throw new Error("<Anova>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+	}
+
+	get dependentVariable() {
+		throw new Error("<Anova>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+	}
+
+	set dependentVariable(value) {
 		throw new Error("<Anova>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 	}
 }
@@ -2746,7 +2819,10 @@ function create_fragment$6(ctx) {
 	var div6, div0, select, option0, option1, option2, option3, option4, t5, div5, div1, t6, div2, t7, div3, t8, div4, div6_intro, current;
 
 	var anova = new Anova({
-		props: { studyId: ctx.studyId },
+		props: {
+		studyId: ctx.studyId,
+		dependentVariable: ctx.dependentVariable
+	},
 		$$inline: true
 	});
 
@@ -2786,36 +2862,36 @@ function create_fragment$6(ctx) {
 			contextpie.$$.fragment.c();
 			option0.__value = "1";
 			option0.value = option0.__value;
-			add_location(option0, file$6, 43, 6, 1063);
+			add_location(option0, file$6, 54, 6, 1411);
 			option1.__value = "2";
 			option1.value = option1.__value;
-			add_location(option1, file$6, 46, 6, 1164);
+			add_location(option1, file$6, 57, 6, 1512);
 			option2.__value = "3";
 			option2.value = option2.__value;
-			add_location(option2, file$6, 49, 6, 1265);
+			add_location(option2, file$6, 60, 6, 1613);
 			option3.__value = "4";
 			option3.value = option3.__value;
-			add_location(option3, file$6, 50, 6, 1347);
+			add_location(option3, file$6, 61, 6, 1695);
 			option4.__value = "5";
 			option4.value = option4.__value;
-			add_location(option4, file$6, 53, 6, 1448);
+			add_location(option4, file$6, 64, 6, 1796);
 			attr(select, "name", "user");
 			attr(select, "id", "userSelect");
-			add_location(select, file$6, 42, 4, 1019);
+			add_location(select, file$6, 53, 4, 1367);
 			attr(div0, "class", "optionsContainer svelte-oe3a3e");
-			add_location(div0, file$6, 41, 2, 983);
+			add_location(div0, file$6, 52, 2, 1331);
 			attr(div1, "class", "widget svelte-oe3a3e");
-			add_location(div1, file$6, 71, 4, 2039);
+			add_location(div1, file$6, 82, 4, 2387);
 			attr(div2, "class", "widget svelte-oe3a3e");
-			add_location(div2, file$6, 74, 4, 2104);
+			add_location(div2, file$6, 85, 4, 2472);
 			attr(div3, "class", "widget svelte-oe3a3e");
-			add_location(div3, file$6, 77, 4, 2163);
+			add_location(div3, file$6, 88, 4, 2531);
 			attr(div4, "class", "widget svelte-oe3a3e");
-			add_location(div4, file$6, 80, 4, 2221);
+			add_location(div4, file$6, 91, 4, 2589);
 			attr(div5, "class", "widgetContainer svelte-oe3a3e");
-			add_location(div5, file$6, 70, 2, 2004);
+			add_location(div5, file$6, 81, 2, 2352);
 			attr(div6, "class", "userview svelte-oe3a3e");
-			add_location(div6, file$6, 40, 0, 929);
+			add_location(div6, file$6, 51, 0, 1277);
 		},
 
 		l: function claim(nodes) {
@@ -2850,6 +2926,7 @@ function create_fragment$6(ctx) {
 		p: function update(changed, ctx) {
 			var anova_changes = {};
 			if (changed.studyId) anova_changes.studyId = ctx.studyId;
+			if (changed.dependentVariable) anova_changes.dependentVariable = ctx.dependentVariable;
 			anova.$set(anova_changes);
 		},
 
@@ -2898,9 +2975,24 @@ function create_fragment$6(ctx) {
 }
 
 function instance$6($$self, $$props, $$invalidate) {
-	
+	let $variableStore;
 
+	validate_store(variableStore, 'variableStore');
+	subscribe($$self, variableStore, $$value => { $variableStore = $$value; $$invalidate('$variableStore', $variableStore); });
+
+	
   let { studyId } = $$props;
+
+  let dependentVariable;
+  const numericVariables = $variableStore.filter(
+    v =>
+      v.studyId === studyId &&
+      v.isDemographic === false &&
+      v.measure === "scale"
+  );
+  if (numericVariables && numericVariables.length) {
+    $$invalidate('dependentVariable', dependentVariable = numericVariables[0]);
+  }
 
 	const writable_props = ['studyId'];
 	Object.keys($$props).forEach(key => {
@@ -2911,7 +3003,7 @@ function instance$6($$self, $$props, $$invalidate) {
 		if ('studyId' in $$props) $$invalidate('studyId', studyId = $$props.studyId);
 	};
 
-	return { studyId };
+	return { studyId, dependentVariable };
 }
 
 class Userview extends SvelteComponentDev {
@@ -2936,7 +3028,6 @@ class Userview extends SvelteComponentDev {
 }
 
 /* src\charts\MainChartSummary.svelte generated by Svelte v3.6.7 */
-const { console: console_1 } = globals;
 
 const file$7 = "src\\charts\\MainChartSummary.svelte";
 
@@ -2949,7 +3040,7 @@ function create_fragment$7(ctx) {
 			attr(div, "id", "mainChartSummary");
 			set_style(div, "width", "100%");
 			set_style(div, "height", "100%");
-			add_location(div, file$7, 187, 0, 5345);
+			add_location(div, file$7, 155, 0, 4312);
 		},
 
 		l: function claim(nodes) {
@@ -2972,7 +3063,7 @@ function create_fragment$7(ctx) {
 	};
 }
 
-function getStatData(dependentVariable) {
+function getStatData$1(dependentVariable) {
   if (!dependentVariable) return [];
   const resultsByHour = new Map();
   for (const result of dependentVariable.results) {
@@ -3005,7 +3096,7 @@ function instance$7($$self, $$props, $$invalidate) {
   function updateChart(variable) {
     if (!mainChartSummary) return;
     mainChartSummary.showLoading();
-    const data = getStatData(variable);
+    const data = getStatData$1(variable);
     mainChartSummary.hideLoading();
     mainChartSummary.setOption({
       series: [
@@ -3020,38 +3111,7 @@ function instance$7($$self, $$props, $$invalidate) {
     mainChartSummary = echarts.init(
       document.getElementById("mainChartSummary")
     );
-
-    // const numericVariables = $variableStore.filter(
-    //   v =>
-    //     v.studyId === studyId &&
-    //     v.isDemographic === false &&
-    //     v.measure === "scale"
-    // );
-
-    // const resultsByHour = new Map();
-    // // TODO: enable user selection
-    // if (numericVariables && numericVariables.length) {
-    //   const dependentVariable = numericVariables[0];
-    //   for (const result of dependentVariable.results) {
-    //     const resultDate = new Date(result.date);
-    //     const hour = resultDate.getHours();
-    //     const rs = resultsByHour.get(hour) || [];
-    //     rs.push(result.value);
-    //     resultsByHour.set(hour, rs);
-    //   }
-    // }
-
-    // const data = [];
-    // for (let i = 0; i < 24; i++) {
-    //   const results = resultsByHour.get(i) || [0];
-    //   data.push([
-    //     stat.mean(results),
-    //     i,
-    //     stat.standardDeviation(results),
-    //     results.length
-    //   ]);
-    // }
-    const data = getStatData(dependentVariable);
+    const data = getStatData$1(dependentVariable);
     const option = {
       tooltip: {
         trigger: "axis",
@@ -3092,7 +3152,7 @@ function instance$7($$self, $$props, $$invalidate) {
       },
       xAxis: {
         type: "value",
-        name: "Avail."
+        name: "Avg."
       },
       yAxis: {
         type: "category",
@@ -3151,7 +3211,7 @@ function instance$7($$self, $$props, $$invalidate) {
 
 	const writable_props = ['studyId', 'dependentVariable'];
 	Object.keys($$props).forEach(key => {
-		if (!writable_props.includes(key) && !key.startsWith('$$')) console_1.warn(`<MainChartSummary> was created with unknown prop '${key}'`);
+		if (!writable_props.includes(key) && !key.startsWith('$$')) console.warn(`<MainChartSummary> was created with unknown prop '${key}'`);
 	});
 
 	$$self.$set = $$props => {
@@ -3161,7 +3221,6 @@ function instance$7($$self, $$props, $$invalidate) {
 
 	$$self.$$.update = ($$dirty = { dependentVariable: 1, old: 1 }) => {
 		if ($$dirty.dependentVariable || $$dirty.old) { if (dependentVariable !== old) {
-        console.log(dependentVariable);
         $$invalidate('old', old = dependentVariable);
         if (dependentVariable) {
           updateChart(dependentVariable);
@@ -3180,10 +3239,10 @@ class MainChartSummary extends SvelteComponentDev {
 		const { ctx } = this.$$;
 		const props = options.props || {};
 		if (ctx.studyId === undefined && !('studyId' in props)) {
-			console_1.warn("<MainChartSummary> was created without expected prop 'studyId'");
+			console.warn("<MainChartSummary> was created without expected prop 'studyId'");
 		}
 		if (ctx.dependentVariable === undefined && !('dependentVariable' in props)) {
-			console_1.warn("<MainChartSummary> was created without expected prop 'dependentVariable'");
+			console.warn("<MainChartSummary> was created without expected prop 'dependentVariable'");
 		}
 	}
 
@@ -3214,7 +3273,7 @@ function get_each_context$1(ctx, list, i) {
 	return child_ctx;
 }
 
-// (253:6) {#each dvs as dv}
+// (255:6) {#each dvs as dv}
 function create_each_block$1(ctx) {
 	var option, t_value = ctx.dv.variableName, t, option_value_value;
 
@@ -3224,7 +3283,7 @@ function create_each_block$1(ctx) {
 			t = text(t_value);
 			option.__value = option_value_value = ctx.dv;
 			option.value = option.__value;
-			add_location(option, file$8, 253, 8, 6588);
+			add_location(option, file$8, 255, 8, 6661);
 		},
 
 		m: function mount(target, anchor) {
@@ -3253,7 +3312,7 @@ function create_each_block$1(ctx) {
 }
 
 function create_fragment$8(ctx) {
-	var div3, div0, t0, select, t1, div2, div1, t2, current, dispose;
+	var div3, div0, t0, select, t1, div2, div1, t2, t3, current, dispose;
 
 	var each_value = ctx.dvs;
 
@@ -3264,6 +3323,14 @@ function create_fragment$8(ctx) {
 	}
 
 	var mainchartsummary = new MainChartSummary({
+		props: {
+		studyId: ctx.studyId,
+		dependentVariable: ctx.dependentVariable
+	},
+		$$inline: true
+	});
+
+	var anova = new Anova({
 		props: {
 		studyId: ctx.studyId,
 		dependentVariable: ctx.dependentVariable
@@ -3287,20 +3354,22 @@ function create_fragment$8(ctx) {
 			div1 = element("div");
 			t2 = space();
 			mainchartsummary.$$.fragment.c();
+			t3 = space();
+			anova.$$.fragment.c();
 			if (ctx.dependentVariable === void 0) add_render_callback(() => ctx.select_change_handler.call(select));
 			attr(select, "name", "dv");
 			attr(select, "id", "dv");
-			add_location(select, file$8, 247, 4, 6442);
-			attr(div0, "class", "filter svelte-1qamm65");
-			add_location(div0, file$8, 245, 2, 6401);
+			add_location(select, file$8, 249, 4, 6515);
+			attr(div0, "class", "filter svelte-1c4nwf");
+			add_location(div0, file$8, 247, 2, 6474);
 			attr(div1, "id", "mainChart");
 			set_style(div1, "width", "100%");
 			set_style(div1, "height", "100%");
-			add_location(div1, file$8, 258, 4, 6703);
-			attr(div2, "class", "charts svelte-1qamm65");
-			add_location(div2, file$8, 257, 2, 6677);
-			attr(div3, "class", "container svelte-1qamm65");
-			add_location(div3, file$8, 244, 0, 6374);
+			add_location(div1, file$8, 260, 4, 6776);
+			attr(div2, "class", "charts svelte-1c4nwf");
+			add_location(div2, file$8, 259, 2, 6750);
+			attr(div3, "class", "container svelte-1c4nwf");
+			add_location(div3, file$8, 246, 0, 6447);
 
 			dispose = [
 				listen(select, "change", ctx.select_change_handler),
@@ -3329,6 +3398,8 @@ function create_fragment$8(ctx) {
 			append(div2, div1);
 			append(div2, t2);
 			mount_component(mainchartsummary, div2, null);
+			append(div2, t3);
+			mount_component(anova, div2, null);
 			current = true;
 		},
 
@@ -3360,17 +3431,25 @@ function create_fragment$8(ctx) {
 			if (changed.studyId) mainchartsummary_changes.studyId = ctx.studyId;
 			if (changed.dependentVariable) mainchartsummary_changes.dependentVariable = ctx.dependentVariable;
 			mainchartsummary.$set(mainchartsummary_changes);
+
+			var anova_changes = {};
+			if (changed.studyId) anova_changes.studyId = ctx.studyId;
+			if (changed.dependentVariable) anova_changes.dependentVariable = ctx.dependentVariable;
+			anova.$set(anova_changes);
 		},
 
 		i: function intro(local) {
 			if (current) return;
 			transition_in(mainchartsummary.$$.fragment, local);
 
+			transition_in(anova.$$.fragment, local);
+
 			current = true;
 		},
 
 		o: function outro(local) {
 			transition_out(mainchartsummary.$$.fragment, local);
+			transition_out(anova.$$.fragment, local);
 			current = false;
 		},
 
@@ -3382,6 +3461,8 @@ function create_fragment$8(ctx) {
 			destroy_each(each_blocks, detaching);
 
 			destroy_component(mainchartsummary, );
+
+			destroy_component(anova, );
 
 			run_all(dispose);
 		}
@@ -3985,7 +4066,7 @@ class Sherlock extends SvelteComponentDev {
 const file$a = "src\\views\\Overview.svelte";
 
 function create_fragment$a(ctx) {
-	var div2, div0, t0, aside, t1, div1, div2_intro, current;
+	var div1, div0, t, aside, div1_intro, current;
 
 	var mainchart = new MainChart({
 		props: { studyId: ctx.studyId },
@@ -3994,30 +4075,20 @@ function create_fragment$a(ctx) {
 
 	var sherlock = new Sherlock({ $$inline: true });
 
-	var anova = new Anova({
-		props: { studyId: ctx.studyId },
-		$$inline: true
-	});
-
 	return {
 		c: function create() {
-			div2 = element("div");
+			div1 = element("div");
 			div0 = element("div");
 			mainchart.$$.fragment.c();
-			t0 = space();
+			t = space();
 			aside = element("aside");
 			sherlock.$$.fragment.c();
-			t1 = space();
-			div1 = element("div");
-			anova.$$.fragment.c();
-			attr(div0, "class", "mainChart svelte-rknk5d");
-			add_location(div0, file$a, 40, 2, 869);
-			attr(aside, "class", "svelte-rknk5d");
-			add_location(aside, file$a, 43, 2, 935);
-			attr(div1, "class", "anova svelte-rknk5d");
-			add_location(div1, file$a, 46, 2, 976);
-			attr(div2, "class", "overview svelte-rknk5d");
-			add_location(div2, file$a, 39, 0, 815);
+			attr(div0, "class", "mainChart svelte-1lnmeup");
+			add_location(div0, file$a, 29, 2, 578);
+			attr(aside, "class", "svelte-1lnmeup");
+			add_location(aside, file$a, 32, 2, 644);
+			attr(div1, "class", "overview svelte-1lnmeup");
+			add_location(div1, file$a, 28, 0, 524);
 		},
 
 		l: function claim(nodes) {
@@ -4025,15 +4096,12 @@ function create_fragment$a(ctx) {
 		},
 
 		m: function mount(target, anchor) {
-			insert(target, div2, anchor);
-			append(div2, div0);
+			insert(target, div1, anchor);
+			append(div1, div0);
 			mount_component(mainchart, div0, null);
-			append(div2, t0);
-			append(div2, aside);
+			append(div1, t);
+			append(div1, aside);
 			mount_component(sherlock, aside, null);
-			append(div2, t1);
-			append(div2, div1);
-			mount_component(anova, div1, null);
 			current = true;
 		},
 
@@ -4041,10 +4109,6 @@ function create_fragment$a(ctx) {
 			var mainchart_changes = {};
 			if (changed.studyId) mainchart_changes.studyId = ctx.studyId;
 			mainchart.$set(mainchart_changes);
-
-			var anova_changes = {};
-			if (changed.studyId) anova_changes.studyId = ctx.studyId;
-			anova.$set(anova_changes);
 		},
 
 		i: function intro(local) {
@@ -4053,12 +4117,10 @@ function create_fragment$a(ctx) {
 
 			transition_in(sherlock.$$.fragment, local);
 
-			transition_in(anova.$$.fragment, local);
-
-			if (!div2_intro) {
+			if (!div1_intro) {
 				add_render_callback(() => {
-					div2_intro = create_in_transition(div2, fade, { duration: 300 });
-					div2_intro.start();
+					div1_intro = create_in_transition(div1, fade, { duration: 300 });
+					div1_intro.start();
 				});
 			}
 
@@ -4068,20 +4130,17 @@ function create_fragment$a(ctx) {
 		o: function outro(local) {
 			transition_out(mainchart.$$.fragment, local);
 			transition_out(sherlock.$$.fragment, local);
-			transition_out(anova.$$.fragment, local);
 			current = false;
 		},
 
 		d: function destroy(detaching) {
 			if (detaching) {
-				detach(div2);
+				detach(div1);
 			}
 
 			destroy_component(mainchart, );
 
 			destroy_component(sherlock, );
-
-			destroy_component(anova, );
 		}
 	};
 }

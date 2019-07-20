@@ -3,29 +3,42 @@
   import { variableStore } from "../modules/store";
   import stat from "../modules/simple-statistics.min";
   export let studyId;
-  onMount(() => {
-    let anovaChart = echarts.init(document.getElementById("anovaChart"));
-    const numericVariables = $variableStore.filter(
-      v =>
-        v.studyId === studyId &&
-        v.isDemographic === false &&
-        v.measure === "scale"
-    );
+  export let dependentVariable;
+  let anovaChart;
+  let old = "";
+  $: if (dependentVariable !== old) {
+    old = dependentVariable;
+    if (dependentVariable) {
+      updateChart(dependentVariable);
+    }
+  }
 
+  function updateChart(variable) {
+    if (!anovaChart) return;
+    anovaChart.showLoading();
+    const [data, errorData] = getStatData(variable);
+    anovaChart.hideLoading();
+    anovaChart.setOption({
+      series: [
+        {
+          name: "Availability",
+          data: data
+        },
+        {
+          name: "CI",
+          data: errorData
+        }
+      ]
+    });
+  }
+  function getStatData(dependentVariable) {
+    if (!dependentVariable) return [[], []];
     const resultsByDay = [[], [], [], [], [], [], []]; // array index -> day of week starting at 0 (monday)
-    // TODO: enable user selection
-    let varName = "";
-    let minVal,
-      maxVal = 0;
-    if (numericVariables && numericVariables.length) {
-      const dependentVariable = numericVariables[0];
-      varName = dependentVariable.variableName;
-      for (const result of dependentVariable.results) {
-        const resultDate = new Date(result.date);
-        const resultDay = resultDate.getDay();
 
-        resultsByDay[resultDay].push(result.value);
-      }
+    for (const result of dependentVariable.results) {
+      const resultDate = new Date(result.date);
+      const resultDay = resultDate.getDay();
+      resultsByDay[resultDay].push(result.value);
     }
 
     const statData = [];
@@ -54,6 +67,55 @@
         errorData.push([day, 0, 0, 0, 0]);
       }
     }
+    return [statData, errorData];
+  }
+
+  onMount(() => {
+    anovaChart = echarts.init(document.getElementById("anovaChart"));
+    // const numericVariables = $variableStore.filter(
+    //   v =>
+    //     v.studyId === studyId &&
+    //     v.isDemographic === false &&
+    //     v.measure === "scale"
+    // );
+
+    // const resultsByDay = [[], [], [], [], [], [], []]; // array index -> day of week starting at 0 (monday)
+    // // TODO: enable user selection
+    // if (numericVariables && numericVariables.length) {
+    //   const dependentVariable = numericVariables[0];
+    //   for (const result of dependentVariable.results) {
+    //     const resultDate = new Date(result.date);
+    //     const resultDay = resultDate.getDay();
+
+    //     resultsByDay[resultDay].push(result.value);
+    //   }
+    // }
+
+    const [statData, errorData] = getStatData(dependentVariable);
+    // const alpha = 0.05;
+    // for (let day = 0; day < 7; ++day) {
+    //   const results = resultsByDay[day];
+    //   if (results && results.length) {
+    //     const mean = stat.mean(results);
+    //     const sd = stat.standardDeviation(results);
+    //     const n = results.length;
+    //     statData.push(mean);
+    //     if (n < 2) {
+    //       errorData.push([day, 0, 0, n, 0]);
+    //       continue;
+    //     }
+    //     errorData.push([
+    //       day,
+    //       ...mctad.confidenceIntervalOnTheMean(mean, sd, n, alpha),
+    //       n,
+    //       sd
+    //     ]);
+    //     // console.log(mean, mctad.confidenceIntervalOnTheMean(mean, sd, n, 0.05));
+    //   } else {
+    //     statData.push(0);
+    //     errorData.push([day, 0, 0, 0, 0]);
+    //   }
+    // }
 
     const categoryData = [
       "Monday",
@@ -72,8 +134,7 @@
       var halfWidth = api.size([1, 0])[0] * 0.05;
       var style = api.style({
         stroke: "#aaa",
-        fill: null,
-        type: "dashed"
+        fill: null
       });
 
       return {
@@ -215,8 +276,8 @@
 
 <style>
   #anovaChart {
-    width: 95%;
-    height: 99%;
+    width: 100%;
+    height: 100%;
     padding: 0;
     margin: 0;
   }

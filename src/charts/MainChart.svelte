@@ -2,6 +2,7 @@
   import { onMount } from "svelte";
   import { variableStore } from "../modules/store";
   import MainChartSummary from "./MainChartSummary.svelte";
+  import Anova from "./Anova.svelte";
   import stat from "../modules/simple-statistics.min";
 
   export let studyId;
@@ -239,6 +240,7 @@
   .charts {
     display: grid;
     grid-template-columns: 2fr minmax(120px, 0.5fr);
+    grid-template-rows: 2fr 1fr;
   }
 </style>
 
@@ -258,5 +260,6 @@
   <div class="charts">
     <div id="mainChart" style="width:100%; height:100%" />
     <MainChartSummary {studyId} {dependentVariable} />
+    <Anova {studyId} {dependentVariable} />
   </div>
 </div>

@@ -4,8 +4,19 @@
   import WeekChart from "../charts/WeekChart.svelte";
   import BDAChart from "../charts/BDAChart.svelte";
   import ContextPie from "../charts/ContextPie.svelte";
-
+  import { variableStore } from "../modules/store";
   export let studyId;
+
+  let dependentVariable;
+  const numericVariables = $variableStore.filter(
+    v =>
+      v.studyId === studyId &&
+      v.isDemographic === false &&
+      v.measure === "scale"
+  );
+  if (numericVariables && numericVariables.length) {
+    dependentVariable = numericVariables[0];
+  }
 </script>
 
 <style>
@@ -70,7 +81,7 @@
   </div>
   <div class="widgetContainer">
     <div class="widget">
-      <Anova {studyId} />
+      <Anova {studyId} {dependentVariable} />
     </div>
     <div class="widget">
       <WeekChart />
