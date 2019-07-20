@@ -1,8 +1,8 @@
 <script>
-  import Userview from "../pages/Userview.svelte";
-  import Overview from "../pages/Overview.svelte";
-  import StudyList from "../pages/StudyList.svelte";
-  import Descriptives from "../pages/Descriptives.svelte";
+  import Userview from "../views/Userview.svelte";
+  import Overview from "../views/Overview.svelte";
+  import StudyList from "../views/StudyList.svelte";
+  import Descriptives from "../views/Descriptives.svelte";
   import { tabStore, activeTabIdx } from "../modules/store.js";
 </script>
 
