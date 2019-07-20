@@ -205,7 +205,8 @@
     font-weight: 400;
     border-top: 1px solid tomato !important;
   }
-  .close {
+  .close:hover {
+    background-color: rgba(212, 212, 212, 0.6);
     /* box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.25); */
   }
 </style>
