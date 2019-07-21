@@ -6,6 +6,7 @@
   import StudyVariables from "../components/StudyVariables.svelte";
   import StudyUsers from "../components/StudyUsers.svelte";
   import StudyResponses from "../components/StudyResponses.svelte";
+  import StudyMerger from "../components/StudyMerger.svelte";
   import { studyStore, msgStore, responseStore } from "../modules/store.js";
   import { dbName } from "../modules/indexeddb.js";
   import { downloadAsJson } from "../modules/utils.js";
@@ -40,6 +41,7 @@
       toggleVars = false;
       toggleUsers = false;
       toggleResponses = false;
+      toggleNewStudy = false;
     }
   }
 
@@ -92,6 +94,12 @@
       $msgStore.push(msg);
     }
     $msgStore = $msgStore; // make sure store gets updated
+  }
+
+  let toggleNewStudy = false;
+  function createNewFromSelected() {
+    if (!selectedStudies.length) return;
+    toggleNewStudy = true;
   }
 </script>
 
@@ -154,6 +162,11 @@
     display: inline-block;
     padding: 0.5rem 1rem;
     border-radius: 0.25rem;
+    margin: 0 0.5em;
+    box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.25);
+  }
+  .action:hover {
+    box-shadow: 0 2px 10px 1px rgba(0, 0, 0, 0.2);
   }
   .open {
     color: white;
@@ -173,6 +186,13 @@
 </style>
 
 <svelte:window on:keyup={closeDetailView} />
+
+{#if toggleNewStudy}
+  <div class="varInfo" transition:fly={{ x: -200, duration: 200 }}>
+    <StudyMerger {selectedStudies} />
+    <div class="close" on:click={() => (toggleNewStudy = false)}>x close</div>
+  </div>
+{/if}
 
 {#if toggleVars}
   <div class="varInfo" transition:fly={{ x: -200, duration: 200 }}>
@@ -195,12 +215,14 @@
   </div>
 {/if}
 <div class="actions">
-  <span class="info">
-    {studyCount < 2 ? studyCount + ' study' : studyCount + ' studies'}:
-  </span>
+  {#if studyCount}
+    <span class="info">
+      {studyCount < 2 ? studyCount + ' study' : studyCount + ' studies'}:
+    </span>
+  {/if}
   {#if selectedStudies.length}
     <span class="selectActions" transition:fly={{ duration: 200, x: -10 }}>
-      <div class="action new" class:disabled>
+      <div class="action new" class:disabled on:click={createNewFromSelected}>
         create new study from selected ({selectedStudies.length})
       </div>
       <div class="action open" class:disabled on:click={openSelected}>
