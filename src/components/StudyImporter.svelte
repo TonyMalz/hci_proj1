@@ -271,12 +271,13 @@
   label {
     width: 100%;
     height: 100%;
+    min-height: 18ch;
     display: grid;
     grid-template-rows: 1fr 1fr;
     grid-gap: 0.5rem;
     justify-items: center;
     background: tomato;
-    position: absolute;
+    position: relative;
     font-weight: 600;
     cursor: pointer;
     overflow: hidden;
