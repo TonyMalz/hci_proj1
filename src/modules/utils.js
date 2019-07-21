@@ -1,4 +1,4 @@
-export function formatDate(date) {
+export function formatDate(date, showtime = true) {
     if (!(date instanceof Date)) {
         date = new Date(date)
     }
@@ -19,7 +19,7 @@ export function formatDate(date) {
     dayOfMonth = dayOfMonth < 10 ? '0' + dayOfMonth : dayOfMonth;
 
     if (diffMs < 0) {
-        return `${dayOfMonth}.${month}.'${year} ${hour}:${minutes}`
+        return showtime ? `${dayOfMonth}.${month}.'${year} ${hour}:${minutes}` : `${dayOfMonth}.${month}.'${year}`
     }
     if (diffSec < 1) {
         return 'right now';
@@ -28,7 +28,7 @@ export function formatDate(date) {
     } else if (diffHour < 1) {
         return `${diffMin.toFixed()} min. ago`
     } else {
-        return `${dayOfMonth}.${month}.'${year} ${hour}:${minutes}`
+        return showtime ? `${dayOfMonth}.${month}.'${year} ${hour}:${minutes}` : `${dayOfMonth}.${month}.'${year}`
     }
 }
 

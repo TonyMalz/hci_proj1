@@ -271,20 +271,27 @@
   label {
     width: 100%;
     height: 100%;
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    grid-gap: 0.5rem;
+    justify-items: center;
     background: tomato;
-    text-align: center;
     position: absolute;
     font-weight: 600;
-    text-overflow: ellipsis;
-    white-space: nowrap;
     cursor: pointer;
     overflow: hidden;
-    padding: 1rem 1.25rem;
+    /* padding: 1rem 1.25rem; */
     border-radius: 0.25rem;
     color: white;
+    box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.25);
+  }
+  figure {
+    align-self: flex-end;
+    margin: 0;
   }
   label:hover {
     background-color: #722040;
+    box-shadow: 0 5px 20px 3px rgba(0, 0, 0, 0.25);
   }
 </style>
 
@@ -305,5 +312,5 @@
         1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z" />
     </svg>
   </figure>
-    Import study data
+  <span>Import study data</span>
 </label>

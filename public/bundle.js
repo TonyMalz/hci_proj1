@@ -1172,7 +1172,7 @@ const msgStore = writable([]);
 const responseStore = writable([]);
 const activeTabIdx = writable(0);
 
-function formatDate(date) {
+function formatDate(date, showtime = true) {
     if (!(date instanceof Date)) {
         date = new Date(date);
     }
@@ -1193,7 +1193,7 @@ function formatDate(date) {
     dayOfMonth = dayOfMonth < 10 ? '0' + dayOfMonth : dayOfMonth;
 
     if (diffMs < 0) {
-        return `${dayOfMonth}.${month}.'${year} ${hour}:${minutes}`
+        return showtime ? `${dayOfMonth}.${month}.'${year} ${hour}:${minutes}` : `${dayOfMonth}.${month}.'${year}`
     }
     if (diffSec < 1) {
         return 'right now';
@@ -1202,7 +1202,7 @@ function formatDate(date) {
     } else if (diffHour < 1) {
         return `${diffMin.toFixed()} min. ago`
     } else {
-        return `${dayOfMonth}.${month}.'${year} ${hour}:${minutes}`
+        return showtime ? `${dayOfMonth}.${month}.'${year} ${hour}:${minutes}` : `${dayOfMonth}.${month}.'${year}`
     }
 }
 
@@ -4200,7 +4200,7 @@ class Overview extends SvelteComponentDev {
 const file$b = "src\\components\\StudyImporter.svelte";
 
 function create_fragment$b(ctx) {
-	var input, t0, label, figure, svg, path, t1;
+	var input, t0, label, figure, svg, path, t1, span;
 
 	return {
 		c: function create() {
@@ -4210,25 +4210,29 @@ function create_fragment$b(ctx) {
 			figure = element("figure");
 			svg = svg_element("svg");
 			path = svg_element("path");
-			t1 = text("\r\n    Import study data");
+			t1 = space();
+			span = element("span");
+			span.textContent = "Import study data";
 			attr(input, "id", "studyImport");
 			attr(input, "type", "file");
 			input.multiple = true;
 			attr(input, "accept", "application/json");
-			attr(input, "class", "svelte-1ftga8c");
-			add_location(input, file$b, 290, 0, 11485);
+			attr(input, "class", "svelte-4akhgq");
+			add_location(input, file$b, 297, 0, 11676);
 			attr(path, "fill", "white");
 			attr(path, "d", "M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3\r\n        11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8\r\n        2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6\r\n        1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4\r\n        1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z");
-			add_location(path, file$b, 298, 6, 11726);
+			add_location(path, file$b, 305, 6, 11917);
 			attr(svg, "xmlns", "http://www.w3.org/2000/svg");
 			attr(svg, "width", "2em");
 			attr(svg, "height", "1.8em");
 			attr(svg, "viewBox", "0 0 20 17");
-			add_location(svg, file$b, 293, 4, 11603);
-			add_location(figure, file$b, 292, 2, 11589);
+			add_location(svg, file$b, 300, 4, 11794);
+			attr(figure, "class", "svelte-4akhgq");
+			add_location(figure, file$b, 299, 2, 11780);
+			add_location(span, file$b, 314, 2, 12276);
 			attr(label, "for", "studyImport");
-			attr(label, "class", "svelte-1ftga8c");
-			add_location(label, file$b, 291, 0, 11560);
+			attr(label, "class", "svelte-4akhgq");
+			add_location(label, file$b, 298, 0, 11751);
 		},
 
 		l: function claim(nodes) {
@@ -4243,6 +4247,7 @@ function create_fragment$b(ctx) {
 			append(figure, svg);
 			append(svg, path);
 			append(label, t1);
+			append(label, span);
 		},
 
 		p: noop,
@@ -4544,7 +4549,7 @@ function create_catch_block(ctx) {
 	};
 }
 
-// (234:85)           Variables: {variableCount}
+// (262:85)           Variables: {variableCount}
 function create_then_block(ctx) {
 	var t0, t1_value = ctx.variableCount, t1;
 
@@ -4585,7 +4590,7 @@ function create_pending_block(ctx) {
 }
 
 function create_fragment$c(ctx) {
-	var div4, div0, svg, path, t0, h4, t1, t2, div1, span0, t3, t4, t5, span1, t6, t7, t8, br, t9, span2, promise, t10, div2, span3, t12, t13_value = formatDate(new ctx.Date(ctx.earliestBeginOfDataGathering)), t13, t14, span4, t16, t17_value = formatDate(ctx.endDate), t17, t18, div3, t19, t20_value = formatDate(ctx.__created), t20, dispose;
+	var div7, div0, svg, path, t0, h4, t1, t2, div1, span0, t3, t4, t5, span1, t6, t7, t8, br, t9, span2, promise, t10, div2, span3, t12, t13_value = formatDate(ctx.earliestBeginOfDataGathering, false), t13, t14, t15_value = formatDate(ctx.endDate, false), t15, t16, div3, t17, t18_value = formatDate(ctx.__created), t18, t19, div6, div4, t21, div5, dispose;
 
 	let info = {
 		ctx,
@@ -4602,7 +4607,7 @@ function create_fragment$c(ctx) {
 
 	return {
 		c: function create() {
-			div4 = element("div");
+			div7 = element("div");
 			div0 = element("div");
 			svg = svg_element("svg");
 			path = svg_element("path");
@@ -4628,55 +4633,64 @@ function create_fragment$c(ctx) {
 			t10 = space();
 			div2 = element("div");
 			span3 = element("span");
-			span3.textContent = "Start:";
+			span3.textContent = "Duration:";
 			t12 = space();
 			t13 = text(t13_value);
-			t14 = space();
-			span4 = element("span");
-			span4.textContent = "End:";
+			t14 = text(" - ");
+			t15 = text(t15_value);
 			t16 = space();
-			t17 = text(t17_value);
-			t18 = space();
 			div3 = element("div");
-			t19 = text("imported: ");
-			t20 = text(t20_value);
+			t17 = text("imported: ");
+			t18 = text(t18_value);
+			t19 = space();
+			div6 = element("div");
+			div4 = element("div");
+			div4.textContent = "export";
+			t21 = space();
+			div5 = element("div");
+			div5.textContent = "select";
 			attr(path, "fill", "#777");
 			attr(path, "d", "M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59\r\n        20,12C20,16.41 16.41,20 12,20M12,2C6.47,2 2,6.47 2,12C2,17.53 6.47,22\r\n        12,22C17.53,22 22,17.53 22,12C22,6.47 17.53,2\r\n        12,2M14.59,8L12,10.59L9.41,8L8,9.41L10.59,12L8,14.59L9.41,16L12,13.41L14.59,16L16,14.59L13.41,12L16,9.41L14.59,8Z");
-			add_location(path, file$c, 219, 6, 5347);
+			add_location(path, file$c, 247, 6, 5967);
 			set_style(svg, "width", "24px");
 			set_style(svg, "height", "24px");
 			attr(svg, "viewBox", "0 0 24 24");
-			add_location(svg, file$c, 218, 4, 5282);
-			attr(div0, "class", "delete svelte-1n8stn6");
-			add_location(div0, file$c, 217, 2, 5233);
-			attr(h4, "class", "svelte-1n8stn6");
-			add_location(h4, file$c, 227, 2, 5735);
-			attr(span0, "class", "vars svelte-1n8stn6");
-			add_location(span0, file$c, 229, 4, 5824);
-			attr(span1, "class", "vars svelte-1n8stn6");
-			add_location(span1, file$c, 230, 4, 5895);
-			add_location(br, file$c, 231, 4, 5974);
-			attr(span2, "class", "vars svelte-1n8stn6");
-			add_location(span2, file$c, 232, 4, 5986);
-			attr(div1, "class", "mainInfo svelte-1n8stn6");
-			add_location(div1, file$c, 228, 2, 5796);
-			attr(span3, "class", "svelte-1n8stn6");
-			add_location(span3, file$c, 239, 4, 6220);
-			attr(span4, "class", "svelte-1n8stn6");
-			add_location(span4, file$c, 241, 4, 6303);
-			attr(div2, "class", "date svelte-1n8stn6");
-			add_location(div2, file$c, 238, 2, 6196);
-			attr(div3, "class", "created svelte-1n8stn6");
-			add_location(div3, file$c, 244, 2, 6361);
-			attr(div4, "class", "card svelte-1n8stn6");
-			add_location(div4, file$c, 216, 0, 5211);
+			add_location(svg, file$c, 246, 4, 5902);
+			attr(div0, "class", "delete svelte-avjgwj");
+			add_location(div0, file$c, 245, 2, 5853);
+			attr(h4, "class", "svelte-avjgwj");
+			add_location(h4, file$c, 255, 2, 6355);
+			attr(span0, "class", "vars svelte-avjgwj");
+			add_location(span0, file$c, 257, 4, 6444);
+			attr(span1, "class", "vars svelte-avjgwj");
+			add_location(span1, file$c, 258, 4, 6515);
+			add_location(br, file$c, 259, 4, 6594);
+			attr(span2, "class", "vars svelte-avjgwj");
+			add_location(span2, file$c, 260, 4, 6606);
+			attr(div1, "class", "mainInfo svelte-avjgwj");
+			add_location(div1, file$c, 256, 2, 6416);
+			attr(span3, "class", "svelte-avjgwj");
+			add_location(span3, file$c, 267, 4, 6840);
+			attr(div2, "class", "date svelte-avjgwj");
+			add_location(div2, file$c, 266, 2, 6816);
+			attr(div3, "class", "created svelte-avjgwj");
+			add_location(div3, file$c, 270, 2, 6962);
+			attr(div4, "class", "export svelte-avjgwj");
+			add_location(div4, file$c, 272, 4, 7053);
+			attr(div5, "class", "select svelte-avjgwj");
+			add_location(div5, file$c, 273, 4, 7114);
+			attr(div6, "class", "actions svelte-avjgwj");
+			add_location(div6, file$c, 271, 2, 7026);
+			attr(div7, "class", "card svelte-avjgwj");
+			add_location(div7, file$c, 244, 0, 5831);
 
 			dispose = [
 				listen(div0, "click", ctx.deleteStudy),
 				listen(h4, "click", stop_propagation(ctx.showStudy)),
 				listen(span0, "click", ctx.showUsers),
 				listen(span1, "click", ctx.showResponses),
-				listen(span2, "click", ctx.showVariables)
+				listen(span2, "click", ctx.showVariables),
+				listen(div4, "click", ctx.exportStudy)
 			];
 		},
 
@@ -4685,15 +4699,15 @@ function create_fragment$c(ctx) {
 		},
 
 		m: function mount(target, anchor) {
-			insert(target, div4, anchor);
-			append(div4, div0);
+			insert(target, div7, anchor);
+			append(div7, div0);
 			append(div0, svg);
 			append(svg, path);
-			append(div4, t0);
-			append(div4, h4);
+			append(div7, t0);
+			append(div7, h4);
 			append(h4, t1);
-			append(div4, t2);
-			append(div4, div1);
+			append(div7, t2);
+			append(div7, div1);
 			append(div1, span0);
 			append(span0, t3);
 			append(span0, t4);
@@ -4710,19 +4724,22 @@ function create_fragment$c(ctx) {
 			info.mount = () => span2;
 			info.anchor = null;
 
-			append(div4, t10);
-			append(div4, div2);
+			append(div7, t10);
+			append(div7, div2);
 			append(div2, span3);
 			append(div2, t12);
 			append(div2, t13);
 			append(div2, t14);
-			append(div2, span4);
-			append(div2, t16);
-			append(div2, t17);
-			append(div4, t18);
-			append(div4, div3);
-			append(div3, t19);
-			append(div3, t20);
+			append(div2, t15);
+			append(div7, t16);
+			append(div7, div3);
+			append(div3, t17);
+			append(div3, t18);
+			append(div7, t19);
+			append(div7, div6);
+			append(div6, div4);
+			append(div6, t21);
+			append(div6, div5);
 		},
 
 		p: function update(changed, new_ctx) {
@@ -4745,12 +4762,12 @@ function create_fragment$c(ctx) {
 				info.block.p(changed, assign(assign({}, ctx), info.resolved));
 			}
 
-			if ((changed.earliestBeginOfDataGathering) && t13_value !== (t13_value = formatDate(new ctx.Date(ctx.earliestBeginOfDataGathering)))) {
+			if ((changed.earliestBeginOfDataGathering) && t13_value !== (t13_value = formatDate(ctx.earliestBeginOfDataGathering, false))) {
 				set_data(t13, t13_value);
 			}
 
-			if ((changed.__created) && t20_value !== (t20_value = formatDate(ctx.__created))) {
-				set_data(t20, t20_value);
+			if ((changed.__created) && t18_value !== (t18_value = formatDate(ctx.__created))) {
+				set_data(t18, t18_value);
 			}
 		},
 
@@ -4759,7 +4776,7 @@ function create_fragment$c(ctx) {
 
 		d: function destroy(detaching) {
 			if (detaching) {
-				detach(div4);
+				detach(div7);
 			}
 
 			info.block.d();
@@ -4769,6 +4786,18 @@ function create_fragment$c(ctx) {
 			run_all(dispose);
 		}
 	};
+}
+
+function downloadAsJson(exportObj, exportName) {
+  var dataStr =
+    "data:text/json;charset=utf-8," +
+    encodeURIComponent(JSON.stringify(exportObj));
+  var da = document.createElement("a");
+  da.setAttribute("href", dataStr);
+  da.setAttribute("download", exportName + ".json");
+  document.body.appendChild(da); // required for firefox
+  da.click();
+  da.remove();
 }
 
 function instance$c($$self, $$props, $$invalidate) {
@@ -4882,6 +4911,32 @@ function instance$c($$self, $$props, $$invalidate) {
       variableStore.set(e.target.result);
   }
 
+  function exportStudy() {
+    const studyData = $studyStore.filter(v => v._id === studyId)[0];
+    if (studyData) {
+      console.log("export study", studyId);
+
+      const res = db
+        .transaction("StudyResponses")
+        .objectStore("StudyResponses")
+        .index("studyId")
+        .getAll(studyId);
+      res.onsuccess = e => {
+        const taskResults = e.target.result;
+        downloadAsJson(
+          { dataSchema: studyData, taskResults },
+          `export_study_${studyId}_${studyName.replace(/\s+/g, "_")}`
+        );
+      };
+      res.onerror = e => {
+        downloadAsJson(
+          { dataSchema: studyData },
+          `export_study_${studyId}_${studyName.replace(/\s+/g, "_")}`
+        );
+      };
+    }
+  }
+
 	const writable_props = ['_id', 'studyName', 'description', 'tasks', '__created', 'minimumStudyDurationPerPerson', 'maximumStudyDurationPerPerson', 'earliestBeginOfDataGathering', 'latestBeginOfDataGathering'];
 	Object.keys($$props).forEach(key => {
 		if (!writable_props.includes(key) && !key.startsWith('$$')) console_1.warn(`<StudyCard> was created with unknown prop '${key}'`);
@@ -4921,7 +4976,7 @@ function instance$c($$self, $$props, $$invalidate) {
 		userCount,
 		endDate,
 		deleteStudy,
-		Date,
+		exportStudy,
 		$variableStore,
 		func
 	};
@@ -6055,7 +6110,7 @@ function get_each_context$5(ctx, list, i) {
 	return child_ctx;
 }
 
-// (90:0) {#if toggleVars}
+// (92:0) {#if toggleVars}
 function create_if_block_2$1(ctx) {
 	var div1, t, div0, div1_transition, current, dispose;
 
@@ -6079,10 +6134,10 @@ function create_if_block_2$1(ctx) {
 			t = space();
 			div0 = element("div");
 			div0.textContent = "x close";
-			attr(div0, "class", "close svelte-1ddmxdo");
-			add_location(div0, file$g, 92, 4, 2347);
-			attr(div1, "class", "varInfo svelte-1ddmxdo");
-			add_location(div1, file$g, 90, 2, 2237);
+			attr(div0, "class", "close svelte-16fqe38");
+			add_location(div0, file$g, 94, 4, 2430);
+			attr(div1, "class", "varInfo svelte-16fqe38");
+			add_location(div1, file$g, 92, 2, 2320);
 			dispose = listen(div0, "click", ctx.click_handler);
 		},
 
@@ -6138,7 +6193,7 @@ function create_if_block_2$1(ctx) {
 	};
 }
 
-// (97:0) {#if toggleUsers}
+// (99:0) {#if toggleUsers}
 function create_if_block_1$1(ctx) {
 	var div1, t, div0, div1_transition, current, dispose;
 
@@ -6159,10 +6214,10 @@ function create_if_block_1$1(ctx) {
 			t = space();
 			div0 = element("div");
 			div0.textContent = "x close";
-			attr(div0, "class", "close svelte-1ddmxdo");
-			add_location(div0, file$g, 99, 4, 2565);
-			attr(div1, "class", "varInfo svelte-1ddmxdo");
-			add_location(div1, file$g, 97, 2, 2459);
+			attr(div0, "class", "close svelte-16fqe38");
+			add_location(div0, file$g, 101, 4, 2648);
+			attr(div1, "class", "varInfo svelte-16fqe38");
+			add_location(div1, file$g, 99, 2, 2542);
 			dispose = listen(div0, "click", ctx.click_handler_1);
 		},
 
@@ -6218,7 +6273,7 @@ function create_if_block_1$1(ctx) {
 	};
 }
 
-// (104:0) {#if toggleResponses}
+// (106:0) {#if toggleResponses}
 function create_if_block$2(ctx) {
 	var div1, t, div0, div1_transition, current, dispose;
 
@@ -6242,10 +6297,10 @@ function create_if_block$2(ctx) {
 			t = space();
 			div0 = element("div");
 			div0.textContent = "x close";
-			attr(div0, "class", "close svelte-1ddmxdo");
-			add_location(div0, file$g, 106, 4, 2792);
-			attr(div1, "class", "varInfo svelte-1ddmxdo");
-			add_location(div1, file$g, 104, 2, 2682);
+			attr(div0, "class", "close svelte-16fqe38");
+			add_location(div0, file$g, 108, 4, 2875);
+			attr(div1, "class", "varInfo svelte-16fqe38");
+			add_location(div1, file$g, 106, 2, 2765);
 			dispose = listen(div0, "click", ctx.click_handler_2);
 		},
 
@@ -6301,7 +6356,7 @@ function create_if_block$2(ctx) {
 	};
 }
 
-// (112:2) {#each $studyStore as study (study._id)}
+// (114:2) {#each $studyStore as study (study._id)}
 function create_each_block$5(key_1, ctx) {
 	var div, div_intro, rect, stop_animation = noop, current;
 
@@ -6326,8 +6381,8 @@ function create_each_block$5(key_1, ctx) {
 		c: function create() {
 			div = element("div");
 			studycard.$$.fragment.c();
-			attr(div, "class", "study svelte-1ddmxdo");
-			add_location(div, file$g, 112, 4, 2989);
+			attr(div, "class", "study svelte-16fqe38");
+			add_location(div, file$g, 114, 4, 3072);
 			this.first = div;
 		},
 
@@ -6426,12 +6481,12 @@ function create_fragment$g(ctx) {
 			t4 = space();
 			div2 = element("div");
 			div2.textContent = "Debug: wipe database";
-			attr(div0, "class", "study svelte-1ddmxdo");
-			add_location(div0, file$g, 123, 2, 3279);
-			attr(div1, "class", "container svelte-1ddmxdo");
-			add_location(div1, file$g, 110, 0, 2888);
-			attr(div2, "class", "debug svelte-1ddmxdo");
-			add_location(div2, file$g, 128, 0, 3343);
+			attr(div0, "class", "study svelte-16fqe38");
+			add_location(div0, file$g, 125, 2, 3362);
+			attr(div1, "class", "container svelte-16fqe38");
+			add_location(div1, file$g, 112, 0, 2971);
+			attr(div2, "class", "debug svelte-16fqe38");
+			add_location(div2, file$g, 130, 0, 3426);
 
 			dispose = [
 				listen(window_1, "keyup", ctx.closeDetailView),

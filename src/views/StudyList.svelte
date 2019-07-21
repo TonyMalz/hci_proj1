@@ -45,14 +45,15 @@
 
 <style>
   .container {
-    position: relative;
     display: grid;
-    grid-template-columns: repeat(auto-fit, 25ch);
+    grid-template-columns: repeat(auto-fit, 30ch);
     grid-gap: 1rem;
+    align-items: flex-start;
   }
   .study {
     position: relative;
-    height: 15ch;
+    width: 100%;
+    height: 100%;
   }
   .debug {
     text-align: center;
@@ -71,7 +72,8 @@
     left: 0;
     z-index: 1;
     border-radius: 0.25rem;
-    box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.25);
+    /* box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.25); */
+    box-shadow: 2px 3px 16px 3px rgba(0, 0, 0, 0.2);
     overflow: hidden;
   }
   .close {

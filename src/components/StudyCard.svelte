@@ -159,9 +159,12 @@
     border-radius: 0.25rem;
     box-shadow: 0 0 6px 0 rgb(214, 214, 214);
     text-align: center;
-    position: absolute;
+    position: relative;
     width: 100%;
     height: 100%;
+  }
+  .card:hover {
+    box-shadow: 0 3px 14px 3px rgba(0, 0, 0, 0.2);
   }
   .created {
     position: absolute;
@@ -180,7 +183,8 @@
     color: rgb(172, 172, 172);
   }
   h4 {
-    margin: 1em;
+    margin: 0;
+    padding: 1em;
     cursor: pointer;
   }
   h4:hover {
@@ -200,7 +204,7 @@
     opacity: 1;
   }
   .mainInfo {
-    padding-top: 0.25rem;
+    padding-top: 0.5rem;
   }
   .vars {
     cursor: pointer;
@@ -209,8 +213,32 @@
   .vars:hover {
     text-decoration-line: underline;
   }
-  button {
-    z-index: 200;
+  .actions {
+    margin-top: 0.5rem;
+
+    font-size: 0.7rem;
+    font-weight: 600;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    color: white;
+    border-bottom-left-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+  }
+  .actions > div {
+    cursor: pointer;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 0.5rem;
+  }
+  .actions > div:hover {
+    background: rgba(0, 0, 0, 0.3);
+  }
+  .export {
+    border-bottom-left-radius: 0.25rem;
+  }
+  .select {
+    border-bottom-right-radius: 0.25rem;
   }
 </style>
 
@@ -237,13 +265,12 @@
     </span>
   </div>
   <div class="date">
-    <span>Start:</span>
-    {formatDate(new Date(earliestBeginOfDataGathering))}
-    <span>End:</span>
-    {formatDate(endDate)}
+    <span>Duration:</span>
+    {formatDate(earliestBeginOfDataGathering, false)} - {formatDate(endDate, false)}
   </div>
   <div class="created">imported: {formatDate(__created)}</div>
-  <!-- <div class="export">
-    <button on:click={exportStudy}>export</button>
-  </div> -->
+  <div class="actions">
+    <div class="export" on:click={exportStudy}>export</div>
+    <div class="select">select</div>
+  </div>
 </div>
