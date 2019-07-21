@@ -1,10 +1,9 @@
 <script>
-  import { formatDate } from "../modules/utils.js";
+  import { formatDate, downloadAsJson } from "../modules/utils.js";
   import { fade } from "svelte/transition";
   import { db } from "../modules/indexeddb.js";
-  import { studyStore, msgStore } from "../modules/store.js";
+  import { studyStore, msgStore, variableStore } from "../modules/store.js";
   import { createEventDispatcher } from "svelte";
-  import { variableStore } from "../modules/store.js";
 
   export let _id,
     studyName,
@@ -26,6 +25,12 @@
   }
   function showResponses() {
     dispatch("showResponses", { studyId, studyName });
+  }
+
+  let selected = false;
+  function selectStudy() {
+    dispatch("selectStudy", { studyId, studyName });
+    selected = !selected;
   }
 
   function showStudy() {
@@ -140,18 +145,6 @@
       };
     }
   }
-
-  function downloadAsJson(exportObj, exportName) {
-    var dataStr =
-      "data:text/json;charset=utf-8," +
-      encodeURIComponent(JSON.stringify(exportObj));
-    var da = document.createElement("a");
-    da.setAttribute("href", dataStr);
-    da.setAttribute("download", exportName + ".json");
-    document.body.appendChild(da); // required for firefox
-    da.click();
-    da.remove();
-  }
 </script>
 
 <style>
@@ -240,9 +233,12 @@
   .select {
     border-bottom-right-radius: 0.25rem;
   }
+  .selected {
+    box-shadow: 0 1px 0px 3px rgba(255, 99, 71, 0.5) !important;
+  }
 </style>
 
-<div class="card">
+<div class="card" class:selected>
   <div class="delete" on:click={deleteStudy}>
     <svg style="width:24px;height:24px;" viewBox="0 0 24 24">
       <path
@@ -271,6 +267,8 @@
   <div class="created">imported: {formatDate(__created)}</div>
   <div class="actions">
     <div class="export" on:click={exportStudy}>export</div>
-    <div class="select">select</div>
+    <div class="select" on:click={selectStudy}>
+      {selected ? 'unselect' : 'select'}
+    </div>
   </div>
 </div>

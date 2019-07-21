@@ -6,8 +6,9 @@
   import StudyVariables from "../components/StudyVariables.svelte";
   import StudyUsers from "../components/StudyUsers.svelte";
   import StudyResponses from "../components/StudyResponses.svelte";
-  import { studyStore, msgStore } from "../modules/store.js";
+  import { studyStore, msgStore, responseStore } from "../modules/store.js";
   import { dbName } from "../modules/indexeddb.js";
+  import { downloadAsJson } from "../modules/utils.js";
 
   function dropDB() {
     if (!confirm("Drop current database?")) return;
@@ -40,6 +41,42 @@
       toggleUsers = false;
       toggleResponses = false;
     }
+  }
+
+  let selectedStudies = [];
+  function selectStudy(event) {
+    const study = event.detail;
+    const studyId = study.studyId;
+    let alreadySelected = false;
+    for (const studyItem of selectedStudies) {
+      if (studyItem.studyId === studyId) {
+        alreadySelected = true;
+        selectedStudies = selectedStudies.filter(v => v.studyId !== studyId);
+        break;
+      }
+    }
+    if (alreadySelected) return;
+    selectedStudies.push(study);
+    selectedStudies = selectedStudies;
+  }
+
+  $: disabled = selectedStudies.length ? false : true;
+  $: if (selectedStudies.length) {
+    console.log("show study actions", selectedStudies);
+  }
+  $: studyCount = $studyStore.length;
+
+  function exportSelected() {
+    if (!selectedStudies.length) return;
+    const exportData = [];
+    for (const study of selectedStudies) {
+      const studyData = $studyStore.filter(v => v._id === study.studyId)[0];
+      const taskResults = $responseStore.filter(
+        v => v.studyId === study.studyId
+      );
+      exportData.push({ dataSchema: studyData, taskResults });
+    }
+    downloadAsJson(exportData, `export_of_${selectedStudies.length}_studies`);
   }
 </script>
 
@@ -85,6 +122,39 @@
     font-size: 0.7rem;
     font-weight: 400;
   }
+  .actions {
+    margin-top: -0.5rem;
+    padding-bottom: 1rem;
+    display: flex;
+    align-items: baseline;
+    font-weight: 300;
+    /* color: rgb(202, 202, 202); */
+  }
+  .selectActions {
+    padding-left: 0.5em;
+  }
+  .action {
+    cursor: pointer;
+    font-weight: 400;
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+  }
+  .open {
+    color: white;
+    background-color: tomato;
+  }
+  .new {
+    /* background-color: rgba(255, 99, 71, 0.479); */
+    background-color: rgba(247, 100, 74, 0.3);
+  }
+  .export {
+    color: white;
+    background-color: #722040;
+  }
+  .info {
+    padding: 0.5rem 0;
+  }
 </style>
 
 <svelte:window on:keyup={closeDetailView} />
@@ -109,7 +179,25 @@
     <div class="close" on:click={() => (toggleResponses = false)}>x close</div>
   </div>
 {/if}
+<div class="actions">
+  <span class="info">
+    {studyCount < 2 ? studyCount + ' study' : studyCount + ' studies'}:
+  </span>
+  {#if selectedStudies.length}
+    <span class="selectActions" transition:fly={{ duration: 200, x: -10 }}>
+      <div class="action new" class:disabled>
+        create new study from selected ({selectedStudies.length})
+      </div>
+      <div class="action open" class:disabled>
+        open selected ({selectedStudies.length})
+      </div>
+      <div class="action export" class:disabled on:click={exportSelected}>
+        export selected studies ({selectedStudies.length})
+      </div>
+    </span>
+  {/if}
 
+</div>
 <div class="container" in:fade={{ duration: 300 }}>
   {#each $studyStore as study (study._id)}
     <div
@@ -120,7 +208,8 @@
         {...study}
         on:showVariables={showVars}
         on:showResponses={showResponses}
-        on:showUsers={showUsers} />
+        on:showUsers={showUsers}
+        on:selectStudy={selectStudy} />
     </div>
   {/each}
   <div class="study">

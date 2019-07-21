@@ -37,3 +37,14 @@ export const trunc = (t, n = 10) => t.substr(0, n - 1) + (t.length > n ? "..." :
 export const uuid = () => ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
     (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
 )
+export function downloadAsJson(exportObj, exportName) {
+    var dataStr =
+        "data:text/json;charset=utf-8," +
+        encodeURIComponent(JSON.stringify(exportObj));
+    var da = document.createElement("a");
+    da.setAttribute("href", dataStr);
+    da.setAttribute("download", exportName + ".json");
+    document.body.appendChild(da); // required for firefox
+    da.click();
+    da.remove();
+}
