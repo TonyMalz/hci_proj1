@@ -53,7 +53,6 @@
   .study {
     position: relative;
     height: 15ch;
-    cursor: pointer;
   }
   .debug {
     text-align: center;

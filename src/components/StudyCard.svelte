@@ -16,15 +16,16 @@
     earliestBeginOfDataGathering,
     latestBeginOfDataGathering;
 
+  const studyId = _id;
   const dispatch = createEventDispatcher();
   function showVariables() {
-    dispatch("showVariables", { studyId: _id, studyName });
+    dispatch("showVariables", { studyId, studyName });
   }
   function showUsers() {
-    dispatch("showUsers", { studyId: _id, studyName });
+    dispatch("showUsers", { studyId, studyName });
   }
   function showResponses() {
-    dispatch("showResponses", { studyId: _id, studyName });
+    dispatch("showResponses", { studyId, studyName });
   }
 
   function showStudy() {
@@ -113,6 +114,44 @@
     tx.objectStore("StudyVariables").getAll().onsuccess = e =>
       variableStore.set(e.target.result);
   }
+
+  function exportStudy() {
+    const studyData = $studyStore.filter(v => v._id === studyId)[0];
+    if (studyData) {
+      console.log("export study", studyId);
+
+      const res = db
+        .transaction("StudyResponses")
+        .objectStore("StudyResponses")
+        .index("studyId")
+        .getAll(studyId);
+      res.onsuccess = e => {
+        const taskResults = e.target.result;
+        downloadAsJson(
+          { dataSchema: studyData, taskResults },
+          `export_study_${studyId}_${studyName.replace(/\s+/g, "_")}`
+        );
+      };
+      res.onerror = e => {
+        downloadAsJson(
+          { dataSchema: studyData },
+          `export_study_${studyId}_${studyName.replace(/\s+/g, "_")}`
+        );
+      };
+    }
+  }
+
+  function downloadAsJson(exportObj, exportName) {
+    var dataStr =
+      "data:text/json;charset=utf-8," +
+      encodeURIComponent(JSON.stringify(exportObj));
+    var da = document.createElement("a");
+    da.setAttribute("href", dataStr);
+    da.setAttribute("download", exportName + ".json");
+    document.body.appendChild(da); // required for firefox
+    da.click();
+    da.remove();
+  }
 </script>
 
 <style>
@@ -170,6 +209,9 @@
   .vars:hover {
     text-decoration-line: underline;
   }
+  button {
+    z-index: 200;
+  }
 </style>
 
 <div class="card">
@@ -201,4 +243,7 @@
     {formatDate(endDate)}
   </div>
   <div class="created">imported: {formatDate(__created)}</div>
+  <!-- <div class="export">
+    <button on:click={exportStudy}>export</button>
+  </div> -->
 </div>
