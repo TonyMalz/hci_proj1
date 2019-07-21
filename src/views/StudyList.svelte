@@ -78,6 +78,21 @@
     }
     downloadAsJson(exportData, `export_of_${selectedStudies.length}_studies`);
   }
+
+  function openSelected() {
+    if (!selectedStudies.length) return;
+    for (const study of selectedStudies) {
+      const _id = study.studyId;
+      const studyName = study.studyName;
+      const msg = {
+        type: "navigation",
+        action: "openStudyTabs",
+        data: { _id, studyName }
+      };
+      $msgStore.push(msg);
+    }
+    $msgStore = $msgStore; // make sure store gets updated
+  }
 </script>
 
 <style>
@@ -188,7 +203,7 @@
       <div class="action new" class:disabled>
         create new study from selected ({selectedStudies.length})
       </div>
-      <div class="action open" class:disabled>
+      <div class="action open" class:disabled on:click={openSelected}>
         open selected ({selectedStudies.length})
       </div>
       <div class="action export" class:disabled on:click={exportSelected}>

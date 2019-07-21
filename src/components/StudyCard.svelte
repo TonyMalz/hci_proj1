@@ -234,7 +234,7 @@
     border-bottom-right-radius: 0.25rem;
   }
   .selected {
-    box-shadow: 0 1px 0px 3px rgba(255, 99, 71, 0.5) !important;
+    box-shadow: 0 0px 0px 0.2rem #72203f71 !important;
   }
 </style>
 
