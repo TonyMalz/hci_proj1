@@ -1354,7 +1354,7 @@ function create_else_block$1(ctx) {
 			if (if_block) if_block.c();
 			t1 = space();
 			attr(li, "class", "active svelte-1jmua38");
-			add_location(li, file$1, 227, 6, 6602);
+			add_location(li, file$1, 227, 6, 6606);
 		},
 
 		m: function mount(target, anchor) {
@@ -1430,7 +1430,7 @@ function create_if_block$1(ctx) {
 			if (if_block) if_block.c();
 			t1 = space();
 			attr(li, "class", "svelte-1jmua38");
-			add_location(li, file$1, 216, 6, 6309);
+			add_location(li, file$1, 216, 6, 6313);
 			dispose = listen(li, "click", click_handler_1);
 		},
 
@@ -1499,7 +1499,7 @@ function create_if_block_2(ctx) {
 			div = element("div");
 			div.textContent = "x";
 			attr(div, "class", "close svelte-1jmua38");
-			add_location(div, file$1, 230, 10, 6710);
+			add_location(div, file$1, 230, 10, 6714);
 			dispose = listen(div, "click", stop_propagation(prevent_default(click_handler_2)));
 		},
 
@@ -1534,7 +1534,7 @@ function create_if_block_1(ctx) {
 			div = element("div");
 			div.textContent = "x";
 			attr(div, "class", "close svelte-1jmua38");
-			add_location(div, file$1, 219, 10, 6411);
+			add_location(div, file$1, 219, 10, 6415);
 			dispose = listen(div, "click", stop_propagation(prevent_default(click_handler)));
 		},
 
@@ -1653,7 +1653,7 @@ function create_fragment$1(ctx) {
 				each_blocks[i].c();
 			}
 			attr(ul, "class", "svelte-1jmua38");
-			add_location(ul, file$1, 213, 0, 6231);
+			add_location(ul, file$1, 213, 0, 6235);
 		},
 
 		l: function claim(nodes) {
@@ -1775,7 +1775,7 @@ function instance$1($$self, $$props, $$invalidate) {
               id: 2
             });
             newTabs.push({
-              title: "Details " + studyName,
+              title: "User view " + studyName,
               type: "userview",
               studyId: study._id,
               id: 3
@@ -1834,7 +1834,7 @@ function instance$1($$self, $$props, $$invalidate) {
                   break;
                 case "userview":
                   newTabs.push({
-                    title: "Details " + studyName,
+                    title: "User view " + studyName,
                     type: "userview",
                     studyId: study._id,
                     id: id++
@@ -2888,36 +2888,36 @@ function create_fragment$6(ctx) {
 			contextpie.$$.fragment.c();
 			option0.__value = "1";
 			option0.value = option0.__value;
-			add_location(option0, file$6, 54, 6, 1411);
+			add_location(option0, file$6, 55, 6, 1435);
 			option1.__value = "2";
 			option1.value = option1.__value;
-			add_location(option1, file$6, 57, 6, 1512);
+			add_location(option1, file$6, 58, 6, 1536);
 			option2.__value = "3";
 			option2.value = option2.__value;
-			add_location(option2, file$6, 60, 6, 1613);
+			add_location(option2, file$6, 61, 6, 1637);
 			option3.__value = "4";
 			option3.value = option3.__value;
-			add_location(option3, file$6, 61, 6, 1695);
+			add_location(option3, file$6, 62, 6, 1719);
 			option4.__value = "5";
 			option4.value = option4.__value;
-			add_location(option4, file$6, 64, 6, 1796);
+			add_location(option4, file$6, 65, 6, 1820);
 			attr(select, "name", "user");
 			attr(select, "id", "userSelect");
-			add_location(select, file$6, 53, 4, 1367);
-			attr(div0, "class", "optionsContainer svelte-oe3a3e");
-			add_location(div0, file$6, 52, 2, 1331);
-			attr(div1, "class", "widget svelte-oe3a3e");
-			add_location(div1, file$6, 82, 4, 2387);
-			attr(div2, "class", "widget svelte-oe3a3e");
-			add_location(div2, file$6, 85, 4, 2472);
-			attr(div3, "class", "widget svelte-oe3a3e");
-			add_location(div3, file$6, 88, 4, 2531);
-			attr(div4, "class", "widget svelte-oe3a3e");
-			add_location(div4, file$6, 91, 4, 2589);
-			attr(div5, "class", "widgetContainer svelte-oe3a3e");
-			add_location(div5, file$6, 81, 2, 2352);
-			attr(div6, "class", "userview svelte-oe3a3e");
-			add_location(div6, file$6, 51, 0, 1277);
+			add_location(select, file$6, 54, 4, 1391);
+			attr(div0, "class", "optionsContainer svelte-uwnouz");
+			add_location(div0, file$6, 53, 2, 1355);
+			attr(div1, "class", "widget svelte-uwnouz");
+			add_location(div1, file$6, 83, 4, 2411);
+			attr(div2, "class", "widget svelte-uwnouz");
+			add_location(div2, file$6, 86, 4, 2496);
+			attr(div3, "class", "widget svelte-uwnouz");
+			add_location(div3, file$6, 89, 4, 2555);
+			attr(div4, "class", "widget svelte-uwnouz");
+			add_location(div4, file$6, 92, 4, 2613);
+			attr(div5, "class", "widgetContainer svelte-uwnouz");
+			add_location(div5, file$6, 82, 2, 2376);
+			attr(div6, "class", "userview svelte-uwnouz");
+			add_location(div6, file$6, 52, 0, 1301);
 		},
 
 		l: function claim(nodes) {
@@ -6145,7 +6145,7 @@ function create_each_block_1$2(ctx) {
 		c: function create() {
 			li = element("li");
 			t = text(t_value);
-			add_location(li, file$g, 81, 6, 2072);
+			add_location(li, file$g, 81, 6, 2071);
 		},
 
 		m: function mount(target, anchor) {
@@ -6185,11 +6185,11 @@ function create_each_block$5(ctx) {
 			input.__value = input_value_value = ctx.name;
 			input.value = input.__value;
 			attr(input, "class", "svelte-1amgvg3");
-			add_location(input, file$g, 96, 8, 2429);
+			add_location(input, file$g, 96, 8, 2428);
 			attr(label, "for", label_for_value = ctx.name);
 			attr(label, "class", "svelte-1amgvg3");
-			add_location(label, file$g, 101, 8, 2562);
-			add_location(li, file$g, 95, 6, 2415);
+			add_location(label, file$g, 101, 8, 2561);
+			add_location(li, file$g, 95, 6, 2414);
 			dispose = listen(input, "change", ctx.input_change_handler);
 		},
 
@@ -6264,14 +6264,14 @@ function create_fragment$g(ctx) {
 			t0 = text("Create New\r\n    ");
 			strong = element("strong");
 			strong.textContent = "Study";
-			t2 = text("\r\n  Combine the following studies:\r\n  ");
+			t2 = text("\r\n  Combine the following studies\r\n  ");
 			ul0 = element("ul");
 
 			for (var i = 0; i < each_blocks_1.length; i += 1) {
 				each_blocks_1[i].c();
 			}
 
-			t3 = text("\r\n  Into new study:\r\n  ");
+			t3 = text("\r\n  into new study:\r\n  ");
 			input = element("input");
 			t4 = space();
 			p1 = element("p");
@@ -6288,19 +6288,19 @@ function create_fragment$g(ctx) {
 			div0.textContent = "Create Study";
 			add_location(strong, file$g, 76, 4, 1954);
 			add_location(p0, file$g, 74, 2, 1929);
-			add_location(ul0, file$g, 79, 2, 2022);
+			add_location(ul0, file$g, 79, 2, 2021);
 			attr(input, "type", "text");
 			attr(input, "placeholder", "New Study Name");
 			input.autofocus = true;
 			attr(input, "spellcheck", "false");
 			attr(input, "class", "svelte-1amgvg3");
-			add_location(input, file$g, 85, 2, 2143);
-			add_location(p1, file$g, 92, 2, 2274);
+			add_location(input, file$g, 85, 2, 2142);
+			add_location(p1, file$g, 92, 2, 2273);
 			attr(ul1, "class", "varList svelte-1amgvg3");
-			add_location(ul1, file$g, 93, 2, 2341);
+			add_location(ul1, file$g, 93, 2, 2340);
 			attr(div0, "class", "create svelte-1amgvg3");
 			toggle_class(div0, "disabled", ctx.disabled);
-			add_location(div0, file$g, 105, 2, 2633);
+			add_location(div0, file$g, 105, 2, 2632);
 			attr(div1, "class", "container svelte-1amgvg3");
 			add_location(div1, file$g, 73, 0, 1902);
 			dispose = listen(input, "input", ctx.input_input_handler);
@@ -6501,7 +6501,7 @@ function get_each_context$6(ctx, list, i) {
 	return child_ctx;
 }
 
-// (190:0) {#if toggleNewStudy}
+// (192:0) {#if toggleNewStudy}
 function create_if_block_5(ctx) {
 	var div1, t, div0, div1_transition, current, dispose;
 
@@ -6517,10 +6517,10 @@ function create_if_block_5(ctx) {
 			t = space();
 			div0 = element("div");
 			div0.textContent = "x close";
-			attr(div0, "class", "close svelte-110m2ta");
-			add_location(div0, file$h, 192, 4, 5181);
-			attr(div1, "class", "varInfo svelte-110m2ta");
-			add_location(div1, file$h, 190, 2, 5071);
+			attr(div0, "class", "close svelte-1bzpjta");
+			add_location(div0, file$h, 194, 4, 5240);
+			attr(div1, "class", "varInfo svelte-1bzpjta");
+			add_location(div1, file$h, 192, 2, 5130);
 			dispose = listen(div0, "click", ctx.click_handler);
 		},
 
@@ -6575,7 +6575,7 @@ function create_if_block_5(ctx) {
 	};
 }
 
-// (197:0) {#if toggleVars}
+// (199:0) {#if toggleVars}
 function create_if_block_4(ctx) {
 	var div1, t, div0, div1_transition, current, dispose;
 
@@ -6599,10 +6599,10 @@ function create_if_block_4(ctx) {
 			t = space();
 			div0 = element("div");
 			div0.textContent = "x close";
-			attr(div0, "class", "close svelte-110m2ta");
-			add_location(div0, file$h, 199, 4, 5406);
-			attr(div1, "class", "varInfo svelte-110m2ta");
-			add_location(div1, file$h, 197, 2, 5296);
+			attr(div0, "class", "close svelte-1bzpjta");
+			add_location(div0, file$h, 201, 4, 5465);
+			attr(div1, "class", "varInfo svelte-1bzpjta");
+			add_location(div1, file$h, 199, 2, 5355);
 			dispose = listen(div0, "click", ctx.click_handler_1);
 		},
 
@@ -6658,7 +6658,7 @@ function create_if_block_4(ctx) {
 	};
 }
 
-// (204:0) {#if toggleUsers}
+// (206:0) {#if toggleUsers}
 function create_if_block_3(ctx) {
 	var div1, t, div0, div1_transition, current, dispose;
 
@@ -6679,10 +6679,10 @@ function create_if_block_3(ctx) {
 			t = space();
 			div0 = element("div");
 			div0.textContent = "x close";
-			attr(div0, "class", "close svelte-110m2ta");
-			add_location(div0, file$h, 206, 4, 5624);
-			attr(div1, "class", "varInfo svelte-110m2ta");
-			add_location(div1, file$h, 204, 2, 5518);
+			attr(div0, "class", "close svelte-1bzpjta");
+			add_location(div0, file$h, 208, 4, 5683);
+			attr(div1, "class", "varInfo svelte-1bzpjta");
+			add_location(div1, file$h, 206, 2, 5577);
 			dispose = listen(div0, "click", ctx.click_handler_2);
 		},
 
@@ -6738,7 +6738,7 @@ function create_if_block_3(ctx) {
 	};
 }
 
-// (211:0) {#if toggleResponses}
+// (213:0) {#if toggleResponses}
 function create_if_block_2$1(ctx) {
 	var div1, t, div0, div1_transition, current, dispose;
 
@@ -6762,10 +6762,10 @@ function create_if_block_2$1(ctx) {
 			t = space();
 			div0 = element("div");
 			div0.textContent = "x close";
-			attr(div0, "class", "close svelte-110m2ta");
-			add_location(div0, file$h, 213, 4, 5851);
-			attr(div1, "class", "varInfo svelte-110m2ta");
-			add_location(div1, file$h, 211, 2, 5741);
+			attr(div0, "class", "close svelte-1bzpjta");
+			add_location(div0, file$h, 215, 4, 5910);
+			attr(div1, "class", "varInfo svelte-1bzpjta");
+			add_location(div1, file$h, 213, 2, 5800);
 			dispose = listen(div0, "click", ctx.click_handler_3);
 		},
 
@@ -6821,7 +6821,7 @@ function create_if_block_2$1(ctx) {
 	};
 }
 
-// (218:2) {#if studyCount}
+// (220:2) {#if studyCount}
 function create_if_block_1$1(ctx) {
 	var span, t0_value = ctx.studyCount < 2 ? ctx.studyCount + ' study' : ctx.studyCount + ' studies', t0, t1;
 
@@ -6830,8 +6830,8 @@ function create_if_block_1$1(ctx) {
 			span = element("span");
 			t0 = text(t0_value);
 			t1 = text(":");
-			attr(span, "class", "info svelte-110m2ta");
-			add_location(span, file$h, 218, 4, 5992);
+			attr(span, "class", "info svelte-1bzpjta");
+			add_location(span, file$h, 220, 4, 6051);
 		},
 
 		m: function mount(target, anchor) {
@@ -6854,7 +6854,7 @@ function create_if_block_1$1(ctx) {
 	};
 }
 
-// (223:2) {#if selectedStudies.length}
+// (225:2) {#if selectedStudies.length}
 function create_if_block$2(ctx) {
 	var span, div0, t0, t1_value = ctx.selectedStudies.length, t1, t2, t3, div1, t4, t5_value = ctx.selectedStudies.length, t5, t6, t7, div2, t8, t9_value = ctx.selectedStudies.length, t9, t10, span_transition, current, dispose;
 
@@ -6875,17 +6875,17 @@ function create_if_block$2(ctx) {
 			t8 = text("export selected studies (");
 			t9 = text(t9_value);
 			t10 = text(")");
-			attr(div0, "class", "action new svelte-110m2ta");
+			attr(div0, "class", "action new svelte-1bzpjta");
 			toggle_class(div0, "disabled", ctx.disabled);
-			add_location(div0, file$h, 224, 6, 6225);
-			attr(div1, "class", "action open svelte-110m2ta");
+			add_location(div0, file$h, 226, 6, 6284);
+			attr(div1, "class", "action open svelte-1bzpjta");
 			toggle_class(div1, "disabled", ctx.disabled);
-			add_location(div1, file$h, 227, 6, 6386);
-			attr(div2, "class", "action export svelte-110m2ta");
+			add_location(div1, file$h, 229, 6, 6445);
+			attr(div2, "class", "action export svelte-1bzpjta");
 			toggle_class(div2, "disabled", ctx.disabled);
-			add_location(div2, file$h, 230, 6, 6522);
-			attr(span, "class", "selectActions svelte-110m2ta");
-			add_location(span, file$h, 223, 4, 6146);
+			add_location(div2, file$h, 232, 6, 6581);
+			attr(span, "class", "selectActions svelte-1bzpjta");
+			add_location(span, file$h, 225, 4, 6205);
 
 			dispose = [
 				listen(div0, "click", ctx.createNewFromSelected),
@@ -6967,7 +6967,7 @@ function create_if_block$2(ctx) {
 	};
 }
 
-// (239:2) {#each $studyStore as study (study._id)}
+// (241:2) {#each $studyStore as study (study._id)}
 function create_each_block$6(key_1, ctx) {
 	var div, div_intro, rect, stop_animation = noop, current;
 
@@ -6993,8 +6993,8 @@ function create_each_block$6(key_1, ctx) {
 		c: function create() {
 			div = element("div");
 			studycard.$$.fragment.c();
-			attr(div, "class", "study svelte-110m2ta");
-			add_location(div, file$h, 239, 4, 6799);
+			attr(div, "class", "study svelte-1bzpjta");
+			add_location(div, file$h, 241, 4, 6858);
 			this.first = div;
 		},
 
@@ -7106,14 +7106,14 @@ function create_fragment$h(ctx) {
 			t7 = space();
 			div3 = element("div");
 			div3.textContent = "Debug: wipe database";
-			attr(div0, "class", "actions svelte-110m2ta");
-			add_location(div0, file$h, 216, 0, 5945);
-			attr(div1, "class", "study svelte-110m2ta");
-			add_location(div1, file$h, 251, 2, 7127);
-			attr(div2, "class", "container svelte-110m2ta");
-			add_location(div2, file$h, 237, 0, 6698);
-			attr(div3, "class", "debug svelte-110m2ta");
-			add_location(div3, file$h, 256, 0, 7191);
+			attr(div0, "class", "actions svelte-1bzpjta");
+			add_location(div0, file$h, 218, 0, 6004);
+			attr(div1, "class", "study svelte-1bzpjta");
+			add_location(div1, file$h, 253, 2, 7186);
+			attr(div2, "class", "container svelte-1bzpjta");
+			add_location(div2, file$h, 239, 0, 6757);
+			attr(div3, "class", "debug svelte-1bzpjta");
+			add_location(div3, file$h, 258, 0, 7250);
 
 			dispose = [
 				listen(window_1, "keyup", ctx.closeDetailView),

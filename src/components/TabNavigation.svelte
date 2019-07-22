@@ -37,7 +37,7 @@
               id: 2
             });
             newTabs.push({
-              title: "Details " + studyName,
+              title: "User view " + studyName,
               type: "userview",
               studyId: study._id,
               id: 3
@@ -98,7 +98,7 @@
                   break;
                 case "userview":
                   newTabs.push({
-                    title: "Details " + studyName,
+                    title: "User view " + studyName,
                     type: "userview",
                     studyId: study._id,
                     id: id++

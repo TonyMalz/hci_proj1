@@ -158,28 +158,30 @@
   }
   .action {
     cursor: pointer;
-    font-weight: 400;
+    /* font-weight: 400; */
     display: inline-block;
     padding: 0.5rem 1rem;
     border-radius: 0.25rem;
     margin: 0 0.5em;
     box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.25);
+    color: white;
+    background-color: #72203fcb;
   }
   .action:hover {
     box-shadow: 0 2px 10px 1px rgba(0, 0, 0, 0.2);
   }
-  .open {
+  /* .open {
     color: white;
     background-color: tomato;
   }
   .new {
-    /* background-color: rgba(255, 99, 71, 0.479); */
+    background-color: rgba(255, 99, 71, 0.479);
     background-color: rgba(247, 100, 74, 0.3);
   }
   .export {
     color: white;
     background-color: #722040;
-  }
+  } */
   .info {
     padding: 0.5rem 0;
   }

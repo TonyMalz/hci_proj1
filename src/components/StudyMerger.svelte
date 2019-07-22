@@ -76,13 +76,13 @@
     Create New
     <strong>Study</strong>
   </p>
-  Combine the following studies:
+  Combine the following studies
   <ul>
     {#each selectedStudies as study}
       <li>{study.studyName}</li>
     {/each}
   </ul>
-  Into new study:
+  into new study:
   <input
     type="text"
     placeholder="New Study Name"
