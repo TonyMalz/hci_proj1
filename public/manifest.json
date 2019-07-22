@@ -1,0 +1,23 @@
+{
+    "dir": "ltr",
+    "lang": "English",
+    "name": "SensQVis",
+    "scope": "/",
+    "display": "browser",
+    "start_url": "https://sensqvis.netlify.com/",
+    // "start_url": "http://localhost:5000/",
+    "short_name": "SensQVis",
+    "theme_color": "transparent",
+    "description": "",
+    "orientation": "landscape",
+    "background_color": "transparent",
+    "prefer_related_applications": false,
+    "generated": "true",
+    "icons": [
+        {
+            "src": "https://sensqvis.netlify.com/favicon.png",
+            // "src": "http://localhost:5000/favicon.png",
+            "sizes": "128x128"
+        }
+    ]
+}
