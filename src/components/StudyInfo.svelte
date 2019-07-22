@@ -1,38 +1,37 @@
 <script>
-  import { activeTabIdx, tabStore, studyStore } from "../modules/store.js";
+  import {
+    activeTabIdx,
+    tabStore,
+    studyStore,
+    responseStore,
+    userStore
+  } from "../modules/store.js";
+  import { formatDate } from "../modules/utils";
   import { db } from "../modules/indexeddb";
 
   let name = "Test Study";
-  let time = "78%";
   let participants = 27;
   let datasets = 1326;
   let activeTab = 0;
+  let endDate;
+  let startDate;
+
   activeTabIdx.subscribe(idx => {
     const currentStudyId = $tabStore[idx].studyId;
     if (currentStudyId) {
       const currentStudy = $studyStore.filter(v => v._id === currentStudyId)[0];
-      // console.log("info", currentStudy);
       name = currentStudy.studyName;
-      //FIXME: use stores instead of db
-      let res = db
-        .transaction("StudyResponses")
-        .objectStore("StudyResponses")
-        .index("studyId")
-        .count(currentStudyId);
-      res.onsuccess = e => {
-        const count = e.target.result;
-        datasets = count;
-      };
-
-      res = db
-        .transaction("Users")
-        .objectStore("Users")
-        .index("studyId")
-        .count(currentStudyId);
-      res.onsuccess = e => {
-        const count = e.target.result;
-        participants = count;
-      };
+      //calc last day of study
+      let days =
+        Math.max(
+          currentStudy.minimumStudyDurationPerPerson,
+          currentStudy.maximumStudyDurationPerPerson
+        ) || 0;
+      endDate = new Date(currentStudy.latestBeginOfDataGathering);
+      endDate.setDate(endDate.getDate() + days);
+      startDate = currentStudy.earliestBeginOfDataGathering;
+      datasets = $responseStore.filter(v => v.studyId == currentStudyId).length;
+      participants = $userStore.filter(v => v.studyId == currentStudyId).length;
     }
   });
 </script>
@@ -42,20 +41,26 @@
     width: 100%;
     height: 100%;
     display: grid;
-    grid-template-columns: 3fr 1fr 1fr 1fr;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
     grid-gap: 1em;
+    justify-items: center;
   }
   .appTitle {
     font-weight: bold;
     width: 100%;
     height: 100%;
   }
+  .name {
+    justify-self: start;
+  }
 </style>
 
 {#if $activeTabIdx}
   <div id="info">
-    <div>Study name: {name}</div>
-    <div>Total study time elapsed: {time}</div>
+    <div class="name">Study name: {name}</div>
+    <div>
+      Duration: {formatDate(startDate, false)} - {formatDate(endDate, false)}
+    </div>
     <div>Number of participants: {participants}</div>
     <div>Datasets collected: {datasets}</div>
   </div>
