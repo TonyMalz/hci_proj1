@@ -17,6 +17,7 @@
     const variable = selectedVariables[0];
     const variableName = variable.variableName;
     let data = variable.results.map(v => v.value);
+
     if (variable.dataformat.textChoices) {
       // map values to labels
       const answerMap = {};
@@ -25,13 +26,13 @@
       }
       data = data.map(v => answerMap[v]);
     }
-
-    const spec = {
-      description: `Count of ${variableName} results`,
-      title: { text: variableName, fontSize: 12 },
+    const graphs = [];
+    const graph = {
       data: {
         values: data
       },
+      description: `Count of ${variableName} results`,
+      title: { text: variableName, fontSize: 16 },
       mark: "bar",
       encoding: {
         y: {
@@ -51,7 +52,50 @@
         }
       }
     };
+    graphs.push(graph);
 
+    if (variable.measure === "scale") {
+      const graph = {
+        data: {
+          values: data
+        },
+        mark: "tick",
+        encoding: {
+          x: {
+            field: "data",
+            type: "quantitative",
+            //scale: { domain: [Math.min(...data), Math.max(...data)] },
+            axis: { title: variableName, domain: false }
+          }
+        }
+      };
+      graphs.push(graph);
+
+      const graphTime = {
+        data: {
+          values: variable.results
+        },
+        mark: "bar",
+        encoding: {
+          y: {
+            field: "value",
+            type: "quantitative",
+            //scale: { domain: [Math.min(...data), Math.max(...data)] },
+            axis: { title: variableName, domain: false }
+          },
+          x: {
+            field: "uid",
+            type: "nominal"
+            //scale: { domain: [Math.min(...data), Math.max(...data)] },
+          }
+        }
+      };
+      graphs.push(graphTime);
+    }
+
+    const spec = {
+      vconcat: graphs
+    };
     vegaEmbed(`#${chartId}`, spec, vegaOptions);
   });
 </script>

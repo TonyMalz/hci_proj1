@@ -3,6 +3,7 @@
   import { studyStore, variableStore } from "../modules/store.js";
   import { formatDate } from "../modules/utils.js";
   import CustomChart from "../charts/CustomChart.svelte";
+  import Custom3dChart from "../charts/Custom3dChart.svelte";
 
   // default to first study in store
   let studyId = $studyStore[0]._id;
@@ -96,7 +97,11 @@
     </div>
     <div class="chart">
       {#if selectedVariables.length}
-        <CustomChart {selectedVariables} />
+        {#if selectedVariables.length > 2}
+          <Custom3dChart {selectedVariables} />
+        {:else}
+          <CustomChart {selectedVariables} />
+        {/if}
       {:else}Chart{/if}
     </div>
   </div>
