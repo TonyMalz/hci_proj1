@@ -3339,7 +3339,7 @@ function create_each_block$1(ctx) {
 			t = text(t_value);
 			option.__value = option_value_value = ctx.dv;
 			option.value = option.__value;
-			add_location(option, file$8, 283, 8, 7216);
+			add_location(option, file$8, 283, 8, 7217);
 		},
 
 		m: function mount(target, anchor) {
@@ -3416,17 +3416,17 @@ function create_fragment$8(ctx) {
 			attr(select, "name", "dv");
 			attr(select, "id", "dv");
 			attr(select, "class", "svelte-2ebd0p");
-			add_location(select, file$8, 277, 4, 7070);
+			add_location(select, file$8, 277, 4, 7071);
 			attr(div0, "class", "filter svelte-2ebd0p");
-			add_location(div0, file$8, 275, 2, 7029);
+			add_location(div0, file$8, 275, 2, 7030);
 			attr(div1, "id", "mainChart");
 			set_style(div1, "width", "100%");
 			set_style(div1, "height", "100%");
-			add_location(div1, file$8, 292, 4, 7482);
+			add_location(div1, file$8, 292, 4, 7483);
 			attr(div2, "class", "charts svelte-2ebd0p");
-			add_location(div2, file$8, 291, 2, 7456);
+			add_location(div2, file$8, 291, 2, 7457);
 			attr(div3, "class", "container svelte-2ebd0p");
-			add_location(div3, file$8, 274, 0, 7002);
+			add_location(div3, file$8, 274, 0, 7003);
 
 			dispose = [
 				listen(select, "change", ctx.select_change_handler),
@@ -3650,7 +3650,7 @@ function instance$8($$self, $$props, $$invalidate) {
         calculable: true,
         precision: 0.1,
         text: ["Mean"],
-        textGap: 2,
+        textGap: 10,
         textStyle: {
           color: "#333"
         },

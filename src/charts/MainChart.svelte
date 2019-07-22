@@ -121,7 +121,7 @@
         calculable: true,
         precision: 0.1,
         text: ["Mean"],
-        textGap: 2,
+        textGap: 10,
         textStyle: {
           color: "#333"
         },
