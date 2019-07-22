@@ -1,8 +1,11 @@
 <script>
   import { onMount } from "svelte";
   import { trunc } from "../modules/utils.js";
+  //   export let selectedVariables = [];
   export let selectedVariables = [];
   const chartId = `viscustom`;
+  let isMounted = false;
+  $: updateGraphs(selectedVariables);
 
   // vega-lite charts
   const vegaOptions = {
@@ -12,9 +15,17 @@
     downloadFileName: `sensQvis_chart_custom`
   };
 
-  onMount(() => {
+  function updateGraphs(selectedVariables) {
+    if (!isMounted) return;
     if (!selectedVariables.length) return;
-    const variable = selectedVariables[0];
+    let spec = getGraph(selectedVariables[0]);
+    if (selectedVariables.length === 2) {
+      spec = { hconcat: [spec, getGraph(selectedVariables[1])] };
+    }
+
+    vegaEmbed(`#${chartId}`, spec, vegaOptions);
+  }
+  function getGraph(variable) {
     const variableName = variable.variableName;
     let data = variable.results.map(v => v.value);
 
@@ -125,6 +136,15 @@
     const spec = {
       vconcat: graphs
     };
+    return spec;
+  }
+  onMount(() => {
+    isMounted = true;
+    if (!selectedVariables.length) return;
+    let spec = getGraph(selectedVariables[0]);
+    if (selectedVariables.length === 2) {
+      spec = { hconcat: [spec, getGraph(selectedVariables[1])] };
+    }
     vegaEmbed(`#${chartId}`, spec, vegaOptions);
   });
 </script>

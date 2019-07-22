@@ -9700,7 +9700,7 @@ function create_fragment$n(ctx) {
 		c: function create() {
 			div = element("div");
 			attr(div, "id", ctx.chartId);
-			add_location(div, file$n, 131, 0, 3527);
+			add_location(div, file$n, 151, 0, 4176);
 		},
 
 		l: function claim(nodes) {
@@ -9723,83 +9723,94 @@ function create_fragment$n(ctx) {
 	};
 }
 
-function instance$n($$self, $$props, $$invalidate) {
-	
-  let { selectedVariables = [] } = $$props;
-  const chartId = `viscustom`;
+function getGraph(variable) {
+  const variableName = variable.variableName;
+  let data = variable.results.map(v => v.value);
 
-  // vega-lite charts
-  const vegaOptions = {
-    renderer: "svg",
-    mode: "vega-lite",
-    actions: { export: true, source: false, editor: false, compiled: false },
-    downloadFileName: `sensQvis_chart_custom`
-  };
-
-  onMount(() => {
-    if (!selectedVariables.length) return;
-    const variable = selectedVariables[0];
-    const variableName = variable.variableName;
-    let data = variable.results.map(v => v.value);
-
-    if (variable.dataformat.textChoices) {
-      // map values to labels
-      const answerMap = {};
-      for (const choice of variable.dataformat.textChoices) {
-        answerMap[choice.value] = trunc(choice.valueLabel || choice.text);
-      }
-      data = data.map(v => answerMap[v]);
+  if (variable.dataformat.textChoices) {
+    // map values to labels
+    const answerMap = {};
+    for (const choice of variable.dataformat.textChoices) {
+      answerMap[choice.value] = trunc(choice.valueLabel || choice.text);
     }
-    const graphs = [];
+    data = data.map(v => answerMap[v]);
+  }
+  const graphs = [];
+  const graph = {
+    data: {
+      values: data
+    },
+    description: `Count of ${variableName} results`,
+    title: { text: variableName, fontSize: 16 },
+    mark: "bar",
+    encoding: {
+      y: {
+        field: "data",
+        type: "nominal",
+        axis: {
+          title: null,
+          domain: false,
+          ticks: false,
+          labelPadding: 5
+        }
+      },
+      x: {
+        aggregate: "count",
+        type: "quantitative",
+        axis: { domain: false, titleFontWeight: 300 }
+      }
+    }
+  };
+  graphs.push(graph);
+
+  if (variable.measure === "scale") {
     const graph = {
       data: {
         values: data
       },
-      description: `Count of ${variableName} results`,
-      title: { text: variableName, fontSize: 16 },
-      mark: "bar",
+      mark: "tick",
       encoding: {
-        y: {
-          field: "data",
-          type: "nominal",
-          axis: {
-            title: null,
-            domain: false,
-            ticks: false,
-            labelPadding: 5
-          }
-        },
         x: {
-          aggregate: "count",
+          field: "data",
           type: "quantitative",
-          axis: { domain: false, titleFontWeight: 300 }
+          //scale: { domain: [Math.min(...data), Math.max(...data)] },
+          axis: { title: variableName, domain: false }
         }
       }
     };
     graphs.push(graph);
 
-    if (variable.measure === "scale") {
-      const graph = {
-        data: {
-          values: data
+    const graphUID = {
+      data: {
+        values: variable.results
+      },
+      mark: "bar",
+      encoding: {
+        y: {
+          field: "value",
+          aggregate: "mean",
+          type: "quantitative",
+          //scale: { domain: [Math.min(...data), Math.max(...data)] },
+          axis: { title: variableName, domain: false }
         },
-        mark: "tick",
-        encoding: {
-          x: {
-            field: "data",
-            type: "quantitative",
-            //scale: { domain: [Math.min(...data), Math.max(...data)] },
-            axis: { title: variableName, domain: false }
-          }
+        x: {
+          field: "uid",
+          type: "nominal"
+          //scale: { domain: [Math.min(...data), Math.max(...data)] },
         }
-      };
-      graphs.push(graph);
+      }
+    };
+    graphs.push(graphUID);
 
-      const graphUID = {
+    if (!variable.isDemographic) {
+      const graphTime = {
         data: {
           values: variable.results
         },
-        mark: "bar",
+        mark: {
+          type: "line",
+          interpolate: "monotone"
+        },
         encoding: {
           y: {
             field: "value",
@@ -9809,46 +9820,55 @@ function instance$n($$self, $$props, $$invalidate) {
             axis: { title: variableName, domain: false }
           },
           x: {
-            field: "uid",
-            type: "nominal"
+            field: "date",
+            type: "temporal",
+            timeUnit: "day"
             //scale: { domain: [Math.min(...data), Math.max(...data)] },
           }
         }
       };
-      graphs.push(graphUID);
+      graphs.push(graphTime);
+    }
+  }
 
-      if (!variable.isDemographic) {
-        const graphTime = {
-          data: {
-            values: variable.results
-          },
-          mark: {
-            type: "line",
-            interpolate: "monotone"
-          },
-          encoding: {
-            y: {
-              field: "value",
-              aggregate: "mean",
-              type: "quantitative",
-              //scale: { domain: [Math.min(...data), Math.max(...data)] },
-              axis: { title: variableName, domain: false }
-            },
-            x: {
-              field: "date",
-              type: "temporal",
-              timeUnit: "day"
-              //scale: { domain: [Math.min(...data), Math.max(...data)] },
-            }
-          }
-        };
-        graphs.push(graphTime);
-      }
+  const spec = {
+    vconcat: graphs
+  };
+  return spec;
+}
+
+function instance$n($$self, $$props, $$invalidate) {
+	
+  //   export let selectedVariables = [];
+  let { selectedVariables = [] } = $$props;
+  const chartId = `viscustom`;
+  let isMounted = false;
+
+  // vega-lite charts
+  const vegaOptions = {
+    renderer: "svg",
+    mode: "vega-lite",
+    actions: { export: true, source: false, editor: false, compiled: false },
+    downloadFileName: `sensQvis_chart_custom`
+  };
+
+  function updateGraphs(selectedVariables) {
+    if (!isMounted) return;
+    if (!selectedVariables.length) return;
+    let spec = getGraph(selectedVariables[0]);
+    if (selectedVariables.length === 2) {
+      spec = { hconcat: [spec, getGraph(selectedVariables[1])] };
     }
 
-    const spec = {
-      vconcat: graphs
-    };
+    vegaEmbed(`#${chartId}`, spec, vegaOptions);
+  }
+  onMount(() => {
+    isMounted = true;
+    if (!selectedVariables.length) return;
+    let spec = getGraph(selectedVariables[0]);
+    if (selectedVariables.length === 2) {
+      spec = { hconcat: [spec, getGraph(selectedVariables[1])] };
+    }
     vegaEmbed(`#${chartId}`, spec, vegaOptions);
   });
 
@@ -9859,6 +9879,10 @@ function instance$n($$self, $$props, $$invalidate) {
 
 	$$self.$set = $$props => {
 		if ('selectedVariables' in $$props) $$invalidate('selectedVariables', selectedVariables = $$props.selectedVariables);
+	};
+
+	$$self.$$.update = ($$dirty = { selectedVariables: 1 }) => {
+		if ($$dirty.selectedVariables) { updateGraphs(selectedVariables); }
 	};
 
 	return { selectedVariables, chartId };
