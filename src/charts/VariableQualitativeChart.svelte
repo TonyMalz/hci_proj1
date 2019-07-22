@@ -40,7 +40,7 @@
 
 <label for="showmore">
   <input type="checkbox" id="showmore" bind:checked={details} />
-  <u>show {details ? 'less' : 'more'} data</u>
+  <u>Show {details ? 'less' : 'more'} data</u>
 </label>
 <table>
   <thead>

@@ -187,7 +187,7 @@
     background: #f5f5f5;
     font-size: 0.9rem;
     display: inline-block;
-    box-shadow: inset 0 -2px 0px 1px white;
+    box-shadow: inset 0px 2px 0px 1px white;
   }
 
   li div {
@@ -199,13 +199,26 @@
   /* Change the link color to #111 (black) on hover */
   li:hover {
     color: inherit;
-    border-top: 1px solid rgb(255, 175, 160);
+    /* border-top: 1px solid rgb(255, 175, 160); */
+    box-shadow: inset 0px 2px 0px 0px rgb(255, 175, 160);
   }
   .active {
+    position: relative;
     color: inherit;
     background: white;
     font-weight: 400;
-    border-top: 1px solid tomato !important;
+    /* border-top: 1px solid tomato !important; */
+    box-shadow: inset 0px 2px 0px 0px tomato,
+      0px 0px 1px 0px rgba(0, 0, 0, 0.25);
+  }
+  .active::before {
+    content: " ";
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    bottom: -3px;
+    border: 4px solid white;
+    z-index: 1;
   }
   .close:hover {
     background-color: rgba(212, 212, 212, 0.6);

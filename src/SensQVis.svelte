@@ -37,7 +37,7 @@
   }
 
   nav {
-    border-top: 1px solid rgba(255, 62, 0, 0.1);
+    /* border-top: 1px solid rgba(255, 62, 0, 0.1); */
     font-weight: 300;
     grid-area: nav;
     background: var(--color-nav);
@@ -47,6 +47,7 @@
   }
 
   section {
+    box-shadow: 1px 0 0 3px #f5f5f5;
     position: relative;
     padding: 1em;
     grid-area: content;

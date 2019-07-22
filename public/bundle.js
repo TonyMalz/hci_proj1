@@ -1334,7 +1334,7 @@ function get_each_context(ctx, list, i) {
 	return child_ctx;
 }
 
-// (229:4) {:else}
+// (242:4) {:else}
 function create_else_block$1(ctx) {
 	var li, t, current;
 
@@ -1352,8 +1352,8 @@ function create_else_block$1(ctx) {
 			tabitem.$$.fragment.c();
 			t = space();
 			if (if_block) if_block.c();
-			attr(li, "class", "active svelte-1jmua38");
-			add_location(li, file$1, 229, 6, 6594);
+			attr(li, "class", "active svelte-lb0mha");
+			add_location(li, file$1, 242, 6, 6954);
 		},
 
 		m: function mount(target, anchor) {
@@ -1405,7 +1405,7 @@ function create_else_block$1(ctx) {
 	};
 }
 
-// (218:4) {#if idx !== $activeTabIdx}
+// (231:4) {#if idx !== $activeTabIdx}
 function create_if_block$1(ctx) {
 	var li, t, current, dispose;
 
@@ -1426,8 +1426,8 @@ function create_if_block$1(ctx) {
 			tabitem.$$.fragment.c();
 			t = space();
 			if (if_block) if_block.c();
-			attr(li, "class", "svelte-1jmua38");
-			add_location(li, file$1, 218, 6, 6301);
+			attr(li, "class", "svelte-lb0mha");
+			add_location(li, file$1, 231, 6, 6661);
 			dispose = listen(li, "click", click_handler_1);
 		},
 
@@ -1482,7 +1482,7 @@ function create_if_block$1(ctx) {
 	};
 }
 
-// (232:8) {#if idx !== 0}
+// (245:8) {#if idx !== 0}
 function create_if_block_2(ctx) {
 	var div, dispose;
 
@@ -1494,8 +1494,8 @@ function create_if_block_2(ctx) {
 		c: function create() {
 			div = element("div");
 			div.textContent = "x";
-			attr(div, "class", "close svelte-1jmua38");
-			add_location(div, file$1, 232, 10, 6702);
+			attr(div, "class", "close svelte-lb0mha");
+			add_location(div, file$1, 245, 10, 7062);
 			dispose = listen(div, "click", stop_propagation(prevent_default(click_handler_2)));
 		},
 
@@ -1517,7 +1517,7 @@ function create_if_block_2(ctx) {
 	};
 }
 
-// (221:8) {#if idx !== 0}
+// (234:8) {#if idx !== 0}
 function create_if_block_1(ctx) {
 	var div, dispose;
 
@@ -1529,8 +1529,8 @@ function create_if_block_1(ctx) {
 		c: function create() {
 			div = element("div");
 			div.textContent = "x";
-			attr(div, "class", "close svelte-1jmua38");
-			add_location(div, file$1, 221, 10, 6403);
+			attr(div, "class", "close svelte-lb0mha");
+			add_location(div, file$1, 234, 10, 6763);
 			dispose = listen(div, "click", stop_propagation(prevent_default(click_handler)));
 		},
 
@@ -1552,7 +1552,7 @@ function create_if_block_1(ctx) {
 	};
 }
 
-// (217:2) {#each $tabStore as tab, idx}
+// (230:2) {#each $tabStore as tab, idx}
 function create_each_block(ctx) {
 	var current_block_type_index, if_block, if_block_anchor, current;
 
@@ -1653,12 +1653,12 @@ function create_fragment$1(ctx) {
 			li = element("li");
 			div = element("div");
 			div.textContent = "+";
-			attr(div, "class", "svelte-1jmua38");
-			add_location(div, file$1, 243, 4, 6910);
-			attr(li, "class", "svelte-1jmua38");
-			add_location(li, file$1, 241, 2, 6898);
-			attr(ul, "class", "svelte-1jmua38");
-			add_location(ul, file$1, 215, 0, 6223);
+			attr(div, "class", "svelte-lb0mha");
+			add_location(div, file$1, 256, 4, 7270);
+			attr(li, "class", "svelte-lb0mha");
+			add_location(li, file$1, 254, 2, 7258);
+			attr(ul, "class", "svelte-lb0mha");
+			add_location(ul, file$1, 228, 0, 6583);
 			dispose = listen(div, "click", ctx.addCustomTab);
 		},
 
@@ -8270,7 +8270,7 @@ function create_fragment$k(ctx) {
 			input = element("input");
 			t0 = space();
 			u = element("u");
-			t1 = text("show ");
+			t1 = text("Show ");
 			t2 = text(t2_value);
 			t3 = text(" data");
 			t4 = space();
@@ -11629,18 +11629,18 @@ function create_fragment$t(ctx) {
 			t2 = space();
 			section = element("section");
 			tabcontent.$$.fragment.c();
-			attr(header, "class", "svelte-1upxu8k");
-			add_location(header, file$s, 64, 2, 1357);
-			attr(div0, "class", "tabs svelte-1upxu8k");
-			add_location(div0, file$s, 68, 4, 1412);
-			attr(div1, "class", "undoRedo svelte-1upxu8k");
-			add_location(div1, file$s, 71, 4, 1473);
-			attr(nav, "class", "svelte-1upxu8k");
-			add_location(nav, file$s, 67, 2, 1401);
-			attr(section, "class", "svelte-1upxu8k");
-			add_location(section, file$s, 75, 2, 1541);
-			attr(main, "class", "svelte-1upxu8k");
-			add_location(main, file$s, 63, 0, 1347);
+			attr(header, "class", "svelte-qfuzku");
+			add_location(header, file$s, 65, 2, 1401);
+			attr(div0, "class", "tabs svelte-qfuzku");
+			add_location(div0, file$s, 69, 4, 1456);
+			attr(div1, "class", "undoRedo svelte-qfuzku");
+			add_location(div1, file$s, 72, 4, 1517);
+			attr(nav, "class", "svelte-qfuzku");
+			add_location(nav, file$s, 68, 2, 1445);
+			attr(section, "class", "svelte-qfuzku");
+			add_location(section, file$s, 76, 2, 1585);
+			attr(main, "class", "svelte-qfuzku");
+			add_location(main, file$s, 64, 0, 1391);
 		},
 
 		l: function claim(nodes) {
