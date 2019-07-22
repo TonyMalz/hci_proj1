@@ -23,6 +23,10 @@
     const data = getStatData(variable);
     mainChart.hideLoading();
     mainChart.setOption({
+      visualMap: {
+        min: minVal,
+        max: maxVal
+      },
       legend: {
         show: true,
         data: [dependentVariable.variableName],
@@ -106,6 +110,25 @@
         yAxisIndex: [0],
         filterMode: "filter"
       },
+      visualMap: {
+        right: 10,
+        top: "25%",
+        dimension: 2,
+        min: minVal,
+        max: maxVal,
+        itemWidth: 15,
+        itemHeight: 100,
+        calculable: true,
+        precision: 0.1,
+        text: ["Mean"],
+        textGap: 2,
+        textStyle: {
+          color: "#333"
+        },
+        outOfRange: {
+          color: ["rgba(0,0,0,0.1)"]
+        }
+      },
       legend: {
         show: true,
         data: [dependentVariable.variableName],
@@ -146,7 +169,7 @@
         top: 40,
         left: 2,
         bottom: 10,
-        right: 30,
+        right: 110,
         containLabel: true
       },
       xAxis: {
@@ -220,6 +243,8 @@
       window.removeEventListener("resize", resizeChart);
     };
   });
+
+  let selectColor;
 </script>
 
 <style>
@@ -242,6 +267,9 @@
     grid-template-columns: 2fr minmax(120px, 0.5fr);
     grid-template-rows: 2fr 1fr;
   }
+  select {
+    margin-right: 1rem;
+  }
 </style>
 
 <div class="container">
@@ -253,9 +281,13 @@
       bind:value={dependentVariable}
       on:change={selectHandler}>
       {#each dvs as dv}
-        <option value={dv}>{dv.variableName}</option>
+        <option value={dv}>{dv.variableLabel}</option>
       {/each}
     </select>
+    <!-- Colour is:
+    <select name="color" id="color" bind:value={selectColor}>
+      <option value="0">not selected</option>
+    </select> -->
   </div>
   <div class="charts">
     <div id="mainChart" style="width:100%; height:100%" />

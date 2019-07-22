@@ -3329,9 +3329,9 @@ function get_each_context$1(ctx, list, i) {
 	return child_ctx;
 }
 
-// (255:6) {#each dvs as dv}
+// (283:6) {#each dvs as dv}
 function create_each_block$1(ctx) {
-	var option, t_value = ctx.dv.variableName, t, option_value_value;
+	var option, t_value = ctx.dv.variableLabel, t, option_value_value;
 
 	return {
 		c: function create() {
@@ -3339,7 +3339,7 @@ function create_each_block$1(ctx) {
 			t = text(t_value);
 			option.__value = option_value_value = ctx.dv;
 			option.value = option.__value;
-			add_location(option, file$8, 255, 8, 6661);
+			add_location(option, file$8, 283, 8, 7216);
 		},
 
 		m: function mount(target, anchor) {
@@ -3348,7 +3348,7 @@ function create_each_block$1(ctx) {
 		},
 
 		p: function update(changed, ctx) {
-			if ((changed.dvs) && t_value !== (t_value = ctx.dv.variableName)) {
+			if ((changed.dvs) && t_value !== (t_value = ctx.dv.variableLabel)) {
 				set_data(t, t_value);
 			}
 
@@ -3415,17 +3415,18 @@ function create_fragment$8(ctx) {
 			if (ctx.dependentVariable === void 0) add_render_callback(() => ctx.select_change_handler.call(select));
 			attr(select, "name", "dv");
 			attr(select, "id", "dv");
-			add_location(select, file$8, 249, 4, 6515);
-			attr(div0, "class", "filter svelte-1c4nwf");
-			add_location(div0, file$8, 247, 2, 6474);
+			attr(select, "class", "svelte-2ebd0p");
+			add_location(select, file$8, 277, 4, 7070);
+			attr(div0, "class", "filter svelte-2ebd0p");
+			add_location(div0, file$8, 275, 2, 7029);
 			attr(div1, "id", "mainChart");
 			set_style(div1, "width", "100%");
 			set_style(div1, "height", "100%");
-			add_location(div1, file$8, 260, 4, 6776);
-			attr(div2, "class", "charts svelte-1c4nwf");
-			add_location(div2, file$8, 259, 2, 6750);
-			attr(div3, "class", "container svelte-1c4nwf");
-			add_location(div3, file$8, 246, 0, 6447);
+			add_location(div1, file$8, 292, 4, 7482);
+			attr(div2, "class", "charts svelte-2ebd0p");
+			add_location(div2, file$8, 291, 2, 7456);
+			attr(div3, "class", "container svelte-2ebd0p");
+			add_location(div3, file$8, 274, 0, 7002);
 
 			dispose = [
 				listen(select, "change", ctx.select_change_handler),
@@ -3551,6 +3552,10 @@ function instance$8($$self, $$props, $$invalidate) {
     const data = getStatData(variable);
     mainChart.hideLoading();
     mainChart.setOption({
+      visualMap: {
+        min: minVal,
+        max: maxVal
+      },
       legend: {
         show: true,
         data: [dependentVariable.variableName],
@@ -3634,6 +3639,25 @@ function instance$8($$self, $$props, $$invalidate) {
         yAxisIndex: [0],
         filterMode: "filter"
       },
+      visualMap: {
+        right: 10,
+        top: "25%",
+        dimension: 2,
+        min: minVal,
+        max: maxVal,
+        itemWidth: 15,
+        itemHeight: 100,
+        calculable: true,
+        precision: 0.1,
+        text: ["Mean"],
+        textGap: 2,
+        textStyle: {
+          color: "#333"
+        },
+        outOfRange: {
+          color: ["rgba(0,0,0,0.1)"]
+        }
+      },
       legend: {
         show: true,
         data: [dependentVariable.variableName],
@@ -3674,7 +3698,7 @@ function instance$8($$self, $$props, $$invalidate) {
         top: 40,
         left: 2,
         bottom: 10,
-        right: 30,
+        right: 110,
         containLabel: true
       },
       xAxis: {
