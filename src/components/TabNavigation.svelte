@@ -128,25 +128,9 @@
   }
 
   function activateTab(tabIdx) {
-    console.log("activate ", tabIdx);
+    // console.log("activate ", tabIdx);
     $activeTabIdx = tabIdx;
   }
-
-  let toggleTab = false;
-  function toggle() {
-    toggleTab = !toggleTab;
-  }
-
-  // function addTab() {
-  //   const el = document.getElementById("newTab");
-  //   const text = el.value.trim();
-  //   if (text !== "") {
-  //     currentTabs.push(el.value);
-  //     currentTabs = currentTabs;
-  //     activeTab = currentTabs.length - 1;
-  //   }
-  //   toggle();
-  // }
 
   function titleChanged(event) {
     console.log("titlechanged");
@@ -171,6 +155,24 @@
       $tabStore = reducedTabs;
       updateTabStore(reducedTabs);
     }
+  }
+
+  function addCustomTab() {
+    let id = 0;
+    // get last id
+    for (const tab of $tabStore) {
+      id = tab.id;
+    }
+    const tab = {
+      title: "Custom view ",
+      type: "customview",
+      studyId: null,
+      id: ++id
+    };
+    console.log("custom tab", tab);
+    $tabStore.push(tab);
+    $tabStore = $tabStore;
+    $activeTabIdx = id;
   }
 </script>
 
@@ -237,17 +239,9 @@
       </li>
     {/if}
   {/each}
-  <!-- <li>
-    {#if toggleTab}
-      <input
-        in:fade={{ duration: 100 }}
-        id="newTab"
-        type="text"
-        on:blur={addTab}
-        on:keydown={e => (e.code === 'Enter' ? addTab() : null)}
-        autofocus />
-    {:else}
-      <div on:click={toggle}>+</div>
-    {/if}
-  </li> -->
+  <li>
+
+    <div on:click={addCustomTab}>+</div>
+
+  </li>
 </ul>

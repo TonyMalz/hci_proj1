@@ -3,6 +3,7 @@
   import Overview from "../views/Overview.svelte";
   import StudyList from "../views/StudyList.svelte";
   import Descriptives from "../views/Descriptives.svelte";
+  import Customview from "../views/Customview.svelte";
   import { tabStore, activeTabIdx } from "../modules/store.js";
 </script>
 
@@ -17,6 +18,8 @@
         <Userview studyId={tab.studyId} />
       {:else if tab.type === 'descriptives'}
         <Descriptives studyId={tab.studyId} />
+      {:else if tab.type === 'customview'}
+        <Customview />
       {/if}
     {/if}
   {/each}
