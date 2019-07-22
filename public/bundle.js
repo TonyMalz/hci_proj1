@@ -9693,18 +9693,42 @@ class Descriptives extends SvelteComponentDev {
 
 const file$n = "src\\charts\\CustomChart.svelte";
 
-function create_fragment$n(ctx) {
+// (171:0) {#if selectedVariables.length == 2 && !combine}
+function create_if_block_1$4(ctx) {
+	var div, dispose;
+
+	return {
+		c: function create() {
+			div = element("div");
+			div.textContent = "Combine in one chart";
+			attr(div, "class", "combine svelte-1oonvjc");
+			add_location(div, file$n, 171, 2, 4631);
+			dispose = listen(div, "click", ctx.click_handler);
+		},
+
+		m: function mount(target, anchor) {
+			insert(target, div, anchor);
+		},
+
+		d: function destroy(detaching) {
+			if (detaching) {
+				detach(div);
+			}
+
+			dispose();
+		}
+	};
+}
+
+// (178:0) {:else}
+function create_else_block$3(ctx) {
 	var div;
 
 	return {
 		c: function create() {
 			div = element("div");
 			attr(div, "id", ctx.chartId);
-			add_location(div, file$n, 151, 0, 4176);
-		},
-
-		l: function claim(nodes) {
-			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+			add_location(div, file$n, 178, 2, 4774);
 		},
 
 		m: function mount(target, anchor) {
@@ -9712,12 +9736,108 @@ function create_fragment$n(ctx) {
 		},
 
 		p: noop,
-		i: noop,
-		o: noop,
 
 		d: function destroy(detaching) {
 			if (detaching) {
 				detach(div);
+			}
+		}
+	};
+}
+
+// (176:0) {#if combine}
+function create_if_block$5(ctx) {
+	var t;
+
+	return {
+		c: function create() {
+			t = text("CombinedChart");
+		},
+
+		m: function mount(target, anchor) {
+			insert(target, t, anchor);
+		},
+
+		p: noop,
+
+		d: function destroy(detaching) {
+			if (detaching) {
+				detach(t);
+			}
+		}
+	};
+}
+
+function create_fragment$n(ctx) {
+	var t, if_block1_anchor;
+
+	var if_block0 = (ctx.selectedVariables.length == 2 && !ctx.combine) && create_if_block_1$4(ctx);
+
+	function select_block_type(ctx) {
+		if (ctx.combine) return create_if_block$5;
+		return create_else_block$3;
+	}
+
+	var current_block_type = select_block_type(ctx);
+	var if_block1 = current_block_type(ctx);
+
+	return {
+		c: function create() {
+			if (if_block0) if_block0.c();
+			t = space();
+			if_block1.c();
+			if_block1_anchor = empty();
+		},
+
+		l: function claim(nodes) {
+			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+		},
+
+		m: function mount(target, anchor) {
+			if (if_block0) if_block0.m(target, anchor);
+			insert(target, t, anchor);
+			if_block1.m(target, anchor);
+			insert(target, if_block1_anchor, anchor);
+		},
+
+		p: function update(changed, ctx) {
+			if (ctx.selectedVariables.length == 2 && !ctx.combine) {
+				if (!if_block0) {
+					if_block0 = create_if_block_1$4(ctx);
+					if_block0.c();
+					if_block0.m(t.parentNode, t);
+				}
+			} else if (if_block0) {
+				if_block0.d(1);
+				if_block0 = null;
+			}
+
+			if (current_block_type === (current_block_type = select_block_type(ctx)) && if_block1) {
+				if_block1.p(changed, ctx);
+			} else {
+				if_block1.d(1);
+				if_block1 = current_block_type(ctx);
+				if (if_block1) {
+					if_block1.c();
+					if_block1.m(if_block1_anchor.parentNode, if_block1_anchor);
+				}
+			}
+		},
+
+		i: noop,
+		o: noop,
+
+		d: function destroy(detaching) {
+			if (if_block0) if_block0.d(detaching);
+
+			if (detaching) {
+				detach(t);
+			}
+
+			if_block1.d(detaching);
+
+			if (detaching) {
+				detach(if_block1_anchor);
 			}
 		}
 	};
@@ -9839,10 +9959,11 @@ function getGraph(variable) {
 
 function instance$n($$self, $$props, $$invalidate) {
 	
-  //   export let selectedVariables = [];
+  //   import Custom2dChart from "./Custom2dChart.svelte";
   let { selectedVariables = [] } = $$props;
   const chartId = `viscustom`;
   let isMounted = false;
+  let combine = false;
 
   // vega-lite charts
   const vegaOptions = {
@@ -9877,6 +9998,12 @@ function instance$n($$self, $$props, $$invalidate) {
 		if (!writable_props.includes(key) && !key.startsWith('$$')) console.warn(`<CustomChart> was created with unknown prop '${key}'`);
 	});
 
+	function click_handler() {
+		const $$result = (combine = true);
+		$$invalidate('combine', combine);
+		return $$result;
+	}
+
 	$$self.$set = $$props => {
 		if ('selectedVariables' in $$props) $$invalidate('selectedVariables', selectedVariables = $$props.selectedVariables);
 	};
@@ -9885,7 +10012,12 @@ function instance$n($$self, $$props, $$invalidate) {
 		if ($$dirty.selectedVariables) { updateGraphs(selectedVariables); }
 	};
 
-	return { selectedVariables, chartId };
+	return {
+		selectedVariables,
+		chartId,
+		combine,
+		click_handler
+	};
 }
 
 class CustomChart extends SvelteComponentDev {
@@ -10193,12 +10325,12 @@ function create_else_block_1$1(ctx) {
 }
 
 // (99:6) {#if selectedVariables.length}
-function create_if_block$5(ctx) {
+function create_if_block$6(ctx) {
 	var current_block_type_index, if_block, if_block_anchor, current;
 
 	var if_block_creators = [
-		create_if_block_1$4,
-		create_else_block$3
+		create_if_block_1$5,
+		create_else_block$4
 	];
 
 	var if_blocks = [];
@@ -10267,7 +10399,7 @@ function create_if_block$5(ctx) {
 }
 
 // (102:8) {:else}
-function create_else_block$3(ctx) {
+function create_else_block$4(ctx) {
 	var current;
 
 	var customchart = new CustomChart({
@@ -10310,7 +10442,7 @@ function create_else_block$3(ctx) {
 }
 
 // (100:8) {#if selectedVariables.length > 2}
-function create_if_block_1$4(ctx) {
+function create_if_block_1$5(ctx) {
 	var current;
 
 	var custom3dchart = new Custom3dChart({
@@ -10372,7 +10504,7 @@ function create_fragment$p(ctx) {
 	}
 
 	var if_block_creators = [
-		create_if_block$5,
+		create_if_block$6,
 		create_else_block_1$1
 	];
 
@@ -10645,7 +10777,7 @@ function get_each_context$b(ctx, list, i) {
 }
 
 // (12:0) {:else}
-function create_else_block$4(ctx) {
+function create_else_block$5(ctx) {
 	var each_1_anchor, current;
 
 	var each_value = ctx.$tabStore;
@@ -10727,7 +10859,7 @@ function create_else_block$4(ctx) {
 }
 
 // (10:0) {#if $activeTabIdx === 0}
-function create_if_block$6(ctx) {
+function create_if_block$7(ctx) {
 	var current;
 
 	var studylist = new StudyList({ $$inline: true });
@@ -10763,7 +10895,7 @@ function create_if_block$6(ctx) {
 }
 
 // (14:4) {#if idx === $activeTabIdx}
-function create_if_block_1$5(ctx) {
+function create_if_block_1$6(ctx) {
 	var current_block_type_index, if_block, if_block_anchor, current;
 
 	var if_block_creators = [
@@ -11017,7 +11149,7 @@ function create_if_block_2$4(ctx) {
 function create_each_block$b(ctx) {
 	var if_block_anchor, current;
 
-	var if_block = (ctx.idx === ctx.$activeTabIdx) && create_if_block_1$5(ctx);
+	var if_block = (ctx.idx === ctx.$activeTabIdx) && create_if_block_1$6(ctx);
 
 	return {
 		c: function create() {
@@ -11037,7 +11169,7 @@ function create_each_block$b(ctx) {
 					if_block.p(changed, ctx);
 					transition_in(if_block, 1);
 				} else {
-					if_block = create_if_block_1$5(ctx);
+					if_block = create_if_block_1$6(ctx);
 					if_block.c();
 					transition_in(if_block, 1);
 					if_block.m(if_block_anchor.parentNode, if_block_anchor);
@@ -11076,8 +11208,8 @@ function create_fragment$q(ctx) {
 	var current_block_type_index, if_block, if_block_anchor, current;
 
 	var if_block_creators = [
-		create_if_block$6,
-		create_else_block$4
+		create_if_block$7,
+		create_else_block$5
 	];
 
 	var if_blocks = [];
@@ -11172,7 +11304,7 @@ class TabContent extends SvelteComponentDev {
 const file$q = "src\\components\\StudyInfo.svelte";
 
 // (62:0) {:else}
-function create_else_block$5(ctx) {
+function create_else_block$6(ctx) {
 	var div;
 
 	return {
@@ -11198,7 +11330,7 @@ function create_else_block$5(ctx) {
 }
 
 // (55:0) {#if $activeTabIdx}
-function create_if_block$7(ctx) {
+function create_if_block$8(ctx) {
 	var div4, div0, t0, t1, t2, div1, t3, t4, t5, div2, t6, t7, t8, div3, t9, t10;
 
 	return {
@@ -11273,8 +11405,8 @@ function create_fragment$r(ctx) {
 	var if_block_anchor;
 
 	function select_block_type(ctx) {
-		if (ctx.$activeTabIdx) return create_if_block$7;
-		return create_else_block$5;
+		if (ctx.$activeTabIdx) return create_if_block$8;
+		return create_else_block$6;
 	}
 
 	var current_block_type = select_block_type(ctx);

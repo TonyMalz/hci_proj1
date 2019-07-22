@@ -1,10 +1,11 @@
 <script>
   import { onMount } from "svelte";
   import { trunc } from "../modules/utils.js";
-  //   export let selectedVariables = [];
+  //   import Custom2dChart from "./Custom2dChart.svelte";
   export let selectedVariables = [];
   const chartId = `viscustom`;
   let isMounted = false;
+  let combine = false;
   $: updateGraphs(selectedVariables);
 
   // vega-lite charts
@@ -149,4 +150,31 @@
   });
 </script>
 
-<div id={chartId} />
+<style>
+  .combine {
+    cursor: pointer;
+    font-weight: 600;
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    background: tomato;
+    color: white;
+    text-align: center;
+    box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.25);
+    margin-bottom: 1rem;
+  }
+  .combine:hover {
+    background: #722040;
+  }
+</style>
+
+{#if selectedVariables.length == 2 && !combine}
+  <div class="combine" on:click={() => (combine = true)}>
+    Combine in one chart
+  </div>
+{/if}
+{#if combine}
+  CombinedChart
+{:else}
+  <div id={chartId} />
+{/if}
