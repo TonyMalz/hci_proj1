@@ -9700,7 +9700,7 @@ function create_fragment$n(ctx) {
 		c: function create() {
 			div = element("div");
 			attr(div, "id", ctx.chartId);
-			add_location(div, file$n, 102, 0, 2695);
+			add_location(div, file$n, 131, 0, 3527);
 		},
 
 		l: function claim(nodes) {
@@ -9795,7 +9795,7 @@ function instance$n($$self, $$props, $$invalidate) {
       };
       graphs.push(graph);
 
-      const graphTime = {
+      const graphUID = {
         data: {
           values: variable.results
         },
@@ -9803,6 +9803,7 @@ function instance$n($$self, $$props, $$invalidate) {
         encoding: {
           y: {
             field: "value",
+            aggregate: "mean",
             type: "quantitative",
             //scale: { domain: [Math.min(...data), Math.max(...data)] },
             axis: { title: variableName, domain: false }
@@ -9814,7 +9815,35 @@ function instance$n($$self, $$props, $$invalidate) {
           }
         }
       };
-      graphs.push(graphTime);
+      graphs.push(graphUID);
+
+      if (!variable.isDemographic) {
+        const graphTime = {
+          data: {
+            values: variable.results
+          },
+          mark: {
+            type: "line",
+            interpolate: "monotone"
+          },
+          encoding: {
+            y: {
+              field: "value",
+              aggregate: "mean",
+              type: "quantitative",
+              //scale: { domain: [Math.min(...data), Math.max(...data)] },
+              axis: { title: variableName, domain: false }
+            },
+            x: {
+              field: "date",
+              type: "temporal",
+              timeUnit: "day"
+              //scale: { domain: [Math.min(...data), Math.max(...data)] },
+            }
+          }
+        };
+        graphs.push(graphTime);
+      }
     }
 
     const spec = {

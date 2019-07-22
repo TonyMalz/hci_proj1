@@ -71,7 +71,7 @@
       };
       graphs.push(graph);
 
-      const graphTime = {
+      const graphUID = {
         data: {
           values: variable.results
         },
@@ -79,6 +79,7 @@
         encoding: {
           y: {
             field: "value",
+            aggregate: "mean",
             type: "quantitative",
             //scale: { domain: [Math.min(...data), Math.max(...data)] },
             axis: { title: variableName, domain: false }
@@ -90,7 +91,35 @@
           }
         }
       };
-      graphs.push(graphTime);
+      graphs.push(graphUID);
+
+      if (!variable.isDemographic) {
+        const graphTime = {
+          data: {
+            values: variable.results
+          },
+          mark: {
+            type: "line",
+            interpolate: "monotone"
+          },
+          encoding: {
+            y: {
+              field: "value",
+              aggregate: "mean",
+              type: "quantitative",
+              //scale: { domain: [Math.min(...data), Math.max(...data)] },
+              axis: { title: variableName, domain: false }
+            },
+            x: {
+              field: "date",
+              type: "temporal",
+              timeUnit: "day"
+              //scale: { domain: [Math.min(...data), Math.max(...data)] },
+            }
+          }
+        };
+        graphs.push(graphTime);
+      }
     }
 
     const spec = {
