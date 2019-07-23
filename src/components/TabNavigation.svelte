@@ -253,8 +253,6 @@
     {/if}
   {/each}
   <li>
-
     <div on:click={addCustomTab}>+</div>
-
   </li>
 </ul>

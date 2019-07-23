@@ -4,12 +4,12 @@
   export let tab;
   let toggle = false;
   function toggleEdit() {
+    if (tab.type === "home") return;
     toggle = !toggle;
   }
 
   const dispatch = createEventDispatcher();
   function update() {
-    // console.log("blur");
     toggleEdit();
     dispatch("notify", tab);
   }

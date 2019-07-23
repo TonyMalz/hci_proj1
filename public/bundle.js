@@ -909,7 +909,7 @@ function create_else_block(ctx) {
 			div = element("div");
 			t = text(t_value);
 			attr(div, "class", "svelte-1av4as1");
-			add_location(div, file, 28, 2, 536);
+			add_location(div, file, 28, 2, 545);
 			dispose = listen(div, "click", ctx.toggleEdit);
 		},
 
@@ -943,7 +943,7 @@ function create_if_block(ctx) {
 			input = element("input");
 			attr(input, "type", "text");
 			input.autofocus = true;
-			add_location(input, file, 26, 2, 452);
+			add_location(input, file, 26, 2, 461);
 
 			dispose = [
 				listen(input, "input", ctx.input_input_handler),
@@ -1029,12 +1029,12 @@ function instance($$self, $$props, $$invalidate) {
 	let { tab } = $$props;
   let toggle = false;
   function toggleEdit() {
+    if (tab.type === "home") return;
     $$invalidate('toggle', toggle = !toggle);
   }
 
   const dispatch = createEventDispatcher();
   function update() {
-    // console.log("blur");
     toggleEdit();
     dispatch("notify", tab);
   }
@@ -1658,7 +1658,7 @@ function create_fragment$1(ctx) {
 			div = element("div");
 			div.textContent = "+";
 			attr(div, "class", "svelte-lb0mha");
-			add_location(div, file$1, 256, 4, 7270);
+			add_location(div, file$1, 255, 4, 7268);
 			attr(li, "class", "svelte-lb0mha");
 			add_location(li, file$1, 254, 2, 7258);
 			attr(ul, "class", "svelte-lb0mha");
