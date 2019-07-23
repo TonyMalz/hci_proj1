@@ -15,9 +15,10 @@
   let activeTab = 0;
   let endDate;
   let startDate;
+  let currentStudyId;
 
   activeTabIdx.subscribe(idx => {
-    const currentStudyId = $tabStore[idx].studyId;
+    currentStudyId = $tabStore[idx].studyId;
     if (currentStudyId) {
       const currentStudy = $studyStore.filter(v => v._id === currentStudyId)[0];
       name = currentStudy.studyName;
@@ -55,7 +56,7 @@
   }
 </style>
 
-{#if $activeTabIdx}
+{#if currentStudyId}
   <div id="info">
     <div class="name">Study name: {name}</div>
     <div>

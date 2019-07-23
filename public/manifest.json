@@ -5,7 +5,6 @@
     "scope": "/",
     "display": "browser",
     "start_url": "https://sensqvis.netlify.com/",
-    // "start_url": "http://localhost:5000/",
     "short_name": "SensQVis",
     "theme_color": "transparent",
     "description": "",
@@ -16,7 +15,6 @@
     "icons": [
         {
             "src": "https://sensqvis.netlify.com/favicon.png",
-            // "src": "http://localhost:5000/favicon.png",
             "sizes": "128x128"
         }
     ]
