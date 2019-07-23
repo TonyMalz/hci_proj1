@@ -204,8 +204,20 @@
           data: statData,
           itemStyle: {
             normal: {
-              // color: "#61a0a7"
-              color: "steelblue"
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                { offset: 0, color: "steelblue" },
+                { offset: 0.7, color: "rgb(83, 152, 209)" },
+                { offset: 1, color: "#83bff6" }
+              ])
+            }
+          },
+          label: {
+            normal: {
+              show: true,
+              color: "#333",
+              formatter: function(value, idx) {
+                return value.data.toFixed(2);
+              }
             }
           }
         },
@@ -276,6 +288,7 @@
     padding-top: 1rem;
     text-align: left;
     font-weight: 600;
+    color: rgb(83, 152, 209);
   }
 </style>
 
