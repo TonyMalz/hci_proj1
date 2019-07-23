@@ -18,13 +18,13 @@
   function updateGraphs(selectedVariables) {
     if (!isMounted) return;
     if (!selectedVariables.length) return;
-    let spec = getGraph(selectedVariables[0]);
-    if (selectedVariables.length === 2) {
-      spec = { hconcat: [spec, getGraph(selectedVariables[1])] };
+    const graphs = [];
+    for (const selectedVar of selectedVariables) {
+      graphs.push(getGraph(selectedVar));
     }
-
-    vegaEmbed(`#${chartId}`, spec, vegaOptions);
+    vegaEmbed(`#${chartId}`, { hconcat: graphs }, vegaOptions);
   }
+
   function getGraph(variable) {
     const variableName = variable.variableName;
     let data = variable.results.map(v => v.value);

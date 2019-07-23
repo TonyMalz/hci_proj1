@@ -4,13 +4,18 @@
   import { formatDate } from "../modules/utils.js";
   import CustomChart from "../charts/CustomChart.svelte";
   import Custom3dChart from "../charts/Custom3dChart.svelte";
-
-  // default to first study in store
-  let studyId = $studyStore[0]._id;
-  $: studyName = $studyStore.filter(v => v._id === studyId)[0].studyName;
-
-  let variables = $variableStore.filter(v => v.studyId === studyId);
+  let studyId;
+  let combine = false;
   let selectedVariables = [];
+  let studyName;
+  let variables = [];
+  $: if ($studyStore.length) {
+    // default to first study in store
+    studyId = $studyStore[0]._id;
+    studyName = $studyStore.filter(v => v._id === studyId)[0].studyName;
+
+    variables = $variableStore.filter(v => v.studyId === studyId);
+  }
   function selectStudy() {
     variables = $variableStore.filter(v => v.studyId === studyId);
     selectedVariables = [];
@@ -18,8 +23,13 @@
   function selectVariable() {
     console.log(selectedVariables);
   }
-
-  let combine = false;
+  function check3dChartAvailable() {
+    let bool = true;
+    for (const v of selectedVariables) {
+      bool &= v.measure === "scale";
+    }
+    return bool && combine;
+  }
 </script>
 
 <style>
@@ -50,8 +60,9 @@
   }
   li {
     display: grid;
-    grid-template-columns: 3ch 1fr;
+    grid-template-columns: auto 2fr 1fr;
     align-items: baseline;
+    grid-gap: 0.5rem;
     padding: 0.15em 0;
   }
   li:hover {
@@ -90,53 +101,57 @@
 </style>
 
 <div class="container" in:fade={{ duration: 300 }}>
-  <div class="studyselect">
-    Selected study:
-    <select
-      name="studyselect"
-      id="studyselect"
-      bind:value={studyId}
-      on:change={selectStudy}>
-      {#each $studyStore as study}
-        <option value={study._id}>
-          {study.studyName} (imported {formatDate(study.__created)})
-        </option>
-      {/each}
-    </select>
-  </div>
-  <div class="customchart">
-    <div class="varselect">
-      Variables of {studyName}
-      <ul class="varList">
-        {#each variables as variable}
-          <li>
-            <input
-              id={variable.variableName}
-              type="checkbox"
-              on:change={selectVariable}
-              bind:group={selectedVariables}
-              value={variable} />
-            <label for={variable.variableName}>{variable.variableName}</label>
-          </li>
+  {#if studyId}
+    <!-- content here -->
+    <div class="studyselect">
+      Selected study:
+      <select
+        name="studyselect"
+        id="studyselect"
+        bind:value={studyId}
+        on:change={selectStudy}>
+        {#each $studyStore as study}
+          <option value={study._id}>
+            {study.studyName} (imported {formatDate(study.__created)})
+          </option>
         {/each}
-      </ul>
-      {#if selectedVariables.length == 2}
-        <div
-          transition:fly={{ duration: 200, x: -50 }}
-          class="combine"
-          on:click={() => (combine = !combine)}>
-          {combine ? 'Split in two charts' : 'Combine in one chart'}
-        </div>
-      {/if}
+      </select>
     </div>
-    <div class="chart">
-      {#if selectedVariables.length}
-        {#if selectedVariables.length > 2}
-          <Custom3dChart {selectedVariables} />
-        {:else}
-          <CustomChart {selectedVariables} />
+    <div class="customchart">
+      <div class="varselect">
+        Variables of {studyName}
+        <ul class="varList">
+          {#each variables as variable}
+            <li>
+              <input
+                id={variable.variableName}
+                type="checkbox"
+                on:change={selectVariable}
+                bind:group={selectedVariables}
+                value={variable} />
+              <label for={variable.variableName}>{variable.variableName}</label>
+              <span>({variable.measure})</span>
+            </li>
+          {/each}
+        </ul>
+        {#if selectedVariables.length > 1}
+          <div
+            transition:fly={{ duration: 200, x: -50 }}
+            class="combine"
+            on:click={() => (combine = !combine)}>
+            {combine ? 'Split into separate charts' : 'Combine in one chart'}
+          </div>
         {/if}
-      {:else}Chart{/if}
+      </div>
+      <div class="chart">
+        {#if selectedVariables.length}
+          {#if selectedVariables.length > 2 && check3dChartAvailable()}
+            <Custom3dChart {selectedVariables} />
+          {:else}
+            <CustomChart {selectedVariables} />
+          {/if}
+        {/if}
+      </div>
     </div>
-  </div>
+  {/if}
 </div>
