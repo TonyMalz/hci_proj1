@@ -10059,100 +10059,14 @@ class Descriptives extends SvelteComponentDev {
 
 const file$o = "src\\charts\\CustomChart.svelte";
 
-// (171:0) {#if selectedVariables.length == 2 && !combine}
-function create_if_block_1$4(ctx) {
-	var div, dispose;
-
-	return {
-		c: function create() {
-			div = element("div");
-			div.textContent = "Combine in one chart";
-			attr(div, "class", "combine svelte-1oonvjc");
-			add_location(div, file$o, 171, 2, 4631);
-			dispose = listen(div, "click", ctx.click_handler);
-		},
-
-		m: function mount(target, anchor) {
-			insert(target, div, anchor);
-		},
-
-		d: function destroy(detaching) {
-			if (detaching) {
-				detach(div);
-			}
-
-			dispose();
-		}
-	};
-}
-
-// (178:0) {:else}
-function create_else_block$3(ctx) {
+function create_fragment$o(ctx) {
 	var div;
 
 	return {
 		c: function create() {
 			div = element("div");
 			attr(div, "id", ctx.chartId);
-			add_location(div, file$o, 178, 2, 4774);
-		},
-
-		m: function mount(target, anchor) {
-			insert(target, div, anchor);
-		},
-
-		p: noop,
-
-		d: function destroy(detaching) {
-			if (detaching) {
-				detach(div);
-			}
-		}
-	};
-}
-
-// (176:0) {#if combine}
-function create_if_block$5(ctx) {
-	var t;
-
-	return {
-		c: function create() {
-			t = text("CombinedChart");
-		},
-
-		m: function mount(target, anchor) {
-			insert(target, t, anchor);
-		},
-
-		p: noop,
-
-		d: function destroy(detaching) {
-			if (detaching) {
-				detach(t);
-			}
-		}
-	};
-}
-
-function create_fragment$o(ctx) {
-	var t, if_block1_anchor;
-
-	var if_block0 = (ctx.selectedVariables.length == 2 && !ctx.combine) && create_if_block_1$4(ctx);
-
-	function select_block_type(ctx) {
-		if (ctx.combine) return create_if_block$5;
-		return create_else_block$3;
-	}
-
-	var current_block_type = select_block_type(ctx);
-	var if_block1 = current_block_type(ctx);
-
-	return {
-		c: function create() {
-			if (if_block0) if_block0.c();
-			t = space();
-			if_block1.c();
-			if_block1_anchor = empty();
+			add_location(div, file$o, 155, 0, 4216);
 		},
 
 		l: function claim(nodes) {
@@ -10160,50 +10074,16 @@ function create_fragment$o(ctx) {
 		},
 
 		m: function mount(target, anchor) {
-			if (if_block0) if_block0.m(target, anchor);
-			insert(target, t, anchor);
-			if_block1.m(target, anchor);
-			insert(target, if_block1_anchor, anchor);
+			insert(target, div, anchor);
 		},
 
-		p: function update(changed, ctx) {
-			if (ctx.selectedVariables.length == 2 && !ctx.combine) {
-				if (!if_block0) {
-					if_block0 = create_if_block_1$4(ctx);
-					if_block0.c();
-					if_block0.m(t.parentNode, t);
-				}
-			} else if (if_block0) {
-				if_block0.d(1);
-				if_block0 = null;
-			}
-
-			if (current_block_type === (current_block_type = select_block_type(ctx)) && if_block1) {
-				if_block1.p(changed, ctx);
-			} else {
-				if_block1.d(1);
-				if_block1 = current_block_type(ctx);
-				if (if_block1) {
-					if_block1.c();
-					if_block1.m(if_block1_anchor.parentNode, if_block1_anchor);
-				}
-			}
-		},
-
+		p: noop,
 		i: noop,
 		o: noop,
 
 		d: function destroy(detaching) {
-			if (if_block0) if_block0.d(detaching);
-
 			if (detaching) {
-				detach(t);
-			}
-
-			if_block1.d(detaching);
-
-			if (detaching) {
-				detach(if_block1_anchor);
+				detach(div);
 			}
 		}
 	};
@@ -10329,7 +10209,6 @@ function instance$o($$self, $$props, $$invalidate) {
   let { selectedVariables = [] } = $$props;
   const chartId = `viscustom`;
   let isMounted = false;
-  let combine = false;
 
   // vega-lite charts
   const vegaOptions = {
@@ -10364,12 +10243,6 @@ function instance$o($$self, $$props, $$invalidate) {
 		if (!writable_props.includes(key) && !key.startsWith('$$')) console.warn(`<CustomChart> was created with unknown prop '${key}'`);
 	});
 
-	function click_handler() {
-		const $$result = (combine = true);
-		$$invalidate('combine', combine);
-		return $$result;
-	}
-
 	$$self.$set = $$props => {
 		if ('selectedVariables' in $$props) $$invalidate('selectedVariables', selectedVariables = $$props.selectedVariables);
 	};
@@ -10378,12 +10251,7 @@ function instance$o($$self, $$props, $$invalidate) {
 		if ($$dirty.selectedVariables) { updateGraphs(selectedVariables); }
 	};
 
-	return {
-		selectedVariables,
-		chartId,
-		combine,
-		click_handler
-	};
+	return { selectedVariables, chartId };
 }
 
 class CustomChart extends SvelteComponentDev {
@@ -10543,7 +10411,7 @@ function get_each_context_1$5(ctx, list, i) {
 	return child_ctx;
 }
 
-// (74:6) {#each $studyStore as study}
+// (100:6) {#each $studyStore as study}
 function create_each_block_1$5(ctx) {
 	var option, t0_value = ctx.study.studyName, t0, t1, t2_value = formatDate(ctx.study.__created), t2, t3, option_value_value;
 
@@ -10556,7 +10424,7 @@ function create_each_block_1$5(ctx) {
 			t3 = text(")\r\n        ");
 			option.__value = option_value_value = ctx.study._id;
 			option.value = option.__value;
-			add_location(option, file$q, 74, 8, 1813);
+			add_location(option, file$q, 100, 8, 2363);
 		},
 
 		m: function mount(target, anchor) {
@@ -10591,7 +10459,7 @@ function create_each_block_1$5(ctx) {
 	};
 }
 
-// (85:8) {#each variables as variable}
+// (111:8) {#each variables as variable}
 function create_each_block$b(ctx) {
 	var li, input, input_id_value, input_value_value, t0, label, t1_value = ctx.variable.variableName, t1, label_for_value, t2, dispose;
 
@@ -10608,11 +10476,12 @@ function create_each_block$b(ctx) {
 			attr(input, "type", "checkbox");
 			input.__value = input_value_value = ctx.variable;
 			input.value = input.__value;
-			add_location(input, file$q, 86, 12, 2155);
+			add_location(input, file$q, 112, 12, 2705);
 			attr(label, "for", label_for_value = ctx.variable.variableName);
-			attr(label, "class", "svelte-psokwu");
-			add_location(label, file$q, 92, 12, 2371);
-			add_location(li, file$q, 85, 10, 2137);
+			attr(label, "class", "svelte-1kzziq6");
+			add_location(label, file$q, 118, 12, 2921);
+			attr(li, "class", "svelte-1kzziq6");
+			add_location(li, file$q, 111, 10, 2687);
 
 			dispose = [
 				listen(input, "change", ctx.input_change_handler),
@@ -10665,7 +10534,60 @@ function create_each_block$b(ctx) {
 	};
 }
 
-// (105:6) {:else}
+// (123:6) {#if selectedVariables.length == 2}
+function create_if_block_2$4(ctx) {
+	var div, t_value = ctx.combine ? 'Split in two charts' : 'Combine in one chart', t, div_transition, current, dispose;
+
+	return {
+		c: function create() {
+			div = element("div");
+			t = text(t_value);
+			attr(div, "class", "combine svelte-1kzziq6");
+			add_location(div, file$q, 123, 8, 3087);
+			dispose = listen(div, "click", ctx.click_handler);
+		},
+
+		m: function mount(target, anchor) {
+			insert(target, div, anchor);
+			append(div, t);
+			current = true;
+		},
+
+		p: function update(changed, ctx) {
+			if ((!current || changed.combine) && t_value !== (t_value = ctx.combine ? 'Split in two charts' : 'Combine in one chart')) {
+				set_data(t, t_value);
+			}
+		},
+
+		i: function intro(local) {
+			if (current) return;
+			add_render_callback(() => {
+				if (!div_transition) div_transition = create_bidirectional_transition(div, fly, { duration: 200, x: -50 }, true);
+				div_transition.run(1);
+			});
+
+			current = true;
+		},
+
+		o: function outro(local) {
+			if (!div_transition) div_transition = create_bidirectional_transition(div, fly, { duration: 200, x: -50 }, false);
+			div_transition.run(0);
+
+			current = false;
+		},
+
+		d: function destroy(detaching) {
+			if (detaching) {
+				detach(div);
+				if (div_transition) div_transition.end();
+			}
+
+			dispose();
+		}
+	};
+}
+
+// (139:6) {:else}
 function create_else_block_1$1(ctx) {
 	var t;
 
@@ -10690,13 +10612,13 @@ function create_else_block_1$1(ctx) {
 	};
 }
 
-// (99:6) {#if selectedVariables.length}
-function create_if_block$6(ctx) {
+// (133:6) {#if selectedVariables.length}
+function create_if_block$5(ctx) {
 	var current_block_type_index, if_block, if_block_anchor, current;
 
 	var if_block_creators = [
-		create_if_block_1$5,
-		create_else_block$4
+		create_if_block_1$4,
+		create_else_block$3
 	];
 
 	var if_blocks = [];
@@ -10764,8 +10686,8 @@ function create_if_block$6(ctx) {
 	};
 }
 
-// (102:8) {:else}
-function create_else_block$4(ctx) {
+// (136:8) {:else}
+function create_else_block$3(ctx) {
 	var current;
 
 	var customchart = new CustomChart({
@@ -10807,8 +10729,8 @@ function create_else_block$4(ctx) {
 	};
 }
 
-// (100:8) {#if selectedVariables.length > 2}
-function create_if_block_1$5(ctx) {
+// (134:8) {#if selectedVariables.length > 2}
+function create_if_block_1$4(ctx) {
 	var current;
 
 	var custom3dchart = new Custom3dChart({
@@ -10851,7 +10773,7 @@ function create_if_block_1$5(ctx) {
 }
 
 function create_fragment$q(ctx) {
-	var div4, div0, t0, select, t1, div3, div1, t2, t3, t4, ul, t5, div2, current_block_type_index, if_block, div4_intro, current, dispose;
+	var div4, div0, t0, select, t1, div3, div1, t2, t3, t4, ul, t5, t6, div2, current_block_type_index, if_block1, div4_intro, current, dispose;
 
 	var each_value_1 = ctx.$studyStore;
 
@@ -10869,8 +10791,10 @@ function create_fragment$q(ctx) {
 		each_blocks[i] = create_each_block$b(get_each_context$b(ctx, each_value, i));
 	}
 
+	var if_block0 = (ctx.selectedVariables.length == 2) && create_if_block_2$4(ctx);
+
 	var if_block_creators = [
-		create_if_block$6,
+		create_if_block$5,
 		create_else_block_1$1
 	];
 
@@ -10882,13 +10806,13 @@ function create_fragment$q(ctx) {
 	}
 
 	current_block_type_index = select_block_type(ctx);
-	if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+	if_block1 = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
 
 	return {
 		c: function create() {
 			div4 = element("div");
 			div0 = element("div");
-			t0 = text("Select study:\r\n    ");
+			t0 = text("Selected study:\r\n    ");
 			select = element("select");
 
 			for (var i = 0; i < each_blocks_1.length; i += 1) {
@@ -10908,24 +10832,26 @@ function create_fragment$q(ctx) {
 			}
 
 			t5 = space();
+			if (if_block0) if_block0.c();
+			t6 = space();
 			div2 = element("div");
-			if_block.c();
+			if_block1.c();
 			if (ctx.studyId === void 0) add_render_callback(() => ctx.select_change_handler.call(select));
 			attr(select, "name", "studyselect");
 			attr(select, "id", "studyselect");
-			add_location(select, file$q, 68, 4, 1650);
-			attr(div0, "class", "studyselect svelte-psokwu");
-			add_location(div0, file$q, 66, 2, 1600);
-			attr(ul, "class", "varList svelte-psokwu");
-			add_location(ul, file$q, 83, 6, 2066);
-			attr(div1, "class", "varselect svelte-psokwu");
-			add_location(div1, file$q, 81, 4, 2003);
-			attr(div2, "class", "chart svelte-psokwu");
-			add_location(div2, file$q, 97, 4, 2502);
-			attr(div3, "class", "customchart svelte-psokwu");
-			add_location(div3, file$q, 80, 2, 1972);
-			attr(div4, "class", "container svelte-psokwu");
-			add_location(div4, file$q, 65, 0, 1545);
+			add_location(select, file$q, 94, 4, 2200);
+			attr(div0, "class", "studyselect svelte-1kzziq6");
+			add_location(div0, file$q, 92, 2, 2148);
+			attr(ul, "class", "varList svelte-1kzziq6");
+			add_location(ul, file$q, 109, 6, 2616);
+			attr(div1, "class", "varselect svelte-1kzziq6");
+			add_location(div1, file$q, 107, 4, 2553);
+			attr(div2, "class", "chart svelte-1kzziq6");
+			add_location(div2, file$q, 131, 4, 3339);
+			attr(div3, "class", "customchart svelte-1kzziq6");
+			add_location(div3, file$q, 106, 2, 2522);
+			attr(div4, "class", "container svelte-1kzziq6");
+			add_location(div4, file$q, 91, 0, 2093);
 
 			dispose = [
 				listen(select, "change", ctx.select_change_handler),
@@ -10961,7 +10887,9 @@ function create_fragment$q(ctx) {
 				each_blocks[i].m(ul, null);
 			}
 
-			append(div3, t5);
+			append(div1, t5);
+			if (if_block0) if_block0.m(div1, null);
+			append(div3, t6);
 			append(div3, div2);
 			if_blocks[current_block_type_index].m(div2, null);
 			current = true;
@@ -11016,6 +10944,24 @@ function create_fragment$q(ctx) {
 				each_blocks.length = each_value.length;
 			}
 
+			if (ctx.selectedVariables.length == 2) {
+				if (if_block0) {
+					if_block0.p(changed, ctx);
+					transition_in(if_block0, 1);
+				} else {
+					if_block0 = create_if_block_2$4(ctx);
+					if_block0.c();
+					transition_in(if_block0, 1);
+					if_block0.m(div1, null);
+				}
+			} else if (if_block0) {
+				group_outros();
+				transition_out(if_block0, 1, 1, () => {
+					if_block0 = null;
+				});
+				check_outros();
+			}
+
 			var previous_block_index = current_block_type_index;
 			current_block_type_index = select_block_type(ctx);
 			if (current_block_type_index === previous_block_index) {
@@ -11027,19 +10973,20 @@ function create_fragment$q(ctx) {
 				});
 				check_outros();
 
-				if_block = if_blocks[current_block_type_index];
-				if (!if_block) {
-					if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
-					if_block.c();
+				if_block1 = if_blocks[current_block_type_index];
+				if (!if_block1) {
+					if_block1 = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+					if_block1.c();
 				}
-				transition_in(if_block, 1);
-				if_block.m(div2, null);
+				transition_in(if_block1, 1);
+				if_block1.m(div2, null);
 			}
 		},
 
 		i: function intro(local) {
 			if (current) return;
-			transition_in(if_block);
+			transition_in(if_block0);
+			transition_in(if_block1);
 
 			if (!div4_intro) {
 				add_render_callback(() => {
@@ -11052,7 +10999,8 @@ function create_fragment$q(ctx) {
 		},
 
 		o: function outro(local) {
-			transition_out(if_block);
+			transition_out(if_block0);
+			transition_out(if_block1);
 			current = false;
 		},
 
@@ -11065,6 +11013,7 @@ function create_fragment$q(ctx) {
 
 			destroy_each(each_blocks, detaching);
 
+			if (if_block0) if_block0.d();
 			if_blocks[current_block_type_index].d();
 			run_all(dispose);
 		}
@@ -11094,6 +11043,8 @@ function instance$q($$self, $$props, $$invalidate) {
     console.log(selectedVariables);
   }
 
+  let combine = false;
+
 	const $$binding_groups = [[]];
 
 	function select_change_handler() {
@@ -11104,6 +11055,12 @@ function instance$q($$self, $$props, $$invalidate) {
 	function input_change_handler() {
 		selectedVariables = get_binding_group_value($$binding_groups[0]);
 		$$invalidate('selectedVariables', selectedVariables);
+	}
+
+	function click_handler() {
+		const $$result = (combine = !combine);
+		$$invalidate('combine', combine);
+		return $$result;
 	}
 
 	let studyName;
@@ -11118,10 +11075,12 @@ function instance$q($$self, $$props, $$invalidate) {
 		selectedVariables,
 		selectStudy,
 		selectVariable,
+		combine,
 		$studyStore,
 		studyName,
 		select_change_handler,
 		input_change_handler,
+		click_handler,
 		$$binding_groups
 	};
 }
@@ -11143,7 +11102,7 @@ function get_each_context$c(ctx, list, i) {
 }
 
 // (12:0) {:else}
-function create_else_block$5(ctx) {
+function create_else_block$4(ctx) {
 	var each_1_anchor, current;
 
 	var each_value = ctx.$tabStore;
@@ -11225,7 +11184,7 @@ function create_else_block$5(ctx) {
 }
 
 // (10:0) {#if $activeTabIdx === 0}
-function create_if_block$7(ctx) {
+function create_if_block$6(ctx) {
 	var current;
 
 	var studylist = new StudyList({ $$inline: true });
@@ -11261,11 +11220,11 @@ function create_if_block$7(ctx) {
 }
 
 // (14:4) {#if idx === $activeTabIdx}
-function create_if_block_1$6(ctx) {
+function create_if_block_1$5(ctx) {
 	var current_block_type_index, if_block, if_block_anchor, current;
 
 	var if_block_creators = [
-		create_if_block_2$4,
+		create_if_block_2$5,
 		create_if_block_3$3,
 		create_if_block_4$2,
 		create_if_block_5$2
@@ -11469,7 +11428,7 @@ function create_if_block_3$3(ctx) {
 }
 
 // (15:6) {#if tab.type === 'overview'}
-function create_if_block_2$4(ctx) {
+function create_if_block_2$5(ctx) {
 	var current;
 
 	var overview = new Overview({
@@ -11515,7 +11474,7 @@ function create_if_block_2$4(ctx) {
 function create_each_block$c(ctx) {
 	var if_block_anchor, current;
 
-	var if_block = (ctx.idx === ctx.$activeTabIdx) && create_if_block_1$6(ctx);
+	var if_block = (ctx.idx === ctx.$activeTabIdx) && create_if_block_1$5(ctx);
 
 	return {
 		c: function create() {
@@ -11535,7 +11494,7 @@ function create_each_block$c(ctx) {
 					if_block.p(changed, ctx);
 					transition_in(if_block, 1);
 				} else {
-					if_block = create_if_block_1$6(ctx);
+					if_block = create_if_block_1$5(ctx);
 					if_block.c();
 					transition_in(if_block, 1);
 					if_block.m(if_block_anchor.parentNode, if_block_anchor);
@@ -11574,8 +11533,8 @@ function create_fragment$r(ctx) {
 	var current_block_type_index, if_block, if_block_anchor, current;
 
 	var if_block_creators = [
-		create_if_block$7,
-		create_else_block$5
+		create_if_block$6,
+		create_else_block$4
 	];
 
 	var if_blocks = [];
@@ -11670,7 +11629,7 @@ class TabContent extends SvelteComponentDev {
 const file$r = "src\\components\\StudyInfo.svelte";
 
 // (68:0) {:else}
-function create_else_block$6(ctx) {
+function create_else_block$5(ctx) {
 	var div;
 
 	return {
@@ -11696,7 +11655,7 @@ function create_else_block$6(ctx) {
 }
 
 // (59:0) {#if currentStudyId}
-function create_if_block$8(ctx) {
+function create_if_block$7(ctx) {
 	var div4, div0, t0, t1, t2, div1, t3, t4_value = formatDate(ctx.startDate, false), t4, t5, t6_value = formatDate(ctx.endDate, false), t6, t7, div2, t8, t9, t10, div3, t11, t12;
 
 	return {
@@ -11784,8 +11743,8 @@ function create_fragment$s(ctx) {
 	var if_block_anchor;
 
 	function select_block_type(ctx) {
-		if (ctx.currentStudyId) return create_if_block$8;
-		return create_else_block$6;
+		if (ctx.currentStudyId) return create_if_block$7;
+		return create_else_block$5;
 	}
 
 	var current_block_type = select_block_type(ctx);

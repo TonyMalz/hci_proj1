@@ -1,5 +1,5 @@
 <script>
-  import { fade } from "svelte/transition";
+  import { fade, fly } from "svelte/transition";
   import { studyStore, variableStore } from "../modules/store.js";
   import { formatDate } from "../modules/utils.js";
   import CustomChart from "../charts/CustomChart.svelte";
@@ -18,6 +18,8 @@
   function selectVariable() {
     console.log(selectedVariables);
   }
+
+  let combine = false;
 </script>
 
 <style>
@@ -46,9 +48,18 @@
     color: #333;
     font-style: initial;
   }
+  li {
+    display: grid;
+    grid-template-columns: 3ch 1fr;
+    align-items: baseline;
+    padding: 0.15em 0;
+  }
+  li:hover {
+    color: #333;
+    background-color: rgb(230, 230, 230);
+  }
   label {
     display: inline-block;
-    padding-left: 0.25em;
     cursor: pointer;
   }
   .varselect {
@@ -61,11 +72,26 @@
     display: grid;
     place-items: center;
   }
+  .combine {
+    cursor: pointer;
+    font-weight: 600;
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    background: tomato;
+    color: white;
+    text-align: center;
+    box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.25);
+    margin-bottom: 1rem;
+  }
+  .combine:hover {
+    background: #722040;
+  }
 </style>
 
 <div class="container" in:fade={{ duration: 300 }}>
   <div class="studyselect">
-    Select study:
+    Selected study:
     <select
       name="studyselect"
       id="studyselect"
@@ -94,6 +120,14 @@
           </li>
         {/each}
       </ul>
+      {#if selectedVariables.length == 2}
+        <div
+          transition:fly={{ duration: 200, x: -50 }}
+          class="combine"
+          on:click={() => (combine = !combine)}>
+          {combine ? 'Split in two charts' : 'Combine in one chart'}
+        </div>
+      {/if}
     </div>
     <div class="chart">
       {#if selectedVariables.length}
