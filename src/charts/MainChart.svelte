@@ -270,6 +270,9 @@
   select {
     margin-right: 1rem;
   }
+  .anova {
+    grid-column: 1/3;
+  }
 </style>
 
 <div class="container">
@@ -292,6 +295,8 @@
   <div class="charts">
     <div id="mainChart" style="width:100%; height:100%" />
     <MainChartSummary {studyId} {dependentVariable} />
-    <Anova {studyId} {dependentVariable} />
+    <div class="anova">
+      <Anova {studyId} {dependentVariable} />
+    </div>
   </div>
 </div>

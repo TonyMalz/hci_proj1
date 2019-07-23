@@ -6,6 +6,14 @@
   export let dependentVariable;
   let anovaChart;
   let old = "";
+  let count = 0;
+  let minVal = 0;
+  let meanVal = 0;
+  let sd = 0;
+  let maxVal = 0;
+  const alpha = 0.05;
+  let ci = [0, 0];
+
   $: if (dependentVariable !== old) {
     old = dependentVariable;
     if (dependentVariable) {
@@ -34,7 +42,13 @@
   function getStatData(dependentVariable) {
     if (!dependentVariable) return [[], []];
     const resultsByDay = [[], [], [], [], [], [], []]; // array index -> day of week starting at 0 (monday)
-
+    const results = dependentVariable.results.map(v => v.value);
+    minVal = stat.min(results);
+    maxVal = stat.max(results);
+    meanVal = stat.mean(results);
+    count = results.length;
+    sd = stat.standardDeviation(results);
+    ci = mctad.confidenceIntervalOnTheMean(meanVal, sd, count, alpha);
     for (const result of dependentVariable.results) {
       const resultDate = new Date(result.date);
       const resultDay = resultDate.getDay();
@@ -43,7 +57,7 @@
 
     const statData = [];
     const errorData = [];
-    const alpha = 0.05;
+
     for (let day = 0; day < 7; ++day) {
       const results = resultsByDay[day];
       if (results && results.length) {
@@ -72,50 +86,7 @@
 
   onMount(() => {
     anovaChart = echarts.init(document.getElementById("anovaChart"));
-    // const numericVariables = $variableStore.filter(
-    //   v =>
-    //     v.studyId === studyId &&
-    //     v.isDemographic === false &&
-    //     v.measure === "scale"
-    // );
-
-    // const resultsByDay = [[], [], [], [], [], [], []]; // array index -> day of week starting at 0 (monday)
-    // // TODO: enable user selection
-    // if (numericVariables && numericVariables.length) {
-    //   const dependentVariable = numericVariables[0];
-    //   for (const result of dependentVariable.results) {
-    //     const resultDate = new Date(result.date);
-    //     const resultDay = resultDate.getDay();
-
-    //     resultsByDay[resultDay].push(result.value);
-    //   }
-    // }
-
     const [statData, errorData] = getStatData(dependentVariable);
-    // const alpha = 0.05;
-    // for (let day = 0; day < 7; ++day) {
-    //   const results = resultsByDay[day];
-    //   if (results && results.length) {
-    //     const mean = stat.mean(results);
-    //     const sd = stat.standardDeviation(results);
-    //     const n = results.length;
-    //     statData.push(mean);
-    //     if (n < 2) {
-    //       errorData.push([day, 0, 0, n, 0]);
-    //       continue;
-    //     }
-    //     errorData.push([
-    //       day,
-    //       ...mctad.confidenceIntervalOnTheMean(mean, sd, n, alpha),
-    //       n,
-    //       sd
-    //     ]);
-    //     // console.log(mean, mctad.confidenceIntervalOnTheMean(mean, sd, n, 0.05));
-    //   } else {
-    //     statData.push(0);
-    //     errorData.push([day, 0, 0, 0, 0]);
-    //   }
-    // }
 
     const categoryData = [
       "Monday",
@@ -194,9 +165,9 @@
                   </tr>
                   <tr>
                     <td>CI</td>
-                    <td style="padding-left:0.5rem;">[${left.toFixed(
+                    <td style="padding-left:0.5rem;">[ ${left.toFixed(
                       4
-                    )} ; ${right.toFixed(4)}]</td>
+                    )} ; ${right.toFixed(4)} ]</td>
                   </tr>
                   <tr>
                     <td>Records</td>
@@ -281,6 +252,57 @@
     padding: 0;
     margin: 0;
   }
+  .container {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto min-content;
+    grid-gap: 1rem;
+    width: 100%;
+    height: 100%;
+  }
+  table {
+    width: 40ch;
+    border-collapse: collapse;
+    font-size: 0.7rem;
+  }
+  td {
+    padding: 0.8em 0;
+    border-bottom: 1px solid #ddd;
+  }
+  tr:hover {
+    background-color: #f5f5f5;
+  }
+  th {
+    padding-top: 1rem;
+    text-align: left;
+    font-weight: 600;
+  }
 </style>
 
-<div id="anovaChart" />
+<div class="container">
+  <div id="anovaChart" />
+  <div class="statTable">
+    <table>
+      <!-- <tr>
+        <td>Records:</td>
+        <td>{count}</td>
+      </tr> -->
+      <tr>
+        <td>Min - Max:</td>
+        <td>{minVal} - {maxVal}</td>
+      </tr>
+      <tr>
+        <td>Mean:</td>
+        <td>{meanVal.toFixed(4)}</td>
+      </tr>
+      <tr>
+        <td>SD:</td>
+        <td>{sd.toFixed(4)}</td>
+      </tr>
+      <tr>
+        <td>CI:</td>
+        <td>[ {ci[0].toFixed(4)} ; {ci[1].toFixed(4)} ]</td>
+      </tr>
+    </table>
+  </div>
+</div>

@@ -1960,14 +1960,81 @@ var simpleStatistics_min = createCommonjsModule(function (module, exports) {
 const file$2 = "src\\charts\\Anova.svelte";
 
 function create_fragment$2(ctx) {
-	var div;
+	var div2, div0, t0, div1, table, tr0, td0, t2, td1, t3, t4, t5, t6, tr1, td2, t8, td3, t9_value = ctx.meanVal.toFixed(4), t9, t10, tr2, td4, t12, td5, t13_value = ctx.sd.toFixed(4), t13, t14, tr3, td6, t16, td7, t17, t18_value = ctx.ci[0].toFixed(4), t18, t19, t20_value = ctx.ci[1].toFixed(4), t20, t21;
 
 	return {
 		c: function create() {
-			div = element("div");
-			attr(div, "id", "anovaChart");
-			attr(div, "class", "svelte-14eklfi");
-			add_location(div, file$2, 285, 0, 7759);
+			div2 = element("div");
+			div0 = element("div");
+			t0 = space();
+			div1 = element("div");
+			table = element("table");
+			tr0 = element("tr");
+			td0 = element("td");
+			td0.textContent = "Min - Max:";
+			t2 = space();
+			td1 = element("td");
+			t3 = text(ctx.minVal);
+			t4 = text(" - ");
+			t5 = text(ctx.maxVal);
+			t6 = space();
+			tr1 = element("tr");
+			td2 = element("td");
+			td2.textContent = "Mean:";
+			t8 = space();
+			td3 = element("td");
+			t9 = text(t9_value);
+			t10 = space();
+			tr2 = element("tr");
+			td4 = element("td");
+			td4.textContent = "SD:";
+			t12 = space();
+			td5 = element("td");
+			t13 = text(t13_value);
+			t14 = space();
+			tr3 = element("tr");
+			td6 = element("td");
+			td6.textContent = "CI:";
+			t16 = space();
+			td7 = element("td");
+			t17 = text("[ ");
+			t18 = text(t18_value);
+			t19 = text(" ; ");
+			t20 = text(t20_value);
+			t21 = text(" ]");
+			attr(div0, "id", "anovaChart");
+			attr(div0, "class", "svelte-42bewl");
+			add_location(div0, file$2, 282, 2, 7146);
+			attr(td0, "class", "svelte-42bewl");
+			add_location(td0, file$2, 290, 8, 7318);
+			attr(td1, "class", "svelte-42bewl");
+			add_location(td1, file$2, 291, 8, 7347);
+			attr(tr0, "class", "svelte-42bewl");
+			add_location(tr0, file$2, 289, 6, 7304);
+			attr(td2, "class", "svelte-42bewl");
+			add_location(td2, file$2, 294, 8, 7410);
+			attr(td3, "class", "svelte-42bewl");
+			add_location(td3, file$2, 295, 8, 7434);
+			attr(tr1, "class", "svelte-42bewl");
+			add_location(tr1, file$2, 293, 6, 7396);
+			attr(td4, "class", "svelte-42bewl");
+			add_location(td4, file$2, 298, 8, 7498);
+			attr(td5, "class", "svelte-42bewl");
+			add_location(td5, file$2, 299, 8, 7520);
+			attr(tr2, "class", "svelte-42bewl");
+			add_location(tr2, file$2, 297, 6, 7484);
+			attr(td6, "class", "svelte-42bewl");
+			add_location(td6, file$2, 302, 8, 7579);
+			attr(td7, "class", "svelte-42bewl");
+			add_location(td7, file$2, 303, 8, 7601);
+			attr(tr3, "class", "svelte-42bewl");
+			add_location(tr3, file$2, 301, 6, 7565);
+			attr(table, "class", "svelte-42bewl");
+			add_location(table, file$2, 284, 4, 7202);
+			attr(div1, "class", "statTable");
+			add_location(div1, file$2, 283, 2, 7173);
+			attr(div2, "class", "container svelte-42bewl");
+			add_location(div2, file$2, 281, 0, 7119);
 		},
 
 		l: function claim(nodes) {
@@ -1975,65 +2042,92 @@ function create_fragment$2(ctx) {
 		},
 
 		m: function mount(target, anchor) {
-			insert(target, div, anchor);
+			insert(target, div2, anchor);
+			append(div2, div0);
+			append(div2, t0);
+			append(div2, div1);
+			append(div1, table);
+			append(table, tr0);
+			append(tr0, td0);
+			append(tr0, t2);
+			append(tr0, td1);
+			append(td1, t3);
+			append(td1, t4);
+			append(td1, t5);
+			append(table, t6);
+			append(table, tr1);
+			append(tr1, td2);
+			append(tr1, t8);
+			append(tr1, td3);
+			append(td3, t9);
+			append(table, t10);
+			append(table, tr2);
+			append(tr2, td4);
+			append(tr2, t12);
+			append(tr2, td5);
+			append(td5, t13);
+			append(table, t14);
+			append(table, tr3);
+			append(tr3, td6);
+			append(tr3, t16);
+			append(tr3, td7);
+			append(td7, t17);
+			append(td7, t18);
+			append(td7, t19);
+			append(td7, t20);
+			append(td7, t21);
 		},
 
-		p: noop,
+		p: function update(changed, ctx) {
+			if (changed.minVal) {
+				set_data(t3, ctx.minVal);
+			}
+
+			if (changed.maxVal) {
+				set_data(t5, ctx.maxVal);
+			}
+
+			if ((changed.meanVal) && t9_value !== (t9_value = ctx.meanVal.toFixed(4))) {
+				set_data(t9, t9_value);
+			}
+
+			if ((changed.sd) && t13_value !== (t13_value = ctx.sd.toFixed(4))) {
+				set_data(t13, t13_value);
+			}
+
+			if ((changed.ci) && t18_value !== (t18_value = ctx.ci[0].toFixed(4))) {
+				set_data(t18, t18_value);
+			}
+
+			if ((changed.ci) && t20_value !== (t20_value = ctx.ci[1].toFixed(4))) {
+				set_data(t20, t20_value);
+			}
+		},
+
 		i: noop,
 		o: noop,
 
 		d: function destroy(detaching) {
 			if (detaching) {
-				detach(div);
+				detach(div2);
 			}
 		}
 	};
 }
 
-function getStatData(dependentVariable) {
-  if (!dependentVariable) return [[], []];
-  const resultsByDay = [[], [], [], [], [], [], []]; // array index -> day of week starting at 0 (monday)
-
-  for (const result of dependentVariable.results) {
-    const resultDate = new Date(result.date);
-    const resultDay = resultDate.getDay();
-    resultsByDay[resultDay].push(result.value);
-  }
-
-  const statData = [];
-  const errorData = [];
-  const alpha = 0.05;
-  for (let day = 0; day < 7; ++day) {
-    const results = resultsByDay[day];
-    if (results && results.length) {
-      const mean = simpleStatistics_min.mean(results);
-      const sd = simpleStatistics_min.standardDeviation(results);
-      const n = results.length;
-      statData.push(mean);
-      if (n < 2) {
-        errorData.push([day, 0, 0, n, 0]);
-        continue;
-      }
-      errorData.push([
-        day,
-        ...mctad.confidenceIntervalOnTheMean(mean, sd, n, alpha),
-        n,
-        sd
-      ]);
-      // console.log(mean, mctad.confidenceIntervalOnTheMean(mean, sd, n, 0.05));
-    } else {
-      statData.push(0);
-      errorData.push([day, 0, 0, 0, 0]);
-    }
-  }
-  return [statData, errorData];
-}
+const alpha = 0.05;
 
 function instance$2($$self, $$props, $$invalidate) {
 	
   let { studyId, dependentVariable } = $$props;
   let anovaChart;
   let old = "";
+  let count = 0;
+  let minVal = 0;
+  let meanVal = 0;
+  let sd = 0;
+  let maxVal = 0;
+  let ci = [0, 0];
 
   function updateChart(variable) {
     if (!anovaChart) return;
@@ -2053,53 +2147,54 @@ function instance$2($$self, $$props, $$invalidate) {
       ]
     });
   }
+  function getStatData(dependentVariable) {
+    if (!dependentVariable) return [[], []];
+    const resultsByDay = [[], [], [], [], [], [], []]; // array index -> day of week starting at 0 (monday)
+    const results = dependentVariable.results.map(v => v.value);
+    $$invalidate('minVal', minVal = simpleStatistics_min.min(results));
+    $$invalidate('maxVal', maxVal = simpleStatistics_min.max(results));
+    $$invalidate('meanVal', meanVal = simpleStatistics_min.mean(results));
+    count = results.length;
+    $$invalidate('sd', sd = simpleStatistics_min.standardDeviation(results));
+    $$invalidate('ci', ci = mctad.confidenceIntervalOnTheMean(meanVal, sd, count, alpha));
+    for (const result of dependentVariable.results) {
+      const resultDate = new Date(result.date);
+      const resultDay = resultDate.getDay();
+      resultsByDay[resultDay].push(result.value);
+    }
+
+    const statData = [];
+    const errorData = [];
+
+    for (let day = 0; day < 7; ++day) {
+      const results = resultsByDay[day];
+      if (results && results.length) {
+        const mean = simpleStatistics_min.mean(results);
+        const sd = simpleStatistics_min.standardDeviation(results);
+        const n = results.length;
+        statData.push(mean);
+        if (n < 2) {
+          errorData.push([day, 0, 0, n, 0]);
+          continue;
+        }
+        errorData.push([
+          day,
+          ...mctad.confidenceIntervalOnTheMean(mean, sd, n, alpha),
+          n,
+          sd
+        ]);
+        // console.log(mean, mctad.confidenceIntervalOnTheMean(mean, sd, n, 0.05));
+      } else {
+        statData.push(0);
+        errorData.push([day, 0, 0, 0, 0]);
+      }
+    }
+    return [statData, errorData];
+  }
 
   onMount(() => {
     anovaChart = echarts.init(document.getElementById("anovaChart"));
-    // const numericVariables = $variableStore.filter(
-    //   v =>
-    //     v.studyId === studyId &&
-    //     v.isDemographic === false &&
-    //     v.measure === "scale"
-    // );
-
-    // const resultsByDay = [[], [], [], [], [], [], []]; // array index -> day of week starting at 0 (monday)
-    // // TODO: enable user selection
-    // if (numericVariables && numericVariables.length) {
-    //   const dependentVariable = numericVariables[0];
-    //   for (const result of dependentVariable.results) {
-    //     const resultDate = new Date(result.date);
-    //     const resultDay = resultDate.getDay();
-
-    //     resultsByDay[resultDay].push(result.value);
-    //   }
-    // }
-
     const [statData, errorData] = getStatData(dependentVariable);
-    // const alpha = 0.05;
-    // for (let day = 0; day < 7; ++day) {
-    //   const results = resultsByDay[day];
-    //   if (results && results.length) {
-    //     const mean = stat.mean(results);
-    //     const sd = stat.standardDeviation(results);
-    //     const n = results.length;
-    //     statData.push(mean);
-    //     if (n < 2) {
-    //       errorData.push([day, 0, 0, n, 0]);
-    //       continue;
-    //     }
-    //     errorData.push([
-    //       day,
-    //       ...mctad.confidenceIntervalOnTheMean(mean, sd, n, alpha),
-    //       n,
-    //       sd
-    //     ]);
-    //     // console.log(mean, mctad.confidenceIntervalOnTheMean(mean, sd, n, 0.05));
-    //   } else {
-    //     statData.push(0);
-    //     errorData.push([day, 0, 0, 0, 0]);
-    //   }
-    // }
 
     const categoryData = [
       "Monday",
@@ -2178,9 +2273,9 @@ function instance$2($$self, $$props, $$invalidate) {
                   </tr>
                   <tr>
                     <td>CI</td>
-                    <td style="padding-left:0.5rem;">[${left.toFixed(
+                    <td style="padding-left:0.5rem;">[ ${left.toFixed(
                       4
-                    )} ; ${right.toFixed(4)}]</td>
+                    )} ; ${right.toFixed(4)} ]</td>
                   </tr>
                   <tr>
                     <td>Records</td>
@@ -2276,7 +2371,15 @@ function instance$2($$self, $$props, $$invalidate) {
       } }
 	};
 
-	return { studyId, dependentVariable };
+	return {
+		studyId,
+		dependentVariable,
+		minVal,
+		meanVal,
+		sd,
+		maxVal,
+		ci
+	};
 }
 
 class Anova extends SvelteComponentDev {
@@ -3123,7 +3226,7 @@ function create_fragment$7(ctx) {
 	};
 }
 
-function getStatData$1(dependentVariable) {
+function getStatData(dependentVariable) {
   if (!dependentVariable) return [];
   const resultsByHour = new Map();
   for (const result of dependentVariable.results) {
@@ -3156,7 +3259,7 @@ function instance$7($$self, $$props, $$invalidate) {
   function updateChart(variable) {
     if (!mainChartSummary) return;
     mainChartSummary.showLoading();
-    const data = getStatData$1(variable);
+    const data = getStatData(variable);
     mainChartSummary.hideLoading();
     mainChartSummary.setOption({
       series: [
@@ -3171,7 +3274,7 @@ function instance$7($$self, $$props, $$invalidate) {
     mainChartSummary = echarts.init(
       document.getElementById("mainChartSummary")
     );
-    const data = getStatData$1(dependentVariable);
+    const data = getStatData(dependentVariable);
     const option = {
       tooltip: {
         trigger: "axis",
@@ -3333,7 +3436,7 @@ function get_each_context$1(ctx, list, i) {
 	return child_ctx;
 }
 
-// (283:6) {#each dvs as dv}
+// (286:6) {#each dvs as dv}
 function create_each_block$1(ctx) {
 	var option, t_value = ctx.dv.variableLabel, t, option_value_value;
 
@@ -3343,7 +3446,7 @@ function create_each_block$1(ctx) {
 			t = text(t_value);
 			option.__value = option_value_value = ctx.dv;
 			option.value = option.__value;
-			add_location(option, file$8, 283, 8, 7217);
+			add_location(option, file$8, 286, 8, 7257);
 		},
 
 		m: function mount(target, anchor) {
@@ -3372,7 +3475,7 @@ function create_each_block$1(ctx) {
 }
 
 function create_fragment$8(ctx) {
-	var div3, div0, t0, select, t1, div2, div1, t2, t3, current, dispose;
+	var div4, div0, t0, select, t1, div3, div1, t2, t3, div2, current, dispose;
 
 	var each_value = ctx.dvs;
 
@@ -3400,7 +3503,7 @@ function create_fragment$8(ctx) {
 
 	return {
 		c: function create() {
-			div3 = element("div");
+			div4 = element("div");
 			div0 = element("div");
 			t0 = text("Variable:\r\n    ");
 			select = element("select");
@@ -3410,27 +3513,30 @@ function create_fragment$8(ctx) {
 			}
 
 			t1 = space();
-			div2 = element("div");
+			div3 = element("div");
 			div1 = element("div");
 			t2 = space();
 			mainchartsummary.$$.fragment.c();
 			t3 = space();
+			div2 = element("div");
 			anova.$$.fragment.c();
 			if (ctx.dependentVariable === void 0) add_render_callback(() => ctx.select_change_handler.call(select));
 			attr(select, "name", "dv");
 			attr(select, "id", "dv");
-			attr(select, "class", "svelte-2ebd0p");
-			add_location(select, file$8, 277, 4, 7071);
-			attr(div0, "class", "filter svelte-2ebd0p");
-			add_location(div0, file$8, 275, 2, 7030);
+			attr(select, "class", "svelte-f2p904");
+			add_location(select, file$8, 280, 4, 7111);
+			attr(div0, "class", "filter svelte-f2p904");
+			add_location(div0, file$8, 278, 2, 7070);
 			attr(div1, "id", "mainChart");
 			set_style(div1, "width", "100%");
 			set_style(div1, "height", "100%");
-			add_location(div1, file$8, 292, 4, 7483);
-			attr(div2, "class", "charts svelte-2ebd0p");
-			add_location(div2, file$8, 291, 2, 7457);
-			attr(div3, "class", "container svelte-2ebd0p");
-			add_location(div3, file$8, 274, 0, 7003);
+			add_location(div1, file$8, 295, 4, 7523);
+			attr(div2, "class", "anova svelte-f2p904");
+			add_location(div2, file$8, 297, 4, 7639);
+			attr(div3, "class", "charts svelte-f2p904");
+			add_location(div3, file$8, 294, 2, 7497);
+			attr(div4, "class", "container svelte-f2p904");
+			add_location(div4, file$8, 277, 0, 7043);
 
 			dispose = [
 				listen(select, "change", ctx.select_change_handler),
@@ -3443,8 +3549,8 @@ function create_fragment$8(ctx) {
 		},
 
 		m: function mount(target, anchor) {
-			insert(target, div3, anchor);
-			append(div3, div0);
+			insert(target, div4, anchor);
+			append(div4, div0);
 			append(div0, t0);
 			append(div0, select);
 
@@ -3454,12 +3560,13 @@ function create_fragment$8(ctx) {
 
 			select_option(select, ctx.dependentVariable);
 
-			append(div3, t1);
+			append(div4, t1);
+			append(div4, div3);
+			append(div3, div1);
+			append(div3, t2);
+			mount_component(mainchartsummary, div3, null);
+			append(div3, t3);
 			append(div3, div2);
-			append(div2, div1);
-			append(div2, t2);
-			mount_component(mainchartsummary, div2, null);
-			append(div2, t3);
 			mount_component(anova, div2, null);
 			current = true;
 		},
@@ -3516,7 +3623,7 @@ function create_fragment$8(ctx) {
 
 		d: function destroy(detaching) {
 			if (detaching) {
-				detach(div3);
+				detach(div4);
 			}
 
 			destroy_each(each_blocks, detaching);
