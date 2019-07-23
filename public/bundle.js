@@ -2760,7 +2760,7 @@ function create_fragment$4(ctx) {
 			div = element("div");
 			attr(div, "id", "BDAChart");
 			attr(div, "class", "svelte-1j0o2bd");
-			add_location(div, file$4, 70, 0, 1430);
+			add_location(div, file$4, 75, 0, 1577);
 		},
 
 		l: function claim(nodes) {
@@ -2789,33 +2789,38 @@ function instance$4($$self) {
     const option = {
       grid: {
         left: 36,
-        top: 5,
-        right: 0,
-        bottom: 29
+        top: 30,
+        right: 10,
+        bottom: 30
       },
+      legend: { show: true },
       xAxis: {
         type: "category",
         data: ["Before", "During", "After"]
       },
       yAxis: {
         axisLabel: {
-          showMaxLabel: false
-        }
+          showMaxLabel: true
+        },
+        name: "Availability"
       },
       series: [
         {
+          name: "Work",
           data: [4.6, 5.8, 4.9],
           type: "line",
           symbol: "triangle",
           symbolSize: 10
         },
         {
+          name: "Leisure",
           data: [3.6, 6.8, 4.9],
           type: "line",
           symbol: "circle",
           symbolSize: 10
         },
         {
+          name: "Television",
           data: [3.2, 2.8, 1.1],
           type: "line",
           symbol: "square",
