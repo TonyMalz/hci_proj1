@@ -10491,7 +10491,7 @@ function create_if_block$5(ctx) {
 			attr(div1, "class", "varselect svelte-eqya5b");
 			add_location(div1, file$q, 117, 6, 2917);
 			attr(div2, "class", "chart svelte-eqya5b");
-			add_location(div2, file$q, 143, 6, 3858);
+			add_location(div2, file$q, 143, 6, 3869);
 			attr(div3, "class", "customchart svelte-eqya5b");
 			add_location(div3, file$q, 116, 4, 2884);
 
@@ -10794,7 +10794,7 @@ function create_each_block$b(ctx) {
 function create_if_block_3$3(ctx) {
 	var div, t0_value = ctx.combine ? 'Split into separate charts' : 'Combine in one chart', t0, t1, div_transition, current, dispose;
 
-	var if_block = (ctx.check3dChartAvailable()) && create_if_block_4$2();
+	var if_block = (ctx.check3dChartAvailable() && ctx.combine) && create_if_block_4$2();
 
 	return {
 		c: function create() {
@@ -10820,7 +10820,7 @@ function create_if_block_3$3(ctx) {
 				set_data(t0, t0_value);
 			}
 
-			if (ctx.check3dChartAvailable()) {
+			if (ctx.check3dChartAvailable() && ctx.combine) {
 				if (!if_block) {
 					if_block = create_if_block_4$2();
 					if_block.c();
@@ -10865,7 +10865,7 @@ function create_if_block_3$3(ctx) {
 	};
 }
 
-// (140:12) {#if check3dChartAvailable()}
+// (140:12) {#if check3dChartAvailable() && combine}
 function create_if_block_4$2(ctx) {
 	var t;
 
