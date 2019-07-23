@@ -104,7 +104,7 @@
       var lowPoint = api.coord([xValue, api.value(2)]);
       var halfWidth = api.size([1, 0])[0] * 0.05;
       var style = api.style({
-        stroke: "#aaa",
+        stroke: "#314655",
         fill: null
       });
 
@@ -165,9 +165,13 @@
                   </tr>
                   <tr>
                     <td>CI</td>
-                    <td style="padding-left:0.5rem;">[ ${left.toFixed(
+                    <td style="padding-left:0.5rem;">[${left.toFixed(
                       4
-                    )} ; ${right.toFixed(4)} ]</td>
+                    )} ; ${right.toFixed(4)}]</td>
+                  </tr>
+                  <tr>
+                    <td>alpha</td>
+                    <td style="padding-left:0.5rem;"> 0.05 </td>
                   </tr>
                   <tr>
                     <td>Records</td>
@@ -205,9 +209,9 @@
           itemStyle: {
             normal: {
               color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                { offset: 0, color: "steelblue" },
-                { offset: 0.7, color: "rgb(83, 152, 209)" },
-                { offset: 1, color: "#83bff6" }
+                { offset: 0, color: "#a4b8c9" },
+                { offset: 0.85, color: "#a4b8c9" },
+                { offset: 1, color: "#9caebe" }
               ])
             }
           },
@@ -264,6 +268,9 @@
     padding: 0;
     margin: 0;
   }
+  .c {
+    color: #9caebe;
+  }
   .container {
     position: relative;
     display: grid;
@@ -313,7 +320,7 @@
       </tr>
       <tr>
         <td>CI:</td>
-        <td>[ {ci[0].toFixed(4)} ; {ci[1].toFixed(4)} ]</td>
+        <td>[ {ci[0].toFixed(4)} ; {ci[1].toFixed(4)} ] (a=0.05)</td>
       </tr>
     </table>
   </div>

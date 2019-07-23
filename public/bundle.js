@@ -2001,40 +2001,40 @@ function create_fragment$2(ctx) {
 			t18 = text(t18_value);
 			t19 = text(" ; ");
 			t20 = text(t20_value);
-			t21 = text(" ]");
+			t21 = text(" ] (a=0.05)");
 			attr(div0, "id", "anovaChart");
-			attr(div0, "class", "svelte-42bewl");
-			add_location(div0, file$2, 294, 2, 7571);
-			attr(td0, "class", "svelte-42bewl");
-			add_location(td0, file$2, 302, 8, 7743);
-			attr(td1, "class", "svelte-42bewl");
-			add_location(td1, file$2, 303, 8, 7772);
-			attr(tr0, "class", "svelte-42bewl");
-			add_location(tr0, file$2, 301, 6, 7729);
-			attr(td2, "class", "svelte-42bewl");
-			add_location(td2, file$2, 306, 8, 7835);
-			attr(td3, "class", "svelte-42bewl");
-			add_location(td3, file$2, 307, 8, 7859);
-			attr(tr1, "class", "svelte-42bewl");
-			add_location(tr1, file$2, 305, 6, 7821);
-			attr(td4, "class", "svelte-42bewl");
-			add_location(td4, file$2, 310, 8, 7923);
-			attr(td5, "class", "svelte-42bewl");
-			add_location(td5, file$2, 311, 8, 7945);
-			attr(tr2, "class", "svelte-42bewl");
-			add_location(tr2, file$2, 309, 6, 7909);
-			attr(td6, "class", "svelte-42bewl");
-			add_location(td6, file$2, 314, 8, 8004);
-			attr(td7, "class", "svelte-42bewl");
-			add_location(td7, file$2, 315, 8, 8026);
-			attr(tr3, "class", "svelte-42bewl");
-			add_location(tr3, file$2, 313, 6, 7990);
-			attr(table, "class", "svelte-42bewl");
-			add_location(table, file$2, 296, 4, 7627);
+			attr(div0, "class", "svelte-fymzr");
+			add_location(div0, file$2, 301, 2, 7746);
+			attr(td0, "class", "svelte-fymzr");
+			add_location(td0, file$2, 309, 8, 7918);
+			attr(td1, "class", "svelte-fymzr");
+			add_location(td1, file$2, 310, 8, 7947);
+			attr(tr0, "class", "svelte-fymzr");
+			add_location(tr0, file$2, 308, 6, 7904);
+			attr(td2, "class", "svelte-fymzr");
+			add_location(td2, file$2, 313, 8, 8010);
+			attr(td3, "class", "svelte-fymzr");
+			add_location(td3, file$2, 314, 8, 8034);
+			attr(tr1, "class", "svelte-fymzr");
+			add_location(tr1, file$2, 312, 6, 7996);
+			attr(td4, "class", "svelte-fymzr");
+			add_location(td4, file$2, 317, 8, 8098);
+			attr(td5, "class", "svelte-fymzr");
+			add_location(td5, file$2, 318, 8, 8120);
+			attr(tr2, "class", "svelte-fymzr");
+			add_location(tr2, file$2, 316, 6, 8084);
+			attr(td6, "class", "svelte-fymzr");
+			add_location(td6, file$2, 321, 8, 8179);
+			attr(td7, "class", "svelte-fymzr");
+			add_location(td7, file$2, 322, 8, 8201);
+			attr(tr3, "class", "svelte-fymzr");
+			add_location(tr3, file$2, 320, 6, 8165);
+			attr(table, "class", "svelte-fymzr");
+			add_location(table, file$2, 303, 4, 7802);
 			attr(div1, "class", "statTable");
-			add_location(div1, file$2, 295, 2, 7598);
-			attr(div2, "class", "container svelte-42bewl");
-			add_location(div2, file$2, 293, 0, 7544);
+			add_location(div1, file$2, 302, 2, 7773);
+			attr(div2, "class", "container svelte-fymzr");
+			add_location(div2, file$2, 300, 0, 7719);
 		},
 
 		l: function claim(nodes) {
@@ -2212,7 +2212,7 @@ function instance$2($$self, $$props, $$invalidate) {
       var lowPoint = api.coord([xValue, api.value(2)]);
       var halfWidth = api.size([1, 0])[0] * 0.05;
       var style = api.style({
-        stroke: "#aaa",
+        stroke: "#314655",
         fill: null
       });
 
@@ -2273,9 +2273,13 @@ function instance$2($$self, $$props, $$invalidate) {
                   </tr>
                   <tr>
                     <td>CI</td>
-                    <td style="padding-left:0.5rem;">[ ${left.toFixed(
+                    <td style="padding-left:0.5rem;">[${left.toFixed(
                       4
-                    )} ; ${right.toFixed(4)} ]</td>
+                    )} ; ${right.toFixed(4)}]</td>
+                  </tr>
+                  <tr>
+                    <td>alpha</td>
+                    <td style="padding-left:0.5rem;"> 0.05 </td>
                   </tr>
                   <tr>
                     <td>Records</td>
@@ -2313,9 +2317,9 @@ function instance$2($$self, $$props, $$invalidate) {
           itemStyle: {
             normal: {
               color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                { offset: 0, color: "steelblue" },
-                { offset: 0.7, color: "rgb(83, 152, 209)" },
-                { offset: 1, color: "#83bff6" }
+                { offset: 0, color: "#a4b8c9" },
+                { offset: 0.85, color: "#a4b8c9" },
+                { offset: 1, color: "#9caebe" }
               ])
             }
           },
@@ -11906,7 +11910,7 @@ function create_fragment$t(ctx) {
 			t3 = space();
 			label1 = element("label");
 			label1.textContent = "redo";
-			attr(path0, "fill", "#333");
+			attr(path0, "fill", "#bbb");
 			attr(path0, "d", "M12.5,8C9.85,8 7.45,9 5.6,10.6L2,7V16H11L7.38,12.38C8.77,11.22\r\n      10.54,10.5 12.5,10.5C16.04,10.5 19.05,12.81\r\n      20.1,16L22.47,15.22C21.08,11.03 17.15,8 12.5,8Z");
 			add_location(path0, file$s, 34, 4, 604);
 			attr(svg0, "id", "undo");
