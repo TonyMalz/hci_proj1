@@ -139,7 +139,7 @@
           min: 0,
           max: 15,
           name: "***",
-          nameGap: -10,
+          nameGap: 0,
           nameTextStyle: {
             color: "black",
             fontSize: 16
@@ -150,7 +150,7 @@
           min: 0,
           max: 15,
           name: "**",
-          nameGap: -10,
+          nameGap: 0,
           nameTextStyle: {
             color: "black",
             fontSize: 16
@@ -161,7 +161,7 @@
           min: 0,
           max: 15,
           name: "**",
-          nameGap: -10,
+          nameGap: 0,
           nameTextStyle: {
             color: "black",
             fontSize: 16
@@ -172,7 +172,7 @@
           min: 0,
           max: 15,
           name: "*",
-          nameGap: -10,
+          nameGap: 0,
           nameTextStyle: {
             color: "black",
             fontSize: 16
