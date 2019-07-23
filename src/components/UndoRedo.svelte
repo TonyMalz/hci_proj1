@@ -23,9 +23,11 @@
     grid-area: redo;
   }
   #undoLabel {
+    color:#bbb;
     grid-area: undoLabel;
   }
   #redoLabel {
+    color:#bbb;
     grid-area: redoLabel;
   }
 </style>

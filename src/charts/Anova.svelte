@@ -268,9 +268,7 @@
     padding: 0;
     margin: 0;
   }
-  .c {
-    color: #9caebe;
-  }
+
   .container {
     position: relative;
     display: grid;
@@ -280,7 +278,7 @@
     height: 100%;
   }
   table {
-    width: 40ch;
+    width: 37ch;
     border-collapse: collapse;
     font-size: 0.7rem;
   }
@@ -291,21 +289,12 @@
   tr:hover {
     background-color: #f5f5f5;
   }
-  th {
-    padding-top: 1rem;
-    text-align: left;
-    font-weight: 600;
-  }
 </style>
 
 <div class="container">
   <div id="anovaChart" />
   <div class="statTable">
     <table>
-      <!-- <tr>
-        <td>Records:</td>
-        <td>{count}</td>
-      </tr> -->
       <tr>
         <td>Min - Max:</td>
         <td>{minVal} - {maxVal}</td>
