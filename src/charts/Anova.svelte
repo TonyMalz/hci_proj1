@@ -288,7 +288,6 @@
     padding-top: 1rem;
     text-align: left;
     font-weight: 600;
-    color: rgb(83, 152, 209);
   }
 </style>
 

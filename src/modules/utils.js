@@ -1,4 +1,4 @@
-export function formatDate(date, showtime = true) {
+export function formatDate(date, showtime = true, abbr = true) {
     if (!(date instanceof Date)) {
         date = new Date(date)
     }
@@ -18,7 +18,7 @@ export function formatDate(date, showtime = true) {
     minutes = minutes < 10 ? '0' + minutes : minutes;
     dayOfMonth = dayOfMonth < 10 ? '0' + dayOfMonth : dayOfMonth;
 
-    if (diffMs < 0) {
+    if (diffMs < 0 || abbr === false) {
         return showtime ? `${dayOfMonth}.${month}.'${year} ${hour}:${minutes}` : `${dayOfMonth}.${month}.'${year}`
     }
     if (diffSec < 1) {

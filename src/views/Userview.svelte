@@ -4,6 +4,7 @@
   import WeekChart from "../charts/WeekChart.svelte";
   import BDAChart from "../charts/BDAChart.svelte";
   import ContextPie from "../charts/ContextPie.svelte";
+  import ImageChart from "../charts/ImageChart.svelte";
   import { variableStore } from "../modules/store";
   export let studyId;
 
@@ -47,6 +48,7 @@
     padding: 0.5em 1em;
     width: 100%;
     height: 24ch;
+    overflow: auto;
   }
 </style>
 
@@ -92,6 +94,9 @@
     </div>
     <div class="widget">
       <ContextPie />
+    </div>
+    <div class="widget">
+      <ImageChart />
     </div>
     <!--<div class="widget">
       <div class="addWidget">
