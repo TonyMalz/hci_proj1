@@ -137,7 +137,7 @@
             class="combine"
             on:click={() => (combine = !combine)}>
             {combine ? 'Split into separate charts' : 'Combine in one chart'}
-            {#if check3dChartAvailable() && combine}(3D){/if}
+            {#if check3dChartAvailable() && !combine}(3D){/if}
           </div>
         {/if}
       </div>
