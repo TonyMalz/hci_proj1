@@ -48,10 +48,29 @@
       grid3D: {},
       xAxis3D: {
         type: "category",
-        name: names[0]
+        name: names[0],
+        axisLabel: {
+          formatter: function(value, idx) {
+            return `${~~(idx / 10)}`;
+          }
+        }
       },
-      yAxis3D: { name: names[1] },
-      zAxis3D: { name: names[2] },
+      yAxis3D: {
+        name: names[1],
+        axisLabel: {
+          formatter: function(value, idx) {
+            return `${~~idx}`;
+          }
+        }
+      },
+      zAxis3D: {
+        name: names[2],
+        axisLabel: {
+          formatter: function(value, idx) {
+            return `${~~(value / 10000)}`;
+          }
+        }
+      },
       dataset: {
         dimensions: [
           "Income",

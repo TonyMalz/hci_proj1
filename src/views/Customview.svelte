@@ -21,14 +21,12 @@
     selectedVariables = [];
   }
   function selectVariable() {
-    console.log(selectedVariables);
+    // console.log(selectedVariables);
   }
   function check3dChartAvailable() {
-    let bool = true;
-    for (const v of selectedVariables) {
-      bool &= v.measure === "scale";
-    }
-    return bool && combine;
+    if (selectedVariables.length < 3) return false;
+    const vars = selectedVariables.filter(v => v.measure === "scale");
+    return vars.length > 2;
   }
 </script>
 
@@ -102,7 +100,6 @@
 
 <div class="container" in:fade={{ duration: 300 }}>
   {#if studyId}
-    <!-- content here -->
     <div class="studyselect">
       Selected study:
       <select
@@ -140,12 +137,13 @@
             class="combine"
             on:click={() => (combine = !combine)}>
             {combine ? 'Split into separate charts' : 'Combine in one chart'}
+            {#if check3dChartAvailable()}(3D){/if}
           </div>
         {/if}
       </div>
       <div class="chart">
         {#if selectedVariables.length}
-          {#if selectedVariables.length > 2 && check3dChartAvailable()}
+          {#if check3dChartAvailable() && combine}
             <Custom3dChart {selectedVariables} />
           {:else}
             <CustomChart {selectedVariables} />

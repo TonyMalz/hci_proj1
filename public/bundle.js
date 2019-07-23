@@ -10281,7 +10281,7 @@ function create_fragment$p(ctx) {
 			attr(div, "id", "3dchart");
 			set_style(div, "width", "100%");
 			set_style(div, "height", "100%");
-			add_location(div, file$p, 95, 0, 61228);
+			add_location(div, file$p, 114, 0, 61651);
 		},
 
 		l: function claim(nodes) {
@@ -10317,10 +10317,29 @@ function instance$p($$self, $$props, $$invalidate) {
       grid3D: {},
       xAxis3D: {
         type: "category",
-        name: names[0]
+        name: names[0],
+        axisLabel: {
+          formatter: function(value, idx) {
+            return `${~~(idx / 10)}`;
+          }
+        }
       },
-      yAxis3D: { name: names[1] },
-      zAxis3D: { name: names[2] },
+      yAxis3D: {
+        name: names[1],
+        axisLabel: {
+          formatter: function(value, idx) {
+            return `${~~idx}`;
+          }
+        }
+      },
+      zAxis3D: {
+        name: names[2],
+        axisLabel: {
+          formatter: function(value, idx) {
+            return `${~~(value / 10000)}`;
+          }
+        }
+      },
       dataset: {
         dimensions: [
           "Income",
@@ -10410,7 +10429,7 @@ function get_each_context_1$5(ctx, list, i) {
 	return child_ctx;
 }
 
-// (104:2) {#if studyId}
+// (102:2) {#if studyId}
 function create_if_block$5(ctx) {
 	var div0, t0, select, t1, div3, div1, t2, t3, t4, ul, t5, t6, div2, current, dispose;
 
@@ -10464,17 +10483,17 @@ function create_if_block$5(ctx) {
 			if (ctx.studyId === void 0) add_render_callback(() => ctx.select_change_handler.call(select));
 			attr(select, "name", "studyselect");
 			attr(select, "id", "studyselect");
-			add_location(select, file$q, 107, 6, 2546);
+			add_location(select, file$q, 104, 6, 2538);
 			attr(div0, "class", "studyselect svelte-eqya5b");
-			add_location(div0, file$q, 105, 4, 2490);
+			add_location(div0, file$q, 102, 4, 2482);
 			attr(ul, "class", "varList svelte-eqya5b");
-			add_location(ul, file$q, 122, 8, 2992);
+			add_location(ul, file$q, 119, 8, 2984);
 			attr(div1, "class", "varselect svelte-eqya5b");
-			add_location(div1, file$q, 120, 6, 2925);
+			add_location(div1, file$q, 117, 6, 2917);
 			attr(div2, "class", "chart svelte-eqya5b");
-			add_location(div2, file$q, 145, 6, 3814);
+			add_location(div2, file$q, 143, 6, 3858);
 			attr(div3, "class", "customchart svelte-eqya5b");
-			add_location(div3, file$q, 119, 4, 2892);
+			add_location(div3, file$q, 116, 4, 2884);
 
 			dispose = [
 				listen(select, "change", ctx.select_change_handler),
@@ -10633,7 +10652,7 @@ function create_if_block$5(ctx) {
 	};
 }
 
-// (113:8) {#each $studyStore as study}
+// (110:8) {#each $studyStore as study}
 function create_each_block_1$5(ctx) {
 	var option, t0_value = ctx.study.studyName, t0, t1, t2_value = formatDate(ctx.study.__created), t2, t3, option_value_value;
 
@@ -10646,7 +10665,7 @@ function create_each_block_1$5(ctx) {
 			t3 = text(")\r\n          ");
 			option.__value = option_value_value = ctx.study._id;
 			option.value = option.__value;
-			add_location(option, file$q, 113, 10, 2721);
+			add_location(option, file$q, 110, 10, 2713);
 		},
 
 		m: function mount(target, anchor) {
@@ -10681,7 +10700,7 @@ function create_each_block_1$5(ctx) {
 	};
 }
 
-// (124:10) {#each variables as variable}
+// (121:10) {#each variables as variable}
 function create_each_block$b(ctx) {
 	var li, input, input_id_value, input_value_value, t0, label, t1_value = ctx.variable.variableName, t1, label_for_value, t2, span, t3, t4_value = ctx.variable.measure, t4, t5, t6, dispose;
 
@@ -10703,17 +10722,17 @@ function create_each_block$b(ctx) {
 			attr(input, "type", "checkbox");
 			input.__value = input_value_value = ctx.variable;
 			input.value = input.__value;
-			add_location(input, file$q, 125, 14, 3087);
+			add_location(input, file$q, 122, 14, 3079);
 			attr(label, "for", label_for_value = ctx.variable.variableName);
 			attr(label, "class", "svelte-eqya5b");
-			add_location(label, file$q, 131, 14, 3315);
-			add_location(span, file$q, 132, 14, 3397);
+			add_location(label, file$q, 128, 14, 3307);
+			add_location(span, file$q, 129, 14, 3389);
 			attr(li, "class", "svelte-eqya5b");
-			add_location(li, file$q, 124, 12, 3067);
+			add_location(li, file$q, 121, 12, 3059);
 
 			dispose = [
 				listen(input, "change", ctx.input_change_handler),
-				listen(input, "change", ctx.selectVariable)
+				listen(input, "change", selectVariable)
 			];
 		},
 
@@ -10771,28 +10790,45 @@ function create_each_block$b(ctx) {
 	};
 }
 
-// (137:8) {#if selectedVariables.length > 1}
+// (134:8) {#if selectedVariables.length > 1}
 function create_if_block_3$3(ctx) {
-	var div, t_value = ctx.combine ? 'Split into separate charts' : 'Combine in one chart', t, div_transition, current, dispose;
+	var div, t0_value = ctx.combine ? 'Split into separate charts' : 'Combine in one chart', t0, t1, div_transition, current, dispose;
+
+	var if_block = (ctx.check3dChartAvailable()) && create_if_block_4$2();
 
 	return {
 		c: function create() {
 			div = element("div");
-			t = text(t_value);
+			t0 = text(t0_value);
+			t1 = space();
+			if (if_block) if_block.c();
 			attr(div, "class", "combine svelte-eqya5b");
-			add_location(div, file$q, 137, 10, 3539);
+			add_location(div, file$q, 134, 10, 3531);
 			dispose = listen(div, "click", ctx.click_handler);
 		},
 
 		m: function mount(target, anchor) {
 			insert(target, div, anchor);
-			append(div, t);
+			append(div, t0);
+			append(div, t1);
+			if (if_block) if_block.m(div, null);
 			current = true;
 		},
 
 		p: function update(changed, ctx) {
-			if ((!current || changed.combine) && t_value !== (t_value = ctx.combine ? 'Split into separate charts' : 'Combine in one chart')) {
-				set_data(t, t_value);
+			if ((!current || changed.combine) && t0_value !== (t0_value = ctx.combine ? 'Split into separate charts' : 'Combine in one chart')) {
+				set_data(t0, t0_value);
+			}
+
+			if (ctx.check3dChartAvailable()) {
+				if (!if_block) {
+					if_block = create_if_block_4$2();
+					if_block.c();
+					if_block.m(div, null);
+				}
+			} else if (if_block) {
+				if_block.d(1);
+				if_block = null;
 			}
 		},
 
@@ -10816,6 +10852,11 @@ function create_if_block_3$3(ctx) {
 		d: function destroy(detaching) {
 			if (detaching) {
 				detach(div);
+			}
+
+			if (if_block) if_block.d();
+
+			if (detaching) {
 				if (div_transition) div_transition.end();
 			}
 
@@ -10824,7 +10865,28 @@ function create_if_block_3$3(ctx) {
 	};
 }
 
-// (147:8) {#if selectedVariables.length}
+// (140:12) {#if check3dChartAvailable()}
+function create_if_block_4$2(ctx) {
+	var t;
+
+	return {
+		c: function create() {
+			t = text("(3D)");
+		},
+
+		m: function mount(target, anchor) {
+			insert(target, t, anchor);
+		},
+
+		d: function destroy(detaching) {
+			if (detaching) {
+				detach(t);
+			}
+		}
+	};
+}
+
+// (145:8) {#if selectedVariables.length}
 function create_if_block_1$4(ctx) {
 	var current_block_type_index, if_block, if_block_anchor, current;
 
@@ -10836,7 +10898,7 @@ function create_if_block_1$4(ctx) {
 	var if_blocks = [];
 
 	function select_block_type(ctx) {
-		if (ctx.selectedVariables.length > 2 && ctx.check3dChartAvailable()) return 0;
+		if (ctx.check3dChartAvailable() && ctx.combine) return 0;
 		return 1;
 	}
 
@@ -10898,7 +10960,7 @@ function create_if_block_1$4(ctx) {
 	};
 }
 
-// (150:10) {:else}
+// (148:10) {:else}
 function create_else_block$3(ctx) {
 	var current;
 
@@ -10941,7 +11003,7 @@ function create_else_block$3(ctx) {
 	};
 }
 
-// (148:10) {#if selectedVariables.length > 2 && check3dChartAvailable()}
+// (146:10) {#if check3dChartAvailable() && combine}
 function create_if_block_2$4(ctx) {
 	var current;
 
@@ -10994,7 +11056,7 @@ function create_fragment$q(ctx) {
 			div = element("div");
 			if (if_block) if_block.c();
 			attr(div, "class", "container svelte-eqya5b");
-			add_location(div, file$q, 102, 0, 2389);
+			add_location(div, file$q, 100, 0, 2408);
 		},
 
 		l: function claim(nodes) {
@@ -11056,6 +11118,10 @@ function create_fragment$q(ctx) {
 	};
 }
 
+function selectVariable() {
+  // console.log(selectedVariables);
+}
+
 function instance$q($$self, $$props, $$invalidate) {
 	let $studyStore, $variableStore;
 
@@ -11074,15 +11140,10 @@ function instance$q($$self, $$props, $$invalidate) {
     $$invalidate('variables', variables = $variableStore.filter(v => v.studyId === studyId));
     $$invalidate('selectedVariables', selectedVariables = []);
   }
-  function selectVariable() {
-    console.log(selectedVariables);
-  }
   function check3dChartAvailable() {
-    let bool = true;
-    for (const v of selectedVariables) {
-      bool &= v.measure === "scale";
-    }
-    return bool && combine;
+    if (selectedVariables.length < 3) return false;
+    const vars = selectedVariables.filter(v => v.measure === "scale");
+    return vars.length > 2;
   }
 
 	const $$binding_groups = [[]];
@@ -11120,7 +11181,6 @@ function instance$q($$self, $$props, $$invalidate) {
 		studyName,
 		variables,
 		selectStudy,
-		selectVariable,
 		check3dChartAvailable,
 		$studyStore,
 		select_change_handler,
@@ -11271,7 +11331,7 @@ function create_if_block_1$5(ctx) {
 	var if_block_creators = [
 		create_if_block_2$5,
 		create_if_block_3$4,
-		create_if_block_4$2,
+		create_if_block_4$3,
 		create_if_block_5$2
 	];
 
@@ -11387,7 +11447,7 @@ function create_if_block_5$2(ctx) {
 }
 
 // (19:44) 
-function create_if_block_4$2(ctx) {
+function create_if_block_4$3(ctx) {
 	var current;
 
 	var descriptives = new Descriptives({
