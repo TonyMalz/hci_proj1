@@ -51,7 +51,9 @@
     ci = mctad.confidenceIntervalOnTheMean(meanVal, sd, count, alpha);
     for (const result of dependentVariable.results) {
       const resultDate = new Date(result.date);
-      const resultDay = resultDate.getDay();
+      // 0: sunday - 6: saturday (US week format!)
+      // convert to 0: monday - 6 sunday
+      const resultDay = (+resultDate.getDay() + 6) % 7;
       resultsByDay[resultDay].push(result.value);
     }
 

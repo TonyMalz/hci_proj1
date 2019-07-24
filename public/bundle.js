@@ -2004,37 +2004,37 @@ function create_fragment$2(ctx) {
 			t21 = text(" ] (a=0.05)");
 			attr(div0, "id", "anovaChart");
 			attr(div0, "class", "svelte-92ikm6");
-			add_location(div0, file$2, 294, 2, 7631);
+			add_location(div0, file$2, 296, 2, 7736);
 			attr(td0, "class", "svelte-92ikm6");
-			add_location(td0, file$2, 298, 8, 7716);
+			add_location(td0, file$2, 300, 8, 7821);
 			attr(td1, "class", "svelte-92ikm6");
-			add_location(td1, file$2, 299, 8, 7745);
+			add_location(td1, file$2, 301, 8, 7850);
 			attr(tr0, "class", "svelte-92ikm6");
-			add_location(tr0, file$2, 297, 6, 7702);
+			add_location(tr0, file$2, 299, 6, 7807);
 			attr(td2, "class", "svelte-92ikm6");
-			add_location(td2, file$2, 302, 8, 7808);
+			add_location(td2, file$2, 304, 8, 7913);
 			attr(td3, "class", "svelte-92ikm6");
-			add_location(td3, file$2, 303, 8, 7832);
+			add_location(td3, file$2, 305, 8, 7937);
 			attr(tr1, "class", "svelte-92ikm6");
-			add_location(tr1, file$2, 301, 6, 7794);
+			add_location(tr1, file$2, 303, 6, 7899);
 			attr(td4, "class", "svelte-92ikm6");
-			add_location(td4, file$2, 306, 8, 7896);
+			add_location(td4, file$2, 308, 8, 8001);
 			attr(td5, "class", "svelte-92ikm6");
-			add_location(td5, file$2, 307, 8, 7918);
+			add_location(td5, file$2, 309, 8, 8023);
 			attr(tr2, "class", "svelte-92ikm6");
-			add_location(tr2, file$2, 305, 6, 7882);
+			add_location(tr2, file$2, 307, 6, 7987);
 			attr(td6, "class", "svelte-92ikm6");
-			add_location(td6, file$2, 310, 8, 7977);
+			add_location(td6, file$2, 312, 8, 8082);
 			attr(td7, "class", "svelte-92ikm6");
-			add_location(td7, file$2, 311, 8, 7999);
+			add_location(td7, file$2, 313, 8, 8104);
 			attr(tr3, "class", "svelte-92ikm6");
-			add_location(tr3, file$2, 309, 6, 7963);
+			add_location(tr3, file$2, 311, 6, 8068);
 			attr(table, "class", "svelte-92ikm6");
-			add_location(table, file$2, 296, 4, 7687);
+			add_location(table, file$2, 298, 4, 7792);
 			attr(div1, "class", "statTable");
-			add_location(div1, file$2, 295, 2, 7658);
+			add_location(div1, file$2, 297, 2, 7763);
 			attr(div2, "class", "container svelte-92ikm6");
-			add_location(div2, file$2, 293, 0, 7604);
+			add_location(div2, file$2, 295, 0, 7709);
 		},
 
 		l: function claim(nodes) {
@@ -2159,7 +2159,9 @@ function instance$2($$self, $$props, $$invalidate) {
     $$invalidate('ci', ci = mctad.confidenceIntervalOnTheMean(meanVal, sd, count, alpha));
     for (const result of dependentVariable.results) {
       const resultDate = new Date(result.date);
-      const resultDay = resultDate.getDay();
+      // 0: sunday - 6: saturday (US week format!)
+      // convert to 0: monday - 6 sunday
+      const resultDay = (+resultDate.getDay() + 6) % 7;
       resultsByDay[resultDay].push(result.value);
     }
 
@@ -3667,7 +3669,7 @@ function get_each_context$2(ctx, list, i) {
 	return child_ctx;
 }
 
-// (286:6) {#each dvs as dv}
+// (288:6) {#each dvs as dv}
 function create_each_block$2(ctx) {
 	var option, t_value = ctx.dv.variableLabel, t, option_value_value;
 
@@ -3677,7 +3679,7 @@ function create_each_block$2(ctx) {
 			t = text(t_value);
 			option.__value = option_value_value = ctx.dv;
 			option.value = option.__value;
-			add_location(option, file$9, 286, 8, 7257);
+			add_location(option, file$9, 288, 8, 7362);
 		},
 
 		m: function mount(target, anchor) {
@@ -3755,19 +3757,19 @@ function create_fragment$9(ctx) {
 			attr(select, "name", "dv");
 			attr(select, "id", "dv");
 			attr(select, "class", "svelte-f2p904");
-			add_location(select, file$9, 280, 4, 7111);
+			add_location(select, file$9, 282, 4, 7216);
 			attr(div0, "class", "filter svelte-f2p904");
-			add_location(div0, file$9, 278, 2, 7070);
+			add_location(div0, file$9, 280, 2, 7175);
 			attr(div1, "id", "mainChart");
 			set_style(div1, "width", "100%");
 			set_style(div1, "height", "100%");
-			add_location(div1, file$9, 295, 4, 7523);
+			add_location(div1, file$9, 297, 4, 7628);
 			attr(div2, "class", "anova svelte-f2p904");
-			add_location(div2, file$9, 297, 4, 7639);
+			add_location(div2, file$9, 299, 4, 7744);
 			attr(div3, "class", "charts svelte-f2p904");
-			add_location(div3, file$9, 294, 2, 7497);
+			add_location(div3, file$9, 296, 2, 7602);
 			attr(div4, "class", "container svelte-f2p904");
-			add_location(div4, file$9, 277, 0, 7043);
+			add_location(div4, file$9, 279, 0, 7148);
 
 			dispose = [
 				listen(select, "change", ctx.select_change_handler),
@@ -3927,7 +3929,9 @@ function instance$9($$self, $$props, $$invalidate) {
     dependentVariable.variableName = dependentVariable.variableLabel;
     for (const result of dependentVariable.results) {
       const resultDate = new Date(result.date);
-      const resultDay = resultDate.getDay();
+      // 0: sunday - 6: saturday (US week format!)
+      // convert to 0: monday - 6 sunday
+      const resultDay = (+resultDate.getDay() + 6) % 7;
       const hour = resultDate.getHours();
       const rs = resultsByDayAndHour[resultDay].get(hour) || [];
       rs.push(result.value);
