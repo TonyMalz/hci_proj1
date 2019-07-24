@@ -4632,21 +4632,21 @@ function create_fragment$c(ctx) {
 			input.multiple = true;
 			attr(input, "accept", "application/json");
 			attr(input, "class", "svelte-13au6jt");
-			add_location(input, file$c, 298, 0, 11699);
+			add_location(input, file$c, 315, 0, 12188);
 			attr(path, "fill", "white");
 			attr(path, "d", "M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3\r\n        11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8\r\n        2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6\r\n        1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4\r\n        1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z");
-			add_location(path, file$c, 306, 6, 11940);
+			add_location(path, file$c, 323, 6, 12429);
 			attr(svg, "xmlns", "http://www.w3.org/2000/svg");
 			attr(svg, "width", "2em");
 			attr(svg, "height", "1.8em");
 			attr(svg, "viewBox", "0 0 20 17");
-			add_location(svg, file$c, 301, 4, 11817);
+			add_location(svg, file$c, 318, 4, 12306);
 			attr(figure, "class", "svelte-13au6jt");
-			add_location(figure, file$c, 300, 2, 11803);
-			add_location(span, file$c, 315, 2, 12299);
+			add_location(figure, file$c, 317, 2, 12292);
+			add_location(span, file$c, 332, 2, 12788);
 			attr(label, "for", "studyImport");
 			attr(label, "class", "svelte-13au6jt");
-			add_location(label, file$c, 299, 0, 11774);
+			add_location(label, file$c, 316, 0, 12263);
 		},
 
 		l: function claim(nodes) {
@@ -4929,6 +4929,18 @@ function instance$c($$self, $$props, $$invalidate) {
                 } // for each taskResult
               } // end of task result import
               //alert(`Study results for "${study.studyName}" were imported`);
+              db
+                .transaction("StudyResponses")
+                .objectStore("StudyResponses")
+                .getAll().onsuccess = e => {
+                responseStore.set(e.target.result);
+              };
+              db
+                .transaction("Users")
+                .objectStore("Users")
+                .getAll().onsuccess = e => {
+                userStore.set(e.target.result);
+              };
             }
           } catch (error) {
             console.error(`Error importing ${file.name}: `, error);

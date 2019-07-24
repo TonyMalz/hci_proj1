@@ -1,6 +1,11 @@
 <script>
   import { db } from "../modules/indexeddb.js";
-  import { studyStore, variableStore } from "../modules/store.js";
+  import {
+    studyStore,
+    variableStore,
+    responseStore,
+    userStore
+  } from "../modules/store.js";
 
   import { onMount } from "svelte";
   onMount(() => {
@@ -247,6 +252,18 @@
                 } // for each taskResult
               } // end of task result import
               //alert(`Study results for "${study.studyName}" were imported`);
+              db
+                .transaction("StudyResponses")
+                .objectStore("StudyResponses")
+                .getAll().onsuccess = e => {
+                responseStore.set(e.target.result);
+              };
+              db
+                .transaction("Users")
+                .objectStore("Users")
+                .getAll().onsuccess = e => {
+                userStore.set(e.target.result);
+              };
             }
           } catch (error) {
             console.error(`Error importing ${file.name}: `, error);
