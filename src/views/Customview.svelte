@@ -26,7 +26,7 @@
   function check3dChartAvailable() {
     if (selectedVariables.length < 3) return false;
     const vars = selectedVariables.filter(v => v.measure === "scale");
-    return vars.length > 2;
+    return vars.length == 3 && selectedVariables.length == 3;
   }
 </script>
 
@@ -136,8 +136,12 @@
             transition:fly={{ duration: 200, x: -50 }}
             class="combine"
             on:click={() => (combine = !combine)}>
-            {combine ? 'Split into separate charts' : 'Combine in one chart'}
-            {#if check3dChartAvailable() && !combine}(3D){/if}
+            {#if combine}
+              Split into separate charts
+            {:else}
+              Combine in one chart
+              {#if check3dChartAvailable()}(3D){/if}
+            {/if}
           </div>
         {/if}
       </div>

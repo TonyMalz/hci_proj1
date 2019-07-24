@@ -10487,17 +10487,17 @@ function create_if_block$5(ctx) {
 			if (ctx.studyId === void 0) add_render_callback(() => ctx.select_change_handler.call(select));
 			attr(select, "name", "studyselect");
 			attr(select, "id", "studyselect");
-			add_location(select, file$q, 104, 6, 2538);
+			add_location(select, file$q, 104, 6, 2572);
 			attr(div0, "class", "studyselect svelte-eqya5b");
-			add_location(div0, file$q, 102, 4, 2482);
+			add_location(div0, file$q, 102, 4, 2516);
 			attr(ul, "class", "varList svelte-eqya5b");
-			add_location(ul, file$q, 119, 8, 2984);
+			add_location(ul, file$q, 119, 8, 3018);
 			attr(div1, "class", "varselect svelte-eqya5b");
-			add_location(div1, file$q, 117, 6, 2917);
+			add_location(div1, file$q, 117, 6, 2951);
 			attr(div2, "class", "chart svelte-eqya5b");
-			add_location(div2, file$q, 143, 6, 3870);
+			add_location(div2, file$q, 147, 6, 3960);
 			attr(div3, "class", "customchart svelte-eqya5b");
-			add_location(div3, file$q, 116, 4, 2884);
+			add_location(div3, file$q, 116, 4, 2918);
 
 			dispose = [
 				listen(select, "change", ctx.select_change_handler),
@@ -10669,7 +10669,7 @@ function create_each_block_1$5(ctx) {
 			t3 = text(")\r\n          ");
 			option.__value = option_value_value = ctx.study._id;
 			option.value = option.__value;
-			add_location(option, file$q, 110, 10, 2713);
+			add_location(option, file$q, 110, 10, 2747);
 		},
 
 		m: function mount(target, anchor) {
@@ -10726,13 +10726,13 @@ function create_each_block$b(ctx) {
 			attr(input, "type", "checkbox");
 			input.__value = input_value_value = ctx.variable;
 			input.value = input.__value;
-			add_location(input, file$q, 122, 14, 3079);
+			add_location(input, file$q, 122, 14, 3113);
 			attr(label, "for", label_for_value = ctx.variable.variableName);
 			attr(label, "class", "svelte-eqya5b");
-			add_location(label, file$q, 128, 14, 3307);
-			add_location(span, file$q, 129, 14, 3389);
+			add_location(label, file$q, 128, 14, 3341);
+			add_location(span, file$q, 129, 14, 3423);
 			attr(li, "class", "svelte-eqya5b");
-			add_location(li, file$q, 121, 12, 3059);
+			add_location(li, file$q, 121, 12, 3093);
 
 			dispose = [
 				listen(input, "change", ctx.input_change_handler),
@@ -10796,43 +10796,41 @@ function create_each_block$b(ctx) {
 
 // (134:8) {#if selectedVariables.length > 1}
 function create_if_block_3$3(ctx) {
-	var div, t0_value = ctx.combine ? 'Split into separate charts' : 'Combine in one chart', t0, t1, div_transition, current, dispose;
+	var div, div_transition, current, dispose;
 
-	var if_block = (ctx.check3dChartAvailable() && !ctx.combine) && create_if_block_4$2();
+	function select_block_type(ctx) {
+		if (ctx.combine) return create_if_block_4$2;
+		return create_else_block_1$1;
+	}
+
+	var current_block_type = select_block_type(ctx);
+	var if_block = current_block_type(ctx);
 
 	return {
 		c: function create() {
 			div = element("div");
-			t0 = text(t0_value);
-			t1 = space();
-			if (if_block) if_block.c();
+			if_block.c();
 			attr(div, "class", "combine svelte-eqya5b");
-			add_location(div, file$q, 134, 10, 3531);
+			add_location(div, file$q, 134, 10, 3565);
 			dispose = listen(div, "click", ctx.click_handler);
 		},
 
 		m: function mount(target, anchor) {
 			insert(target, div, anchor);
-			append(div, t0);
-			append(div, t1);
-			if (if_block) if_block.m(div, null);
+			if_block.m(div, null);
 			current = true;
 		},
 
 		p: function update(changed, ctx) {
-			if ((!current || changed.combine) && t0_value !== (t0_value = ctx.combine ? 'Split into separate charts' : 'Combine in one chart')) {
-				set_data(t0, t0_value);
-			}
-
-			if (ctx.check3dChartAvailable() && !ctx.combine) {
-				if (!if_block) {
-					if_block = create_if_block_4$2();
+			if (current_block_type === (current_block_type = select_block_type(ctx)) && if_block) {
+				if_block.p(changed, ctx);
+			} else {
+				if_block.d(1);
+				if_block = current_block_type(ctx);
+				if (if_block) {
 					if_block.c();
 					if_block.m(div, null);
 				}
-			} else if (if_block) {
-				if_block.d(1);
-				if_block = null;
 			}
 		},
 
@@ -10858,7 +10856,7 @@ function create_if_block_3$3(ctx) {
 				detach(div);
 			}
 
-			if (if_block) if_block.d();
+			if_block.d();
 
 			if (detaching) {
 				if (div_transition) div_transition.end();
@@ -10869,8 +10867,77 @@ function create_if_block_3$3(ctx) {
 	};
 }
 
-// (140:12) {#if check3dChartAvailable() && !combine}
+// (141:12) {:else}
+function create_else_block_1$1(ctx) {
+	var t, if_block_anchor;
+
+	var if_block = (ctx.check3dChartAvailable()) && create_if_block_5$2();
+
+	return {
+		c: function create() {
+			t = text("Combine in one chart\r\n              ");
+			if (if_block) if_block.c();
+			if_block_anchor = empty();
+		},
+
+		m: function mount(target, anchor) {
+			insert(target, t, anchor);
+			if (if_block) if_block.m(target, anchor);
+			insert(target, if_block_anchor, anchor);
+		},
+
+		p: function update(changed, ctx) {
+			if (ctx.check3dChartAvailable()) {
+				if (!if_block) {
+					if_block = create_if_block_5$2();
+					if_block.c();
+					if_block.m(if_block_anchor.parentNode, if_block_anchor);
+				}
+			} else if (if_block) {
+				if_block.d(1);
+				if_block = null;
+			}
+		},
+
+		d: function destroy(detaching) {
+			if (detaching) {
+				detach(t);
+			}
+
+			if (if_block) if_block.d(detaching);
+
+			if (detaching) {
+				detach(if_block_anchor);
+			}
+		}
+	};
+}
+
+// (139:12) {#if combine}
 function create_if_block_4$2(ctx) {
+	var t;
+
+	return {
+		c: function create() {
+			t = text("Split into separate charts");
+		},
+
+		m: function mount(target, anchor) {
+			insert(target, t, anchor);
+		},
+
+		p: noop,
+
+		d: function destroy(detaching) {
+			if (detaching) {
+				detach(t);
+			}
+		}
+	};
+}
+
+// (143:14) {#if check3dChartAvailable()}
+function create_if_block_5$2(ctx) {
 	var t;
 
 	return {
@@ -10890,7 +10957,7 @@ function create_if_block_4$2(ctx) {
 	};
 }
 
-// (145:8) {#if selectedVariables.length}
+// (149:8) {#if selectedVariables.length}
 function create_if_block_1$4(ctx) {
 	var current_block_type_index, if_block, if_block_anchor, current;
 
@@ -10901,12 +10968,12 @@ function create_if_block_1$4(ctx) {
 
 	var if_blocks = [];
 
-	function select_block_type(ctx) {
+	function select_block_type_1(ctx) {
 		if (ctx.check3dChartAvailable() && ctx.combine) return 0;
 		return 1;
 	}
 
-	current_block_type_index = select_block_type(ctx);
+	current_block_type_index = select_block_type_1(ctx);
 	if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
 
 	return {
@@ -10923,7 +10990,7 @@ function create_if_block_1$4(ctx) {
 
 		p: function update(changed, ctx) {
 			var previous_block_index = current_block_type_index;
-			current_block_type_index = select_block_type(ctx);
+			current_block_type_index = select_block_type_1(ctx);
 			if (current_block_type_index === previous_block_index) {
 				if_blocks[current_block_type_index].p(changed, ctx);
 			} else {
@@ -10964,7 +11031,7 @@ function create_if_block_1$4(ctx) {
 	};
 }
 
-// (148:10) {:else}
+// (152:10) {:else}
 function create_else_block$3(ctx) {
 	var current;
 
@@ -11007,7 +11074,7 @@ function create_else_block$3(ctx) {
 	};
 }
 
-// (146:10) {#if check3dChartAvailable() && combine}
+// (150:10) {#if check3dChartAvailable() && combine}
 function create_if_block_2$4(ctx) {
 	var current;
 
@@ -11060,7 +11127,7 @@ function create_fragment$q(ctx) {
 			div = element("div");
 			if (if_block) if_block.c();
 			attr(div, "class", "container svelte-eqya5b");
-			add_location(div, file$q, 100, 0, 2408);
+			add_location(div, file$q, 100, 0, 2442);
 		},
 
 		l: function claim(nodes) {
@@ -11147,7 +11214,7 @@ function instance$q($$self, $$props, $$invalidate) {
   function check3dChartAvailable() {
     if (selectedVariables.length < 3) return false;
     const vars = selectedVariables.filter(v => v.measure === "scale");
-    return vars.length > 2;
+    return vars.length == 3 && selectedVariables.length == 3;
   }
 
 	const $$binding_groups = [[]];
@@ -11336,7 +11403,7 @@ function create_if_block_1$5(ctx) {
 		create_if_block_2$5,
 		create_if_block_3$4,
 		create_if_block_4$3,
-		create_if_block_5$2
+		create_if_block_5$3
 	];
 
 	var if_blocks = [];
@@ -11415,7 +11482,7 @@ function create_if_block_1$5(ctx) {
 }
 
 // (21:42) 
-function create_if_block_5$2(ctx) {
+function create_if_block_5$3(ctx) {
 	var current;
 
 	var customview = new Customview({ $$inline: true });
