@@ -6,4 +6,4 @@ HCI Project 1 - SensQVis
 
 * Install npm (package manager for JS programming language): `npm install`
 * Build project: `npm run-script build`
-* Run project on local machine: `npm run-dev`
+* Run project on local machine: `npm run dev`
